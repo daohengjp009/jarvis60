@@ -1,0 +1,7 @@
+{
+  "text_file_analyzer": {
+    "task": "Write a function analyze_text(path) that reads a text file and returns a dict: {'lines': int, 'words': int, 'top5': list of the 5 most common words (lowercased)}.",
+    "file": "text_file_analyzer.py",
+    "attempts": 1
+  }
+}
