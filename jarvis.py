@@ -1,4 +1,4 @@
-"""Jarvis_60 — dispatcher-first pipeline: reuse before re-solving."""
+"""Jarvis_60 — full loop: dispatch -> (reuse|solve) -> execute -> answer."""
 import sys, os
 sys.path.insert(0, os.path.dirname(__file__))
 from core.brain import think
@@ -6,32 +6,33 @@ from core.dispatcher import find_tool
 from core.examiner import write_test
 from core.evolve import solve
 from core.toolbelt import save_tool, list_tools
+from core.executor import execute
 
 def do(task: str):
-    print(f"TASK: {task}\n[0/3] Dispatcher checking toolbelt...")
+    print(f"TASK: {task}\n[dispatch] checking toolbelt...")
     owned = find_tool(task)
     if owned:
-        print(f"REUSE: already own '{owned}' — no solving needed. (tools/{owned}.py)")
+        print(f"[reuse] running owned tool '{owned}'...")
+        execute(owned, task)
         return
-    print("      no matching tool — solving from scratch.")
-    print("[1/3] Examiner writing test...")
+    print("[solve] no matching tool — earning a new one.")
     exam = write_test(task)
     if not exam["ok"]:
         print("Examiner could not produce a valid test. Task aborted.")
         return
-    print(f"      test accepted (attempt {exam['attempts']})")
-    print("[2/3] Solver working...")
     result = solve(task, exam["test"])
     if not result["solved"]:
         print("FAILED after", result["attempts"], "attempts. Nothing saved.")
         return
-    print("[3/3] Saving tool...")
     name = think(
         f"Suggest a short snake_case name (max 3 words) for a tool that does: {task}. "
         "Reply with ONLY the name."
     )
-    path = save_tool(name, task, result["code"], result["attempts"])
-    print(f"DONE. Tool saved: {os.path.basename(path)} | toolbelt size: {len(list_tools())}")
+    save_tool(name, task, result["code"], result["attempts"])
+    tool_name = [n for n in list_tools() if list_tools()[n]["task"] == task][0]
+    print(f"[earned] new tool '{tool_name}' | toolbelt size: {len(list_tools())}")
+    print("[run] executing it on your input...")
+    execute(tool_name, task)
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
