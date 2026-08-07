@@ -8,5 +8,10 @@
     "task": "Write a function seconds_to_hms(n) that converts seconds to a string 'H:MM:SS', e.g. 3661 -> '1:01:01'.",
     "file": "seconds_to_hms.py",
     "attempts": 1
+  },
+  "sha256_hex_hash": {
+    "task": "Write a function that returns the SHA-256 hash of a string as hex.",
+    "file": "sha256_hex_hash.py",
+    "attempts": 1
   }
 }
