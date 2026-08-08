@@ -11,7 +11,7 @@ def think(prompt: str, system: str = "You are Jarvis_60, a precise assistant.") 
     """Send a prompt to the brain, return its reply as text."""
     response = client.messages.create(
         model="claude-sonnet-4-6",
-        max_tokens=1024,
+        max_tokens=4096,
         system=system,
         messages=[{"role": "user", "content": prompt}],
     )

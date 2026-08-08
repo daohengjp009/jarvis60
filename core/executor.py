@@ -27,6 +27,18 @@ def execute(tool_name: str, task: str) -> None:
     with open(os.path.join(TOOLS_DIR, info["file"])) as f:
         tool_code = f.read()
 
+    check = think(
+        f"Tool code:\n{tool_code}\n\nUser request: {task}\n\n"
+        "Does the request contain ALL concrete input values needed to actually run "
+        "the tool (real file paths, real numbers, real strings)? Reply ONLY YES or "
+        "ONLY the word MISSING followed by what is missing.",
+        system="You are Jarvis_60's executor. Terse answers.",
+    ).strip()
+    if check.upper().startswith("MISSING"):
+        print(f"NEED INPUT — {check[7:].strip() or 'concrete input values required.'}")
+        print("Re-run with the actual values in your request.")
+        return
+
     call_line = think(
         f"Tool code:\n{tool_code}\n\nUser request: {task}\n\n"
         "Write ONLY the Python line(s) that call the tool's function with the "
