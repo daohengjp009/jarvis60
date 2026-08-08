@@ -10,12 +10,15 @@ def _load_registry() -> dict:
             return json.load(f)
     return {}
 
-def save_tool(name: str, task: str, code: str, attempts: int) -> str:
+def save_tool(name: str, task: str, code: str, attempts: int, exam: str = "") -> str:
     """Store passing code as a permanent tool + registry entry."""
     name = re.sub(r"[^a-z0-9_]", "", name.lower().replace(" ", "_"))[:40]
     path = os.path.join(TOOLS_DIR, f"{name}.py")
     with open(path, "w") as f:
         f.write(f'"""Tool: {name}\nTask: {task}\nBorn after {attempts} attempt(s)."""\n\n{code}\n')
+    if exam:
+        with open(os.path.join(TOOLS_DIR, f"{name}.exam.py"), "w") as f:
+            f.write(exam)
     registry = _load_registry()
     registry[name] = {"task": task, "file": f"{name}.py", "attempts": attempts}
     with open(REGISTRY, "w") as f:

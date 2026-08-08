@@ -42,7 +42,11 @@ def execute(tool_name: str, task: str) -> None:
     call_line = think(
         f"Tool code:\n{tool_code}\n\nUser request: {task}\n\n"
         "Write ONLY the Python line(s) that call the tool's function with the "
-        "concrete input from the user request and print the result. No fences.",
+        "concrete input from the user request and print the result. No fences. "
+        "IMPORTANT: the code runs with working directory = the project's sandbox/ dir. "
+        "The project root is /Users/leolo/jarvis60. If the user gives a relative path "
+        "(e.g. sandbox/demo.txt or memory/x.json), convert it to an absolute path "
+        "under the project root.",
         system="You are Jarvis_60's executor. Minimal code, only the call and print.",
     ).replace("```python", "").replace("```", "").strip()
 

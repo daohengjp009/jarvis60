@@ -2,17 +2,20 @@
   "text_file_analyzer": {
     "task": "Write a function analyze_text(path) that reads a text file and returns a dict: {'lines': int, 'words': int, 'top5': list of the 5 most common words (lowercased)}.",
     "file": "text_file_analyzer.py",
-    "attempts": 1
+    "attempts": 1,
+    "status": "unverified"
   },
   "seconds_to_hms": {
     "task": "Write a function seconds_to_hms(n) that converts seconds to a string 'H:MM:SS', e.g. 3661 -> '1:01:01'.",
     "file": "seconds_to_hms.py",
-    "attempts": 1
+    "attempts": 1,
+    "status": "unverified"
   },
   "sha256_hex_hash": {
     "task": "Write a function that returns the SHA-256 hash of a string as hex.",
     "file": "sha256_hex_hash.py",
-    "attempts": 1
+    "attempts": 1,
+    "status": "unverified"
   },
   "file_word_hasher": {
     "task": "Write a function that takes a text file path, finds the most common word in it, and returns that word's SHA-256 hash as hex.",
@@ -21,6 +24,7 @@
     "composed_from": [
       "text_file_analyzer",
       "sha256_hex_hash"
-    ]
+    ],
+    "status": "unverified"
   }
 }

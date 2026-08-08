@@ -5,7 +5,8 @@ from core.brain import think
 from core.toolbelt import list_tools
 
 def _catalog() -> str:
-    return "\n".join(f"- {n}: {i['task']}" for n, i in list_tools().items())
+    return "\n".join(f"- {n}: {i['task']}" for n, i in list_tools().items()
+                      if i.get("status") != "broken")
 
 def find_tool(task: str) -> str | None:
     """Exact match: one owned tool fully does the task."""

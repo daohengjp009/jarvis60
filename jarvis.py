@@ -9,12 +9,12 @@ from core.composer import compose
 from core.toolbelt import save_tool, list_tools
 from core.executor import execute
 
-def _name_and_save(task, code, attempts, composed_from=None):
+def _name_and_save(task, code, attempts, composed_from=None, exam=""):
     name = think(
         f"Suggest a short snake_case name (max 3 words) for a tool that does: {task}. "
         "Reply with ONLY the name."
     )
-    path = save_tool(name, task, code, attempts)
+    path = save_tool(name, task, code, attempts, exam=exam)
     tool_name = os.path.basename(path)[:-3]
     if composed_from:
         import json
@@ -40,7 +40,7 @@ def do(task: str):
         print(f"[compose] using owned pieces: {parts}")
         result = compose(task, parts, exam["test"])
         if result["solved"]:
-            tool_name = _name_and_save(task, result["code"], result["attempts"], composed_from=parts)
+            tool_name = _name_and_save(task, result["code"], result["attempts"], composed_from=parts, exam=exam["test"])
             print(f"[earned-by-composition] '{tool_name}' | toolbelt: {len(list_tools())}")
             execute(tool_name, task)
             return
@@ -50,7 +50,7 @@ def do(task: str):
     if not result["solved"]:
         print("FAILED after", result["attempts"], "attempts. Nothing saved.")
         return
-    tool_name = _name_and_save(task, result["code"], result["attempts"])
+    tool_name = _name_and_save(task, result["code"], result["attempts"], exam=exam["test"])
     print(f"[earned] '{tool_name}' | toolbelt: {len(list_tools())}")
     execute(tool_name, task)
 
