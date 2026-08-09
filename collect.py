@@ -65,6 +65,13 @@ def main(tickers):
     print(f"watching {len(watch)} contracts, polling every {POLL_SECONDS}s. Ctrl-C to stop.\n")
     ctx.subscribe(watch, [SubType.TICKER])
     seen = set()
+    import glob
+    for f in glob.glob(os.path.join(TICKS, "*.csv")):   # survive restarts
+        try:
+            seen.update(pd.read_csv(f, usecols=["sequence"])["sequence"].tolist())
+        except Exception:
+            pass
+    print(f"loaded {len(seen)} previously-seen ticks from disk")
     try:
         while True:
             total = sum(append_ticks(ctx, c, seen) for c in watch)
