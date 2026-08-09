@@ -4,6 +4,7 @@ Saves: data/ticks/<CODE>_<date>.csv  and  data/snapshots/<TICKER>_<date>.csv"""
 import sys, os, time, datetime, pandas as pd
 sys.path.insert(0, os.path.dirname(__file__))
 from futu import OpenQuoteContext, SysConfig, SubType
+from core.notify import send
 
 KEY = "/Users/leolo/.openclaw/futu/conn_key_1024.pem"
 BASE = os.path.dirname(os.path.abspath(__file__))
@@ -63,6 +64,8 @@ def main(tickers):
     if not watch:
         print("nothing to watch."); ctx.close(); return
     print(f"watching {len(watch)} contracts, polling every {POLL_SECONDS}s. Ctrl-C to stop.\n")
+    send(f"Collector STARTED\n{len(watch)} contracts: {', '.join(tickers)}")
+    last_beat = time.time(); beat_ticks = 0; quiet_polls = 0
     ctx.subscribe(watch, [SubType.TICKER])
     seen = set()
     import glob
@@ -76,9 +79,20 @@ def main(tickers):
         while True:
             total = sum(append_ticks(ctx, c, seen) for c in watch)
             print(f"{datetime.datetime.now():%H:%M:%S}  new ticks: {total}  (cumulative unique: {len(seen)})")
+            beat_ticks += total
+            quiet_polls = quiet_polls + 1 if total == 0 else 0
+            if quiet_polls == 40:   # ~20 min of silence during a session
+                send("WARNING: no new ticks for 20 minutes. Feed may be down.")
+            if time.time() - last_beat >= 3600:
+                send(f"Heartbeat: +{beat_ticks} ticks this hour (total {len(seen)})")
+                last_beat = time.time(); beat_ticks = 0
             time.sleep(POLL_SECONDS)
     except KeyboardInterrupt:
         print("\nstopped by user.")
+        send(f"Collector STOPPED by user. Total ticks: {len(seen)}")
+    except Exception as e:
+        send(f"Collector CRASHED: {type(e).__name__}: {e}")
+        raise
     finally:
         ctx.close()
 
