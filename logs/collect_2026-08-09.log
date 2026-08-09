@@ -1,0 +1,1 @@
+2026-08-09 19:47:00,892 | 29710 | 4314043904 | [open_context_base.py:410] _init_connect_sync: New connect ready: conn=7492290355845533958(1) context=<futu.quote.open_quote_context.OpenQuoteContext object at 0x100edfac0>
