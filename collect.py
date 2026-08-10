@@ -39,7 +39,8 @@ def pick_contracts(ctx, ticker: str) -> list:
     snap_path = os.path.join(SNAPS, f"{ticker.replace('.','_')}_{today}.csv")
     df[keep].to_csv(snap_path, index=False)
     print(f"[{ticker}] snapshot saved: {len(df)} contracts -> {os.path.basename(snap_path)}")
-    live = df[(df["option_premium"] > 0) & (df["volume"] > 0)].copy()
+    live = df[(df["option_premium"] > 0) & (df["volume"] > 0) &
+              (df["option_expiry_date_distance"] > 1)].copy()
     live = live.sort_values("volume", ascending=False)
     return list(live["code"].head(TOP_N))
 
@@ -66,6 +67,7 @@ def main(tickers):
     print(f"watching {len(watch)} contracts, polling every {POLL_SECONDS}s. Ctrl-C to stop.\n")
     send(f"Collector STARTED\n{len(watch)} contracts: {', '.join(tickers)}")
     last_beat = time.time(); beat_ticks = 0; quiet_polls = 0
+    start_time = time.time(); repicked = False
     ctx.subscribe(watch, [SubType.TICKER])
     seen = set()
     import glob
@@ -83,6 +85,17 @@ def main(tickers):
             quiet_polls = quiet_polls + 1 if total == 0 else 0
             if quiet_polls == 40:   # ~20 min of silence during a session
                 send("WARNING: no new ticks for 20 minutes. Feed may be down.")
+            if not repicked and time.time() - start_time >= 2700:   # 45 min
+                fresh = []
+                for t in tickers:
+                    c = t if "." in t else f"US.{t.upper()}"
+                    fresh += pick_contracts(ctx, c)
+                added = [c for c in fresh if c not in watch]
+                if added:
+                    ctx.subscribe(added, [SubType.TICKER])
+                    watch.extend(added)
+                    send(f"Watchlist re-picked on live volume: +{len(added)} contracts (now {len(watch)})")
+                repicked = True
             if time.time() - last_beat >= 3600:
                 send(f"Heartbeat: +{beat_ticks} ticks this hour (total {len(seen)})")
                 last_beat = time.time(); beat_ticks = 0

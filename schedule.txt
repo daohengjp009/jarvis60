@@ -1,0 +1,3 @@
+# Jarvis_60 auto-collection, Mon-Fri (times are MacBook A's local time = UK)
+20 14 * * 1-5 cd /Users/leolo/jarvis60 && /usr/bin/python3 collect.py TSLA NVDA >> logs/collect_$(date +\%F).log 2>&1
+0 21 * * 1-5 pkill -f collect.py
