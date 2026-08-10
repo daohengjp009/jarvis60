@@ -21,7 +21,7 @@ def _ctx():
     SysConfig.set_init_rsa_file(KEY)
     return OpenQuoteContext(host="127.0.0.1", port=11112)
 
-def pick_contracts(ctx, ticker: str) -> list:
+def pick_contracts(ctx, ticker: str, tag: str = "") -> list:
     """Daily snapshot + choose the most liquid contracts to watch."""
     today = datetime.date.today()
     end = today + datetime.timedelta(days=28)
@@ -36,7 +36,7 @@ def pick_contracts(ctx, ticker: str) -> list:
     if not rows: return []
     df = pd.concat(rows, ignore_index=True)
     keep = [c for c in COLS if c in df.columns]
-    snap_path = os.path.join(SNAPS, f"{ticker.replace('.','_')}_{today}.csv")
+    snap_path = os.path.join(SNAPS, f"{ticker.replace('.','_')}_{today}{tag}.csv")
     df[keep].to_csv(snap_path, index=False)
     print(f"[{ticker}] snapshot saved: {len(df)} contracts -> {os.path.basename(snap_path)}")
     live = df[(df["option_premium"] > 0) & (df["volume"] > 0) &
@@ -89,7 +89,7 @@ def main(tickers):
                 fresh = []
                 for t in tickers:
                     c = t if "." in t else f"US.{t.upper()}"
-                    fresh += pick_contracts(ctx, c)
+                    fresh += pick_contracts(ctx, c, tag="_repick")
                 added = [c for c in fresh if c not in watch]
                 if added:
                     ctx.subscribe(added, [SubType.TICKER])
