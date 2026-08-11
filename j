@@ -29,7 +29,8 @@ case "$1" in
   log)    tail -f "logs/collect_$(date +%F).log" ;;
   screen) shift; python3 screen.py "${@:-TSLA}" ;;
   check)  python3 core/recheck.py ;;
+  snap)   python3 snapshot.py ;;
   *)
-    echo "Usage: ./j start [TICKERS] | stop | status | log | screen TICKER | check"
+    echo "Usage: ./j start [TICKERS] | stop | status | log | screen TICKER | check | snap"
     ;;
 esac

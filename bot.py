@@ -47,13 +47,14 @@ def cmd_screen(arg):
     if not t.isalpha(): return "invalid ticker"
     return _sh([sys.executable, "screen.py", t])
 def cmd_check(arg):  return _sh([sys.executable, "core/recheck.py"])
+def cmd_snap(arg):   return _sh([sys.executable, "snapshot.py"], timeout=600)
 def cmd_help(arg):
     return ("/start [TICKERS] - begin collecting\n/stop - stop collector\n"
             "/status - is it alive\n/screen TICKER - option screener\n"
-            "/check - toolbelt health\n/help - this menu")
+            "/check - toolbelt health\n/snap - daily chain snapshot (all 13)\n/help - this menu")
 
 COMMANDS = {"/start": cmd_start, "/stop": cmd_stop, "/status": cmd_status,
-            "/screen": cmd_screen, "/check": cmd_check, "/help": cmd_help}
+            "/screen": cmd_screen, "/check": cmd_check, "/snap": cmd_snap, "/help": cmd_help}
 
 def main():
     offset = None
