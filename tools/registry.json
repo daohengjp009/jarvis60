@@ -32,5 +32,10 @@
     "file": "options_screener.py",
     "attempts": 2,
     "status": "ok"
+  },
+  "analyze_flow": {
+    "task": "Write a function analyze_flow(ticks) that takes a list of dicts, each with keys: time (string), price (float), volume (float), turnover (float), ticker_direction (string, one of 'BUY', 'SELL', 'NEUTRAL'). Return a dict with these keys: 'buy_notional' = sum of turnover where ticker_direction is BUY; 'sell_notional' = sum of turnover where ticker_direction is SELL; 'net_notional' = buy_notional minus sell_notional; 'buy_share' = buy_notional divided by (buy_notional + sell_notional), or 0.0 if that sum is 0; 'total_prints' = number of ticks; 'blocks' = list of the original tick dicts whose volume is 50 or greater, sorted by volume descending, at most 10 items; 'clusters' = for every group of 2 or more ticks that share an identical time string AND the same ticker_direction, a dict with keys 'time', 'direction', 'prints' (count), 'volume' (sum), 'notional' (sum of turnover), sorted by notional descending, at most 10 items; 'label' = 'UNUSUAL_BUY_PRESSURE' if buy_share >= 0.65, 'UNUSUAL_SELL_PRESSURE' if buy_share <= 0.35, otherwise 'BALANCED'.",
+    "file": "analyze_flow.py",
+    "attempts": 2
   }
 }

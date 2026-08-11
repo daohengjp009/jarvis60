@@ -10,6 +10,8 @@ KEY = "/Users/leolo/.openclaw/futu/conn_key_1024.pem"
 BASE = os.path.dirname(os.path.abspath(__file__))
 TICKS = os.path.join(BASE, "data", "ticks")
 SNAPS = os.path.join(BASE, "data", "snapshots")
+UNDER = os.path.join(BASE, "data", "underlying")
+os.makedirs(UNDER, exist_ok=True)
 COLS = ["option_type","option_strike_price","option_open_interest","option_implied_volatility",
         "option_premium","option_delta","option_gamma","option_vega","option_theta",
         "option_expiry_date_distance","bid_price","ask_price","volume","turnover","last_price","code"]
@@ -45,19 +47,43 @@ def pick_contracts(ctx, ticker: str, tag: str = "") -> list:
     return list(live["code"].head(TOP_N))
 
 def append_ticks(ctx, code: str, seen: set):
-    r, t = ctx.get_rt_ticker(code, 500)
+    r, t = ctx.get_rt_ticker(code, 1000)
     if r != 0 or t is None or len(t) == 0: return 0
-    t = t[~t["sequence"].isin(seen)]
+    s_ = seen.setdefault(code, set())          # per-contract: sequences collide across contracts
+    t = t[~t["sequence"].isin(s_)]
     if len(t) == 0: return 0
-    seen.update(t["sequence"].tolist())
+    s_.update(t["sequence"].tolist())
     t["trade_date"] = pd.to_datetime(t["time"], format="mixed").dt.date
     for d, grp in t.groupby("trade_date"):
         path = os.path.join(TICKS, f"{code.replace('.','_')}_{d}.csv")
         grp.to_csv(path, mode="a", header=not os.path.exists(path), index=False)
     return len(t)
 
+UNDER_COLS = ["code", "update_time", "last_price", "bid_price", "ask_price",
+               "volume", "turnover", "high_price", "low_price", "open_price",
+               "prev_close_price"]
+
+def record_underlying(ctx, codes):
+    """Append a price row per underlying each poll. Never raises."""
+    try:
+        r, snap = ctx.get_market_snapshot(codes)
+        if r != 0:
+            return 0
+        keep = [c for c in UNDER_COLS if c in snap.columns]
+        snap = snap[keep].copy()
+        snap["poll_time"] = datetime.datetime.now().isoformat(timespec="seconds")
+        today = datetime.date.today()
+        for c, grp in snap.groupby("code"):
+            path = os.path.join(UNDER, f"{c.replace('.','_')}_{today}.csv")
+            grp.to_csv(path, mode="a", header=not os.path.exists(path), index=False)
+        return len(snap)
+    except Exception:
+        return 0
+
+
 def main(tickers):
     ctx = _ctx()
+    under_codes = [t if "." in t else f"US.{t.upper()}" for t in tickers]
     watch = []
     for t in tickers:
         code = t if "." in t else f"US.{t.upper()}"
@@ -69,18 +95,21 @@ def main(tickers):
     last_beat = time.time(); beat_ticks = 0; quiet_polls = 0
     start_time = time.time(); repicked = False
     ctx.subscribe(watch, [SubType.TICKER])
-    seen = set()
-    import glob
-    for f in glob.glob(os.path.join(TICKS, "*.csv")):   # survive restarts
+    seen = {}
+    import glob, re
+    for f in glob.glob(os.path.join(TICKS, "*.csv")):   # survive restarts, per contract
+        mm = re.match(r"(US)_(.+)_\d{4}-\d{2}-\d{2}\.csv$", os.path.basename(f))
+        if not mm: continue
+        c_ = f"{mm.group(1)}.{mm.group(2)}"
         try:
-            seen.update(pd.read_csv(f, usecols=["sequence"])["sequence"].tolist())
+            seen.setdefault(c_, set()).update(pd.read_csv(f, usecols=["sequence"])["sequence"].tolist())
         except Exception:
             pass
-    print(f"loaded {len(seen)} previously-seen ticks from disk")
+    print(f"loaded prior ticks for {len(seen)} contracts from disk")
     try:
         while True:
             total = sum(append_ticks(ctx, c, seen) for c in watch)
-            print(f"{datetime.datetime.now():%H:%M:%S}  new ticks: {total}  (cumulative unique: {len(seen)})")
+            print(f"{datetime.datetime.now():%H:%M:%S}  new ticks: {total}  (cumulative: {sum(len(v) for v in seen.values())})")
             beat_ticks += total
             quiet_polls = quiet_polls + 1 if total == 0 else 0
             if quiet_polls == 40:   # ~20 min of silence during a session
@@ -97,12 +126,13 @@ def main(tickers):
                     send(f"Watchlist re-picked on live volume: +{len(added)} contracts (now {len(watch)})")
                 repicked = True
             if time.time() - last_beat >= 3600:
-                send(f"Heartbeat: +{beat_ticks} ticks this hour (total {len(seen)})")
+                send(f"Heartbeat: +{beat_ticks} ticks this hour (total {sum(len(v) for v in seen.values())})")
                 last_beat = time.time(); beat_ticks = 0
+            record_underlying(ctx, under_codes)
             time.sleep(POLL_SECONDS)
     except KeyboardInterrupt:
         print("\nstopped by user.")
-        send(f"Collector STOPPED by user. Total ticks: {len(seen)}")
+        send(f"Collector STOPPED by user. Total ticks: {sum(len(v) for v in seen.values())}")
     except Exception as e:
         send(f"Collector CRASHED: {type(e).__name__}: {e}")
         raise
