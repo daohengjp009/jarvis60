@@ -140,4 +140,4 @@ def main(tickers):
         ctx.close()
 
 if __name__ == "__main__":
-    main(sys.argv[1:] or ["TSLA"])
+    main(sys.argv[1:] or ["TSLA", "NVDA", "GOOGL"])

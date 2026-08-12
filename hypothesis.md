@@ -32,7 +32,7 @@ Stop at 150 qualifying events OR 6 weeks of collection, whichever comes first.
 No analysis of the primary metric before the stopping rule is met.
 
 ## Decision thresholds (fixed now)
-GO      : excess >= +0.15%, t-stat >= 2.5, and excess is positive in >= 60% of symbols
+GO      : excess >= +0.15%, t-stat >= 2.5, and excess is positive in ALL 3 symbols (tightened from 60% due to small symbol count)
 KILL    : |excess| < 0.10%, OR t-stat < 2.0, OR sign flips across the majority of symbols
 AMBIGUOUS: anything between -> collect one more month, then decide once
 
@@ -51,7 +51,12 @@ AMBIGUOUS: anything between -> collect one more month, then decide once
 - effect size must exceed option bid-ask costs (2-3%) to be tradable at all
 
 ## Data requirements
-- >= 10 liquid underlyings (not 2 - the pilot showed single-name effects dominate)
+- 3 liquid underlyings: TSLA, NVDA, GOOGL
+- AMENDED 2026-08-11 before any collection: original v1 required >= 10 underlyings.
+  Reduced to 3 to keep contract count near the level where 100% tick capture was
+  verified (32 contracts on 2026-08-11). Accepted cost: single-name effects cannot
+  be fully ruled out, so a GO result means "worth a larger test", never "tradable".
+  To compensate, the symbol-agreement rule below is TIGHTENED, not relaxed.
 - watchlist rule unchanged for the whole experiment
 - underlying 1-minute bars backfilled for every collection day
 

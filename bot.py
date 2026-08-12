@@ -29,7 +29,7 @@ def _sh(args: list, timeout: int = 240) -> str:
 def cmd_start(arg):
     if subprocess.run(["pgrep", "-f", "collect.py"], capture_output=True).returncode == 0:
         return "collector already running"
-    tickers = [t.upper() for t in arg.split()][:5] or ["TSLA", "NVDA"]
+    tickers = [t.upper() for t in arg.split()][:5] or ["TSLA", "NVDA", "GOOGL"]
     if not all(t.isalpha() for t in tickers):
         return "invalid ticker"
     log = os.path.join(BASE, "logs", f"collect_{time.strftime('%F')}.log")

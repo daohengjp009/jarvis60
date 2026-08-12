@@ -4,7 +4,7 @@ cd "$(dirname "$0")"
 case "$1" in
   start)
     shift
-    TICKERS="${@:-TSLA NVDA}"
+    TICKERS="${@:-TSLA NVDA GOOGL}"
     if pgrep -f "collect.py" > /dev/null; then
       echo "already running (use ./j stop first)"; exit 1
     fi
