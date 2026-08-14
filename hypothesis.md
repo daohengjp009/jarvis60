@@ -27,6 +27,14 @@ For each event: 20 random timestamps from the SAME symbol, SAME calendar day,
 SAME hour of day. Control return computed identically.
 excess = mean(event signed_return) - mean(matched control signed_return)
 
+## Data completeness rule (added 2026-08-14, before any result was examined)
+Capture rate = our summed tick volume / the contract's daily K-line volume.
+- Any single contract-day with capture < 95% is EXCLUDED from the event count.
+- Other contracts on the same day are unaffected.
+- Capture is measured for every contract-day before the primary test is run.
+Rationale: a partial tape understates flow unevenly, so events drawn from it are
+not comparable. Fixed now so the threshold cannot be chosen to suit the outcome.
+
 ## Stopping rule
 Stop at 150 qualifying events OR 6 weeks of collection, whichever comes first.
 No analysis of the primary metric before the stopping rule is met.
