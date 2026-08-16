@@ -38,7 +38,7 @@ def pick_contracts(ctx, ticker: str, tag: str = "") -> list:
     if not rows: return []
     df = pd.concat(rows, ignore_index=True)
     keep = [c for c in COLS if c in df.columns]
-    snap_path = os.path.join(SNAPS, f"{ticker.replace('.','_')}_{today}{tag}.csv")
+    snap_path = os.path.join(SNAPS, f"{ticker.replace('.','_')}_{today}_collector{tag}.csv")
     df[keep].to_csv(snap_path, index=False)
     print(f"[{ticker}] snapshot saved: {len(df)} contracts -> {os.path.basename(snap_path)}")
     live = df[(df["option_premium"] > 0) & (df["volume"] > 0) &

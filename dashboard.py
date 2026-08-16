@@ -12,6 +12,7 @@ SYMS = ("TSLA", "NVDA", "GOOGL")
 ALL13 = "TSLA NVDA AAPL MSFT GOOGL SPY QQQ SPCX INTC MU SKHY COHR BE".split()
 MIN_NOTIONAL, THRESHOLD = 250_000, 95.0
 EXP_START, TARGET_EVENTS, TARGET_DAYS = "2026-08-12", 150, 20
+CUTOFF_HOUR = 15   # events at/after 15:00 ET excluded (horizon would pass the close)
 HARD_STOP, PORT = "2026-09-23", 8060
 COL = {"TSLA": "#58a6ff", "NVDA": "#3fb950", "GOOGL": "#d29922"}
 
@@ -37,8 +38,8 @@ def scan(path):
             label = f'{m.group(1)} {m.group(3)}{int(m.group(4))/1000:g} {m.group(2)}'
             for _, r in q.iterrows():
                 evs.append({"t": r["time"], "dir": r["ticker_direction"], "p": int(r["p"]),
-                            "v": float(r["v"]), "n": float(r["n"]),
-                            "sym": m.group(1), "label": label})
+                            "v": float(r["v"]), "n": float(r["n"]), "sym": m.group(1),
+                            "label": label, "code": os.path.basename(path)[:-15].replace("US_", "US.")})
     st = {"sym": m.group(1), "day": m.group(5), "prints": len(d), "events": evs}
     _cache[path] = (mt, st)
     return st
@@ -55,13 +56,19 @@ def gather():
         evbyday.setdefault(s["day"], []).extend(s["events"])
     snaps, depth = {}, {}
     for f in glob.glob(os.path.join(SNAPS, "*.csv")):
-        mm = re.match(r"US_([A-Z]+)_(\d{4}-\d{2}-\d{2})(_repick)?\.csv$", os.path.basename(f))
-        if mm and not mm.group(3):
+        mm = re.match(r"US_([A-Z]+)_(\d{4}-\d{2}-\d{2})\.csv$", os.path.basename(f))
+        if mm:
             snaps.setdefault(mm.group(2), set()).add(mm.group(1))
             depth[mm.group(1)] = depth.get(mm.group(1), 0) + 1
     cap = json.load(open(CACHE)) if os.path.exists(CACHE) else {}
     running = subprocess.run(["pgrep", "-f", "collect.py"], capture_output=True).returncode == 0
     return days, evbyday, snaps, depth, cap, running
+
+def qualifies(e, day, cap):
+    if int(e["t"][11:13]) >= CUTOFF_HOUR: return False
+    c = cap.get(day)
+    if c is None or c["overall"] < THRESHOLD: return False
+    return e["code"] not in set(c.get("below_threshold", []))
 
 def alerts(days, snaps, cap):
     out, today = [], str(datetime.date.today())
@@ -145,11 +152,13 @@ margin:3px 4px 0 0;font-size:12.5px;color:#8b949e}}.chip b{{color:#c9d1d9}}
 def render_home():
     days, evbyday, snaps, depth, cap, running = gather()
     exp = sorted(d for d in days if d >= EXP_START)
-    ok = [d for d in exp if cap.get(d, {}).get("overall", 100) >= THRESHOLD]
-    tot_ev = sum(sum(days[d][s]["events"] for s in SYMS) for d in ok)
+    ok = [d for d in exp if cap.get(d, {}).get("overall", 0) >= THRESHOLD]
+    qual = {d: [e for e in evbyday.get(d, []) if qualifies(e, d, cap)] for d in ok}
+    tot_ev = sum(len(v) for v in qual.values())
     n_days = len(ok)
     per_day = tot_ev / n_days if n_days else 0
-    sym_tot = {s: sum(days[d][s]["events"] for d in ok) for s in SYMS}
+    sym_tot = {s: sum(1 for d in ok for e in qual[d] if e["sym"] == s) for s in SYMS}
+    pending = [d for d in exp if d not in ok]
     need_days, need_ev = max(0, TARGET_DAYS - n_days), max(0, TARGET_EVENTS - tot_ev)
     eta = max(need_days, need_ev / per_day if per_day else 0)
     finish, left = datetime.date.today(), eta
@@ -159,6 +168,8 @@ def render_home():
     finish = min(finish, datetime.date.fromisoformat(HARD_STOP))
 
     al = alerts(days, snaps, cap)
+    if pending:
+        al.insert(0, ("warn", f"not yet counted (capture unchecked): {', '.join(pending)}"))
     albox = "".join(f'<div class="al {k}">{t}</div>' for k, t in al) or \
             '<div class="al ok">no data-quality issues</div>'
 
@@ -178,12 +189,12 @@ def render_home():
                  + f'<td><b>{ev}</b></td><td>{sb}</td></tr>')
 
     # charts (experiment days only)
-    trend = [(d[5:], sum(days[d][s]["events"] for s in SYMS)) for d in ok]
+    trend = [(d[5:], len(qual[d])) for d in ok]
     hours = {}
     buckets = [("250k-500k", 0), ("500k-1M", 0), ("1M-2M", 0), ("2M-5M", 0), ("5M+", 0)]
     bcount = dict(buckets)
     for d in ok:
-        for e in evbyday.get(d, []):
+        for e in qual[d]:
             hours[e["t"][11:13]] = hours.get(e["t"][11:13], 0) + 1
             n = e["n"]
             k = ("250k-500k" if n < 5e5 else "500k-1M" if n < 1e6 else
@@ -214,7 +225,7 @@ def render_home():
   <div class=big>{n_days}<span style="font-size:15px;color:#8b949e"> / {TARGET_DAYS}</span></div>
   <div class=bar><div class=fill style="width:{min(100,n_days/TARGET_DAYS*100):.1f}%;background:#d29922"></div></div></div>
  <div class=card><div class=lab>events / day</div><div class=big>{per_day:.1f}</div>
-  <div class=lab>days counted only if capture &ge; 95%</div></div>
+  <div class=lab>excludes unchecked days, sub-95% contracts, and events after {CUTOFF_HOUR}:00</div></div>
 </div>
 
 <h2>events by day</h2><div class=card>{svg_bars(trend)}</div>
@@ -235,17 +246,18 @@ Forward returns stay sealed until the stopping rule is met.</div>""")
 def render_day(day):
     _, evbyday, _, _, cap, _ = gather()
     evs = sorted(evbyday.get(day, []), key=lambda e: -e["n"])
+    for e in evs: e["ok"] = qualifies(e, day, cap)
     c = cap.get(day)
     badge = ("not yet checked" if c is None else
              f'{c["overall"]}% capture' + ("" if c["overall"] >= THRESHOLD else " — DAY EXCLUDED"))
     rows = "".join(
-        f'<tr><td>{e["t"][11:]}</td><td>{e["label"]}</td>'
+        f'<tr style="opacity:{1 if e["ok"] else .4}"><td>{e["t"][11:]}</td><td>{e["label"]}</td>'
         f'<td class="{"buy" if e["dir"]=="BUY" else "sell"}">{e["dir"]}</td>'
         f'<td>{e["p"]}</td><td>{e["v"]:,.0f}</td><td><b>${e["n"]:,.0f}</b></td></tr>' for e in evs)
     tot = sum(e["n"] for e in evs)
     return page(f"""
 <h1>{day} — qualifying events</h1>
-<div class=sub><a href="/">&larr; back</a> &middot; {len(evs)} events &middot;
+<div class=sub><a href="/">&larr; back</a> &middot; {sum(e["ok"] for e in evs)} counted of {len(evs)} &middot;
 ${tot:,.0f} total notional &middot; {badge}</div>
 <table><tr><th>time</th><th>contract</th><th>dir</th><th>prints</th><th>lots</th><th>notional</th></tr>
 {rows or '<tr><td colspan=6>no qualifying events</td></tr>'}</table>
