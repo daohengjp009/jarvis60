@@ -143,7 +143,7 @@ tr.pre td{{color:#6e7681}}
 .b{{padding:2px 7px;border-radius:11px;font-size:12px;font-weight:600}}
 .b.green{{background:#12261a;color:#56d364}}.b.red{{background:#2d1214;color:#ff7b72}}
 .b.amber{{background:#2b2314;color:#e3b341}}.b.grey{{background:#21262d;color:#8b949e}}
-.buy{{color:#56d364}}.sell{{color:#ff7b72}}
+.mut{{color:#6e7681;font-weight:400}}.buy{{color:#56d364}}.sell{{color:#ff7b72}}
 .chip{{display:inline-block;background:#21262d;border-radius:6px;padding:4px 9px;
 margin:3px 4px 0 0;font-size:12.5px;color:#8b949e}}.chip b{{color:#c9d1d9}}
 .note{{margin-top:16px;color:#6e7681;font-size:12px}}
@@ -179,7 +179,7 @@ def render_home():
         badge = ('<span class="b grey">unchecked</span>' if c is None else
                  f'<span class="b {"green" if c["overall"]>=THRESHOLD else "red"}">{c["overall"]}%</span>')
         dq = [e for e in evbyday.get(d, []) if qualifies(e, d, cap)]
-        ev = len(dq)
+        ev, raw = len(dq), len(evbyday.get(d, []))
         pr = sum(days[d][s]["prints"] for s in SYMS)
         ct = sum(days[d][s]["contracts"] for s in SYMS)
         sn = len(snaps.get(d, set()))
@@ -187,7 +187,7 @@ def render_home():
         rows += (f'<tr class="{"pre" if d < EXP_START else ""}"><td><a href="/day?d={d}">{d}</a></td>'
                  f'<td>{badge}</td><td>{ct}</td><td>{pr:,}</td>'
                  + "".join(f"<td>{sum(1 for e in dq if e['sym']==s)}</td>" for s in SYMS)
-                 + f'<td><b>{ev}</b></td><td>{sb}</td></tr>')
+                 + f'<td><b>{ev}</b> <span class=mut>/ {raw}</span></td><td>{sb}</td></tr>')
 
     # charts (experiment days only)
     trend = [(d[5:], len(qual[d])) for d in ok]
@@ -195,13 +195,15 @@ def render_home():
     buckets = [("250k-500k", 0), ("500k-1M", 0), ("1M-2M", 0), ("2M-5M", 0), ("5M+", 0)]
     bcount = dict(buckets)
     for d in ok:
-        for e in qual[d]:
+        for e in evbyday.get(d, []):                 # RAW: everything collected
             hours[e["t"][11:13]] = hours.get(e["t"][11:13], 0) + 1
+        for e in qual[d]:                            # COUNTED
             n = e["n"]
             k = ("250k-500k" if n < 5e5 else "500k-1M" if n < 1e6 else
                  "1M-2M" if n < 2e6 else "2M-5M" if n < 5e6 else "5M+")
             bcount[k] += 1
     hpairs = [(h, hours.get(h, 0)) for h in sorted(hours)] if hours else []
+    hcol = {h: ("#6e7681" if int(h) >= CUTOFF_HOUR else "#58a6ff") for h, _ in hpairs}
     bpairs = [(k, bcount[k]) for k, _ in buckets]
     spairs = [(s, sym_tot[s]) for s in SYMS]
 
@@ -230,9 +232,9 @@ def render_home():
 </div>
 
 <h2>events by day</h2><div class=card>{svg_bars(trend)}</div>
-<h2>events by hour (US Eastern)</h2><div class=card>{svg_bars(hpairs)}
-<div class=note>If events concentrate near the open, a +60m horizon spans a different
-market regime for those than for midday events — worth knowing before the test.</div></div>
+<h2>events by hour (US Eastern) &mdash; raw collected</h2><div class=card>{svg_bars(hpairs, hcol)}
+<div class=note>Grey bars are collected but NOT counted: events at/after {CUTOFF_HOUR}:00 are
+excluded because a +60m horizon would run past the 16:00 close. Blue bars are counted.</div></div>
 <h2>notional size distribution</h2><div class=card>{svg_bars(bpairs)}</div>
 <h2>events by symbol</h2><div class=card>{svg_bars(spairs, COL)}</div>
 
@@ -240,28 +242,36 @@ market regime for those than for midday events — worth knowing before the test
 
 <h2>daily detail</h2>
 <table><tr><th>date</th><th>capture</th><th>contracts</th><th>prints</th>
-{"".join(f"<th>{s}</th>" for s in SYMS)}<th>events</th><th>snapshots</th></tr>{rows}</table>
+{"".join(f"<th>{s}</th>" for s in SYMS)}<th>events counted / raw</th><th>snapshots</th></tr>{rows}</table>
 <div class=note>Click a date for its event list. Grey rows are pre-experiment days.
 Forward returns stay sealed until the stopping rule is met.</div>""")
 
 def render_day(day):
     _, evbyday, _, _, cap, _ = gather()
     evs = sorted(evbyday.get(day, []), key=lambda e: -e["n"])
-    for e in evs: e["ok"] = qualifies(e, day, cap)
+    c0 = cap.get(day)
+    for e in evs:
+        e["ok"] = qualifies(e, day, cap)
+        if e["ok"]: e["why"] = "counted"
+        elif int(e["t"][11:13]) >= CUTOFF_HOUR: e["why"] = f"after {CUTOFF_HOUR}:00"
+        elif c0 is None: e["why"] = "day unchecked"
+        elif c0["overall"] < THRESHOLD: e["why"] = "day &lt;95%"
+        else: e["why"] = "contract &lt;95%"
     c = cap.get(day)
     badge = ("not yet checked" if c is None else
              f'{c["overall"]}% capture' + ("" if c["overall"] >= THRESHOLD else " — DAY EXCLUDED"))
     rows = "".join(
         f'<tr style="opacity:{1 if e["ok"] else .4}"><td>{e["t"][11:]}</td><td>{e["label"]}</td>'
         f'<td class="{"buy" if e["dir"]=="BUY" else "sell"}">{e["dir"]}</td>'
-        f'<td>{e["p"]}</td><td>{e["v"]:,.0f}</td><td><b>${e["n"]:,.0f}</b></td></tr>' for e in evs)
+        f'<td>{e["p"]}</td><td>{e["v"]:,.0f}</td><td><b>${e["n"]:,.0f}</b></td>'
+        f'<td><span class="b {"green" if e["ok"] else "grey"}">{e["why"]}</span></td></tr>' for e in evs)
     tot = sum(e["n"] for e in evs)
     return page(f"""
 <h1>{day} — qualifying events</h1>
 <div class=sub><a href="/">&larr; back</a> &middot; {sum(e["ok"] for e in evs)} counted of {len(evs)} &middot;
 ${tot:,.0f} total notional &middot; {badge}</div>
-<table><tr><th>time</th><th>contract</th><th>dir</th><th>prints</th><th>lots</th><th>notional</th></tr>
-{rows or '<tr><td colspan=6>no qualifying events</td></tr>'}</table>
+<table><tr><th>time</th><th>contract</th><th>dir</th><th>prints</th><th>lots</th><th>notional</th><th>status</th></tr>
+{rows or '<tr><td colspan=7>no events collected</td></tr>'}</table>
 <div class=note>Sorted by notional. An event = 2+ prints sharing an identical timestamp and
 direction, totalling at least ${MIN_NOTIONAL:,}. No forward returns shown.</div>""")
 
