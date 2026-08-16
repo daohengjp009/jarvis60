@@ -178,14 +178,15 @@ def render_home():
         c = cap.get(d)
         badge = ('<span class="b grey">unchecked</span>' if c is None else
                  f'<span class="b {"green" if c["overall"]>=THRESHOLD else "red"}">{c["overall"]}%</span>')
-        ev = sum(days[d][s]["events"] for s in SYMS)
+        dq = [e for e in evbyday.get(d, []) if qualifies(e, d, cap)]
+        ev = len(dq)
         pr = sum(days[d][s]["prints"] for s in SYMS)
         ct = sum(days[d][s]["contracts"] for s in SYMS)
         sn = len(snaps.get(d, set()))
         sb = f'<span class="b {"green" if sn==13 else "red" if sn==0 else "amber"}">{sn}/13</span>'
         rows += (f'<tr class="{"pre" if d < EXP_START else ""}"><td><a href="/day?d={d}">{d}</a></td>'
                  f'<td>{badge}</td><td>{ct}</td><td>{pr:,}</td>'
-                 + "".join(f"<td>{days[d][s]['events']}</td>" for s in SYMS)
+                 + "".join(f"<td>{sum(1 for e in dq if e['sym']==s)}</td>" for s in SYMS)
                  + f'<td><b>{ev}</b></td><td>{sb}</td></tr>')
 
     # charts (experiment days only)
