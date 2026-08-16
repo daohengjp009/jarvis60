@@ -36,7 +36,17 @@ Rationale: a partial tape understates flow unevenly, so events drawn from it are
 not comparable. Fixed now so the threshold cannot be chosen to suit the outcome.
 
 ## Stopping rule
-Stop at 150 qualifying events OR 6 weeks of collection, whichever comes first.
+AMENDED 2026-08-14, before any result was examined.
+Original: 150 events OR 6 weeks, whichever came first.
+Pace check showed ~26 events/day, so 150 events would arrive in ~6 trading days.
+Events cluster heavily within a day (same contract, same hour, same underlying
+move), so 150 events over 6 days is close to 6 independent observations - the
+same confound that invalidated the pilot.
+
+Revised: stop only when BOTH are true:
+  - at least 150 qualifying events, AND
+  - at least 20 distinct trading days collected
+Hard cap remains 6 weeks (2026-09-23) regardless.
 No analysis of the primary metric before the stopping rule is met.
 
 ## Decision thresholds (fixed now)
