@@ -1,7 +1,7 @@
-"""Jarvis_60 dashboard — collection status, data quality, sealed-test countdown.
+"""Jarvis_60 dashboard — collection status, quality, events, charts.
 Deliberately shows NO forward returns.
 Run: ./j dash    then http://192.168.0.208:8060"""
-import os, re, glob, json, subprocess, datetime
+import os, re, glob, json, subprocess, datetime, urllib.parse
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import pandas as pd
 
@@ -13,6 +13,7 @@ ALL13 = "TSLA NVDA AAPL MSFT GOOGL SPY QQQ SPCX INTC MU SKHY COHR BE".split()
 MIN_NOTIONAL, THRESHOLD = 250_000, 95.0
 EXP_START, TARGET_EVENTS, TARGET_DAYS = "2026-08-12", 150, 20
 HARD_STOP, PORT = "2026-09-23", 8060
+COL = {"TSLA": "#58a6ff", "NVDA": "#3fb950", "GOOGL": "#d29922"}
 
 _cache = {}
 
@@ -20,31 +21,38 @@ def scan(path):
     mt = os.path.getmtime(path)
     hit = _cache.get(path)
     if hit and hit[0] == mt: return hit[1]
-    m = re.match(r"US_([A-Z]+)\d{6}[CP]\d+_(\d{4}-\d{2}-\d{2})\.csv$", os.path.basename(path))
+    m = re.match(r"US_([A-Z]+)(\d{6})([CP])(\d+)_(\d{4}-\d{2}-\d{2})\.csv$", os.path.basename(path))
     if not m: return None
-    try: d = pd.read_csv(path, usecols=["time","volume","turnover","ticker_direction"])
-    except Exception: return None
-    ev, hrs = 0, {}
+    try:
+        d = pd.read_csv(path, usecols=["time", "volume", "turnover", "ticker_direction"])
+    except Exception:
+        return None
+    evs = []
     if len(d) >= 2:
-        dd = d[d["ticker_direction"].isin(["BUY","SELL"])]
+        dd = d[d["ticker_direction"].isin(["BUY", "SELL"])]
         if len(dd):
-            g = dd.groupby(["time","ticker_direction"]).agg(p=("volume","size"), n=("turnover","sum")).reset_index()
+            g = dd.groupby(["time", "ticker_direction"]).agg(
+                p=("volume", "size"), v=("volume", "sum"), n=("turnover", "sum")).reset_index()
             q = g[(g["p"] >= 2) & (g["n"] >= MIN_NOTIONAL)]
-            ev = len(q)
-            for t in q["time"]:
-                hrs[t[11:13]] = hrs.get(t[11:13], 0) + 1
-    st = {"sym": m.group(1), "day": m.group(2), "prints": len(d), "events": ev, "hours": hrs}
+            label = f'{m.group(1)} {m.group(3)}{int(m.group(4))/1000:g} {m.group(2)}'
+            for _, r in q.iterrows():
+                evs.append({"t": r["time"], "dir": r["ticker_direction"], "p": int(r["p"]),
+                            "v": float(r["v"]), "n": float(r["n"]),
+                            "sym": m.group(1), "label": label})
+    st = {"sym": m.group(1), "day": m.group(5), "prints": len(d), "events": evs}
     _cache[path] = (mt, st)
     return st
 
 def gather():
-    days = {}
+    days, evbyday = {}, {}
     for f in glob.glob(os.path.join(TICKS, "*.csv")):
         s = scan(f)
         if not s or s["sym"] not in SYMS: continue
-        d = days.setdefault(s["day"], {y: {"prints":0,"events":0,"contracts":0} for y in SYMS})
-        d[s["sym"]]["prints"] += s["prints"]; d[s["sym"]]["events"] += s["events"]
+        d = days.setdefault(s["day"], {y: {"prints": 0, "events": 0, "contracts": 0} for y in SYMS})
+        d[s["sym"]]["prints"] += s["prints"]
+        d[s["sym"]]["events"] += len(s["events"])
         d[s["sym"]]["contracts"] += 1
+        evbyday.setdefault(s["day"], []).extend(s["events"])
     snaps, depth = {}, {}
     for f in glob.glob(os.path.join(SNAPS, "*.csv")):
         mm = re.match(r"US_([A-Z]+)_(\d{4}-\d{2}-\d{2})(_repick)?\.csv$", os.path.basename(f))
@@ -52,8 +60,8 @@ def gather():
             snaps.setdefault(mm.group(2), set()).add(mm.group(1))
             depth[mm.group(1)] = depth.get(mm.group(1), 0) + 1
     cap = json.load(open(CACHE)) if os.path.exists(CACHE) else {}
-    running = subprocess.run(["pgrep","-f","collect.py"], capture_output=True).returncode == 0
-    return days, snaps, depth, cap, running
+    running = subprocess.run(["pgrep", "-f", "collect.py"], capture_output=True).returncode == 0
+    return days, evbyday, snaps, depth, cap, running
 
 def alerts(days, snaps, cap):
     out, today = [], str(datetime.date.today())
@@ -61,9 +69,9 @@ def alerts(days, snaps, cap):
     for d in exp:
         c = cap.get(d)
         if not c:
-            if d < today: out.append(("warn", f"{d}: capture not yet checked — run ./j cap"))
+            if d < today: out.append(("warn", f"{d}: capture not yet checked — run /cap"))
         elif c["overall"] < THRESHOLD:
-            out.append(("bad", f"{d}: capture {c['overall']}% — below the 95% rule, day excluded"))
+            out.append(("bad", f"{d}: capture {c['overall']}% — below 95%, day excluded"))
         elif c.get("below_threshold"):
             out.append(("warn", f"{d}: {len(c['below_threshold'])} contract(s) below 95% — excluded individually"))
         n = len(snaps.get(d, set()))
@@ -78,56 +86,37 @@ def alerts(days, snaps, cap):
             k += datetime.timedelta(days=1)
     return out
 
-def render():
-    days, snaps, depth, cap, running = gather()
-    exp = sorted(d for d in days if d >= EXP_START)
-    ok = [d for d in exp if cap.get(d, {}).get("overall", 100) >= THRESHOLD]
-    tot_ev = sum(sum(days[d][s]["events"] for s in SYMS) for d in ok)
-    n_days, per_day = len(ok), (sum(sum(days[d][s]["events"] for s in SYMS) for d in ok)/len(ok) if ok else 0)
-    sym_tot = {s: sum(days[d][s]["events"] for d in ok) for s in SYMS}
-    need_days = max(0, TARGET_DAYS - n_days)
-    need_ev = max(0, TARGET_EVENTS - tot_ev)
-    eta = max(need_days, (need_ev/per_day if per_day else 0))
-    finish = datetime.date.today()
-    left = eta
-    while left > 0:
-        finish += datetime.timedelta(days=1)
-        if finish.weekday() < 5: left -= 1
-    hard = datetime.date.fromisoformat(HARD_STOP)
-    finish = min(finish, hard)
+def svg_bars(pairs, colours=None, height=140, label_every=1, fmt=lambda v: f"{v:g}"):
+    """pairs: [(label, value)] -> simple SVG column chart."""
+    if not pairs: return "<div class=lab>no data</div>"
+    w, pad = 44, 26
+    mx = max(v for _, v in pairs) or 1
+    width = max(260, len(pairs) * w + pad)
+    bars = ""
+    for i, (lab, v) in enumerate(pairs):
+        h = (v / mx) * (height - 34)
+        x = pad + i * w
+        c = (colours or {}).get(lab, "#58a6ff")
+        bars += (f'<rect x="{x}" y="{height-20-h:.1f}" width="{w-12}" height="{h:.1f}" rx="3" fill="{c}"/>'
+                 f'<text x="{x+(w-12)/2}" y="{height-24-h:.1f}" class="v">{fmt(v)}</text>')
+        if i % label_every == 0:
+            bars += f'<text x="{x+(w-12)/2}" y="{height-6}" class="x">{lab}</text>'
+    return (f'<svg viewBox="0 0 {width} {height}" style="width:100%;max-width:{width*1.6}px">'
+            f'<style>.v{{fill:#8b949e;font:11px sans-serif;text-anchor:middle}}'
+            f'.x{{fill:#6e7681;font:11px sans-serif;text-anchor:middle}}</style>{bars}</svg>')
 
-    al = alerts(days, snaps, cap)
-    albox = "".join(f'<div class="al {k}">{t}</div>' for k, t in al) if al else \
-            '<div class="al ok">no data-quality issues</div>'
-
-    rows = ""
-    for d in sorted(days, reverse=True):
-        pre = d < EXP_START
-        c = cap.get(d)
-        if c is None: badge = '<span class="b grey">unchecked</span>'
-        elif c["overall"] >= THRESHOLD: badge = f'<span class="b green">{c["overall"]}%</span>'
-        else: badge = f'<span class="b red">{c["overall"]}%</span>'
-        ev = sum(days[d][s]["events"] for s in SYMS)
-        pr = sum(days[d][s]["prints"] for s in SYMS)
-        ct = sum(days[d][s]["contracts"] for s in SYMS)
-        sn = len(snaps.get(d, set()))
-        sb = f'<span class="b {"green" if sn==13 else "red" if sn==0 else "amber"}">{sn}/13</span>'
-        rows += (f'<tr class="{"pre" if pre else ""}"><td>{d}</td><td>{badge}</td><td>{ct}</td>'
-                 f'<td>{pr:,}</td>' + "".join(f"<td>{days[d][s]['events']}</td>" for s in SYMS)
-                 + f'<td><b>{ev}</b></td><td>{sb}</td></tr>')
-
-    dep = "".join(f'<span class="chip">{s} <b>{depth.get(s,0)}</b></span>' for s in ALL13)
-
+def page(body):
     return f"""<!doctype html><meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<meta http-equiv=refresh content=120><title>Jarvis_60</title>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>Jarvis_60</title>
 <style>
 *{{box-sizing:border-box}}body{{margin:0;padding:20px;background:#0d1117;color:#c9d1d9;
 font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}}
-h1{{font-size:20px;margin:0 0 4px}}.sub{{color:#8b949e;font-size:13px;margin-bottom:18px}}
+a{{color:#58a6ff;text-decoration:none}}a:hover{{text-decoration:underline}}
+h1{{font-size:20px;margin:0 0 4px}}h2{{font-size:15px;margin:22px 0 10px;color:#8b949e;
+text-transform:uppercase;letter-spacing:.5px;font-weight:600}}
+.sub{{color:#8b949e;font-size:13px;margin-bottom:18px}}
 .seal{{background:#1c2128;border:1px solid #30363d;border-left:3px solid #d29922;
-border-radius:8px;padding:12px 16px;margin-bottom:18px;font-size:14px}}
-.seal b{{color:#e3b341}}
+border-radius:8px;padding:12px 16px;margin-bottom:18px;font-size:14px}}.seal b{{color:#e3b341}}
 .grid{{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:18px}}
 .card{{background:#161b22;border:1px solid #30363d;border-radius:10px;padding:16px}}
 .lab{{color:#8b949e;font-size:12px;text-transform:uppercase;letter-spacing:.5px}}
@@ -139,7 +128,7 @@ border-radius:8px;padding:12px 16px;margin-bottom:18px;font-size:14px}}
 .al.warn{{background:#2b2314;border-color:#d2992233;color:#e3b341}}
 .al.ok{{background:#12261a;border-color:#3fb95033;color:#56d364}}
 table{{width:100%;border-collapse:collapse;background:#161b22;border:1px solid #30363d;
-border-radius:10px;overflow:hidden;margin-top:16px}}
+border-radius:10px;overflow:hidden}}
 th{{background:#1c2128;padding:9px;text-align:right;font-size:12px;color:#8b949e}}
 th:first-child,td:first-child{{text-align:left}}
 td{{padding:9px;text-align:right;border-top:1px solid #21262d;font-variant-numeric:tabular-nums}}
@@ -147,16 +136,71 @@ tr.pre td{{color:#6e7681}}
 .b{{padding:2px 7px;border-radius:11px;font-size:12px;font-weight:600}}
 .b.green{{background:#12261a;color:#56d364}}.b.red{{background:#2d1214;color:#ff7b72}}
 .b.amber{{background:#2b2314;color:#e3b341}}.b.grey{{background:#21262d;color:#8b949e}}
+.buy{{color:#56d364}}.sell{{color:#ff7b72}}
 .chip{{display:inline-block;background:#21262d;border-radius:6px;padding:4px 9px;
 margin:3px 4px 0 0;font-size:12.5px;color:#8b949e}}.chip b{{color:#c9d1d9}}
 .note{{margin-top:16px;color:#6e7681;font-size:12px}}
-</style>
-<h1>Jarvis_60 — collection status</h1>
-<div class=sub>updated {datetime.datetime.now():%H:%M:%S} &middot; auto-refresh 2 min</div>
+</style>{body}"""
 
-<div class=seal>PRIMARY TEST SEALED &mdash; needs <b>{need_days} more trading days</b>
-and <b>{need_ev} more events</b>. Projected unseal: <b>{finish}</b> (hard stop {HARD_STOP}).
-Forward returns are not shown until then.</div>
+def render_home():
+    days, evbyday, snaps, depth, cap, running = gather()
+    exp = sorted(d for d in days if d >= EXP_START)
+    ok = [d for d in exp if cap.get(d, {}).get("overall", 100) >= THRESHOLD]
+    tot_ev = sum(sum(days[d][s]["events"] for s in SYMS) for d in ok)
+    n_days = len(ok)
+    per_day = tot_ev / n_days if n_days else 0
+    sym_tot = {s: sum(days[d][s]["events"] for d in ok) for s in SYMS}
+    need_days, need_ev = max(0, TARGET_DAYS - n_days), max(0, TARGET_EVENTS - tot_ev)
+    eta = max(need_days, need_ev / per_day if per_day else 0)
+    finish, left = datetime.date.today(), eta
+    while left > 0:
+        finish += datetime.timedelta(days=1)
+        if finish.weekday() < 5: left -= 1
+    finish = min(finish, datetime.date.fromisoformat(HARD_STOP))
+
+    al = alerts(days, snaps, cap)
+    albox = "".join(f'<div class="al {k}">{t}</div>' for k, t in al) or \
+            '<div class="al ok">no data-quality issues</div>'
+
+    rows = ""
+    for d in sorted(days, reverse=True):
+        c = cap.get(d)
+        badge = ('<span class="b grey">unchecked</span>' if c is None else
+                 f'<span class="b {"green" if c["overall"]>=THRESHOLD else "red"}">{c["overall"]}%</span>')
+        ev = sum(days[d][s]["events"] for s in SYMS)
+        pr = sum(days[d][s]["prints"] for s in SYMS)
+        ct = sum(days[d][s]["contracts"] for s in SYMS)
+        sn = len(snaps.get(d, set()))
+        sb = f'<span class="b {"green" if sn==13 else "red" if sn==0 else "amber"}">{sn}/13</span>'
+        rows += (f'<tr class="{"pre" if d < EXP_START else ""}"><td><a href="/day?d={d}">{d}</a></td>'
+                 f'<td>{badge}</td><td>{ct}</td><td>{pr:,}</td>'
+                 + "".join(f"<td>{days[d][s]['events']}</td>" for s in SYMS)
+                 + f'<td><b>{ev}</b></td><td>{sb}</td></tr>')
+
+    # charts (experiment days only)
+    trend = [(d[5:], sum(days[d][s]["events"] for s in SYMS)) for d in ok]
+    hours = {}
+    buckets = [("250k-500k", 0), ("500k-1M", 0), ("1M-2M", 0), ("2M-5M", 0), ("5M+", 0)]
+    bcount = dict(buckets)
+    for d in ok:
+        for e in evbyday.get(d, []):
+            hours[e["t"][11:13]] = hours.get(e["t"][11:13], 0) + 1
+            n = e["n"]
+            k = ("250k-500k" if n < 5e5 else "500k-1M" if n < 1e6 else
+                 "1M-2M" if n < 2e6 else "2M-5M" if n < 5e6 else "5M+")
+            bcount[k] += 1
+    hpairs = [(h, hours.get(h, 0)) for h in sorted(hours)] if hours else []
+    bpairs = [(k, bcount[k]) for k, _ in buckets]
+    spairs = [(s, sym_tot[s]) for s in SYMS]
+
+    dep = "".join(f'<span class="chip">{s} <b>{depth.get(s,0)}</b></span>' for s in ALL13)
+
+    return page(f"""
+<h1>Jarvis_60 — collection status</h1>
+<div class=sub>updated {datetime.datetime.now():%H:%M:%S} &middot; <a href="/">refresh</a></div>
+
+<div class=seal>PRIMARY TEST SEALED &mdash; needs <b>{need_days} more trading days</b> and
+<b>{need_ev} more events</b>. Projected unseal: <b>{finish}</b> (hard stop {HARD_STOP}).</div>
 
 {albox}
 
@@ -173,25 +217,51 @@ Forward returns are not shown until then.</div>
   <div class=lab>days counted only if capture &ge; 95%</div></div>
 </div>
 
-<div class=grid>
- {"".join(f'<div class=card><div class=lab>{s}</div><div class=big>{sym_tot[s]}</div>'
-          f'<div class=lab>{(sym_tot[s]/tot_ev*100 if tot_ev else 0):.0f}% of events</div></div>' for s in SYMS)}
-</div>
+<h2>events by day</h2><div class=card>{svg_bars(trend)}</div>
+<h2>events by hour (US Eastern)</h2><div class=card>{svg_bars(hpairs)}
+<div class=note>If events concentrate near the open, a +60m horizon spans a different
+market regime for those than for midday events — worth knowing before the test.</div></div>
+<h2>notional size distribution</h2><div class=card>{svg_bars(bpairs)}</div>
+<h2>events by symbol</h2><div class=card>{svg_bars(spairs, COL)}</div>
 
-<div class=card><div class=lab>chain snapshot depth (days banked, all 13 symbols)</div>
-<div style="margin-top:8px">{dep}</div></div>
+<h2>chain snapshot depth (days banked)</h2><div class=card>{dep}</div>
 
+<h2>daily detail</h2>
 <table><tr><th>date</th><th>capture</th><th>contracts</th><th>prints</th>
 {"".join(f"<th>{s}</th>" for s in SYMS)}<th>events</th><th>snapshots</th></tr>{rows}</table>
+<div class=note>Click a date for its event list. Grey rows are pre-experiment days.
+Forward returns stay sealed until the stopping rule is met.</div>""")
 
-<div class=note>Grey rows are pre-experiment days. Days below 95% capture are excluded from
-the counts above. Forward returns stay sealed until the stopping rule is met.</div>
-"""
+def render_day(day):
+    _, evbyday, _, _, cap, _ = gather()
+    evs = sorted(evbyday.get(day, []), key=lambda e: -e["n"])
+    c = cap.get(day)
+    badge = ("not yet checked" if c is None else
+             f'{c["overall"]}% capture' + ("" if c["overall"] >= THRESHOLD else " — DAY EXCLUDED"))
+    rows = "".join(
+        f'<tr><td>{e["t"][11:]}</td><td>{e["label"]}</td>'
+        f'<td class="{"buy" if e["dir"]=="BUY" else "sell"}">{e["dir"]}</td>'
+        f'<td>{e["p"]}</td><td>{e["v"]:,.0f}</td><td><b>${e["n"]:,.0f}</b></td></tr>' for e in evs)
+    tot = sum(e["n"] for e in evs)
+    return page(f"""
+<h1>{day} — qualifying events</h1>
+<div class=sub><a href="/">&larr; back</a> &middot; {len(evs)} events &middot;
+${tot:,.0f} total notional &middot; {badge}</div>
+<table><tr><th>time</th><th>contract</th><th>dir</th><th>prints</th><th>lots</th><th>notional</th></tr>
+{rows or '<tr><td colspan=6>no qualifying events</td></tr>'}</table>
+<div class=note>Sorted by notional. An event = 2+ prints sharing an identical timestamp and
+direction, totalling at least ${MIN_NOTIONAL:,}. No forward returns shown.</div>""")
 
 class H(BaseHTTPRequestHandler):
     def do_GET(self):
-        b = render().encode()
-        self.send_response(200); self.send_header("Content-Type","text/html; charset=utf-8")
+        u = urllib.parse.urlparse(self.path)
+        if u.path == "/day":
+            q = urllib.parse.parse_qs(u.query).get("d", [""])[0]
+            body = render_day(q) if re.fullmatch(r"\d{4}-\d{2}-\d{2}", q) else page("<h1>bad date</h1>")
+        else:
+            body = render_home()
+        b = body.encode()
+        self.send_response(200); self.send_header("Content-Type", "text/html; charset=utf-8")
         self.send_header("Content-Length", str(len(b))); self.end_headers(); self.wfile.write(b)
     def log_message(self, *a): pass
 

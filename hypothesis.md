@@ -18,6 +18,12 @@ BULLISH-implied: CALL BUY, PUT SELL
 BEARISH-implied: PUT BUY, CALL SELL
 signed_return = underlying return x (+1 if bullish-implied, -1 if bearish-implied)
 
+## Event time cutoff (added 2026-08-16, before any result was examined)
+Events with a timestamp at or after 15:00 US Eastern are EXCLUDED, because the
++60 minute horizon would extend past the 16:00 close and the forward return would
+be truncated. Discovered from the event-by-hour chart (10 of 77 events sat in the
+15:00 hour). Fixed now so the handling cannot be chosen to suit the outcome.
+
 ## Target variable
 Underlying stock return, close-to-close of 1-minute bars, +60 minutes after the
 event timestamp. ONE horizon. Not option returns. Not IV.
