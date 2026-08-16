@@ -30,7 +30,9 @@ case "$1" in
   screen) shift; python3 screen.py "${@:-TSLA}" ;;
   check)  python3 core/recheck.py ;;
   snap)   python3 snapshot.py ;;
+  dash)   nohup python3 dashboard.py > logs/dashboard.log 2>&1 & sleep 2; echo "dashboard: http://192.168.0.208:8060" ;;
+  nodash) pkill -f dashboard.py && echo "dashboard stopped" || echo "was not running" ;;
   *)
-    echo "Usage: ./j start [TICKERS] | stop | status | log | screen TICKER | check | snap"
+    echo "Usage: ./j start [TICKERS] | stop | status | log | screen TICKER | check | snap | dash | nodash"
     ;;
 esac

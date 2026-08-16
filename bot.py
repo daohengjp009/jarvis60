@@ -48,13 +48,23 @@ def cmd_screen(arg):
     return _sh([sys.executable, "screen.py", t])
 def cmd_check(arg):  return _sh([sys.executable, "core/recheck.py"])
 def cmd_snap(arg):   return _sh([sys.executable, "snapshot.py"], timeout=600)
+
+def cmd_dash(arg):
+    if subprocess.run(["pgrep", "-f", "dashboard.py"], capture_output=True).returncode == 0:
+        return "dashboard already running: http://192.168.0.208:8060"
+    log = os.path.join(BASE, "logs", "dashboard.log")
+    subprocess.Popen([sys.executable, "dashboard.py"], cwd=BASE,
+                     stdout=open(log, "a"), stderr=subprocess.STDOUT)
+    return "dashboard started: http://192.168.0.208:8060"
+
+def cmd_nodash(arg): return _sh(["pkill", "-f", "dashboard.py"]) or "dashboard stopped"
 def cmd_help(arg):
     return ("/start [TICKERS] - begin collecting\n/stop - stop collector\n"
             "/status - is it alive\n/screen TICKER - option screener\n"
-            "/check - toolbelt health\n/snap - daily chain snapshot (all 13)\n/help - this menu")
+            "/check - toolbelt health\n/snap - daily chain snapshot (all 13)\n/dash - start dashboard\n/nodash - stop dashboard\n/help - this menu")
 
 COMMANDS = {"/start": cmd_start, "/stop": cmd_stop, "/status": cmd_status,
-            "/screen": cmd_screen, "/check": cmd_check, "/snap": cmd_snap, "/help": cmd_help}
+            "/screen": cmd_screen, "/check": cmd_check, "/snap": cmd_snap, "/dash": cmd_dash, "/nodash": cmd_nodash, "/help": cmd_help}
 
 def main():
     offset = None
