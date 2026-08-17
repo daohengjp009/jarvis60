@@ -47,7 +47,13 @@ def cmd_screen(arg):
     if not t.isalpha(): return "invalid ticker"
     return _sh([sys.executable, "screen.py", t])
 def cmd_check(arg):  return _sh([sys.executable, "core/recheck.py"])
-def cmd_snap(arg):   return _sh([sys.executable, "snapshot.py"], timeout=1800)
+def cmd_snap(arg):
+    if subprocess.run(["pgrep", "-f", "snapshot.py"], capture_output=True).returncode == 0:
+        return "snapshot already running"
+    log = os.path.join(BASE, "logs", "snapshot.log")
+    subprocess.Popen([sys.executable, "snapshot.py"], cwd=BASE,
+                     stdout=open(log, "a"), stderr=subprocess.STDOUT)
+    return "snapshot started in background (~6 min) — you'll get a message when it finishes"
 
 def cmd_dash(arg):
     if subprocess.run(["pgrep", "-f", "dashboard.py"], capture_output=True).returncode == 0:
