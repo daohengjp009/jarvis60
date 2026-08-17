@@ -11,7 +11,7 @@ SNAPS = os.path.join(BASE, "data", "snapshots")
 KEY = "/Users/leolo/.openclaw/futu/conn_key_1024.pem"
 os.makedirs(SNAPS, exist_ok=True)
 
-SYMBOLS = "TSLA NVDA AAPL MSFT GOOGL SPY QQQ SPCX INTC MU SKHY COHR BE".split()
+SYMBOLS = "TSLA NVDA AAPL MSFT GOOGL SPY QQQ SPCX INTC MU SKHY COHR BE AMZN META AMD NFLX AVGO COIN PLTR MSTR ARM IWM SMCI CRWD ORCL LLY XOM".split()
 COLS = ["code","option_type","option_strike_price","option_open_interest",
         "option_implied_volatility","option_premium","option_delta","option_gamma",
         "option_vega","option_theta","option_rho","option_expiry_date_distance",

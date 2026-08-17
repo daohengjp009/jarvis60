@@ -47,7 +47,7 @@ def cmd_screen(arg):
     if not t.isalpha(): return "invalid ticker"
     return _sh([sys.executable, "screen.py", t])
 def cmd_check(arg):  return _sh([sys.executable, "core/recheck.py"])
-def cmd_snap(arg):   return _sh([sys.executable, "snapshot.py"], timeout=600)
+def cmd_snap(arg):   return _sh([sys.executable, "snapshot.py"], timeout=1800)
 
 def cmd_dash(arg):
     if subprocess.run(["pgrep", "-f", "dashboard.py"], capture_output=True).returncode == 0:
@@ -62,7 +62,7 @@ def cmd_cap(arg):    return _sh([sys.executable, "capture_check.py"], timeout=90
 def cmd_help(arg):
     return ("/start [TICKERS] - begin collecting\n/stop - stop collector\n"
             "/status - is it alive\n/screen TICKER - option screener\n"
-            "/check - toolbelt health\n/snap - daily chain snapshot (all 13)\n/dash - start dashboard\n/nodash - stop dashboard\n/cap - capture check (run next morning)\n/help - this menu")
+            "/check - toolbelt health\n/snap - daily chain snapshot (all 28)\n/dash - start dashboard\n/nodash - stop dashboard\n/cap - capture check (run next morning)\n/help - this menu")
 
 COMMANDS = {"/start": cmd_start, "/stop": cmd_stop, "/status": cmd_status,
             "/screen": cmd_screen, "/check": cmd_check, "/snap": cmd_snap, "/dash": cmd_dash, "/nodash": cmd_nodash, "/cap": cmd_cap, "/help": cmd_help}
