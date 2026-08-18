@@ -54,6 +54,12 @@ def append_ticks(ctx, code: str, seen: set):
     if len(t) == 0: return 0
     s_.update(t["sequence"].tolist())
     t["trade_date"] = pd.to_datetime(t["time"], format="mixed").dt.date
+    session = datetime.date.today()
+    stale = t[t["trade_date"] != session]
+    if len(stale):
+        print(f"  {code}: ignored {len(stale)} ticks from prior sessions (files are sealed)")
+    t = t[t["trade_date"] == session]
+    if len(t) == 0: return 0
     for d, grp in t.groupby("trade_date"):
         path = os.path.join(TICKS, f"{code.replace('.','_')}_{d}.csv")
         grp.to_csv(path, mode="a", header=not os.path.exists(path), index=False)
