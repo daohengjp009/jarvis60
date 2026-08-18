@@ -32,7 +32,17 @@ def main():
         if m and m.group(1) in SYMS:
             byday.setdefault(m.group(2), []).append(f)
 
-    todo = [d for d in sorted(byday) if d < today and d not in cache]
+    def fingerprint(fs):
+        return f"{len(fs)}:{max(os.path.getmtime(f) for f in fs):.0f}"
+    todo = []
+    for d in sorted(byday):
+        if d >= today: continue
+        fp = fingerprint(byday[d])
+        if d not in cache:
+            todo.append(d)
+        elif cache[d].get("fingerprint") != fp:
+            print(f"{d}: tick files changed since last check — re-checking")
+            todo.append(d)
     if not todo:
         print("nothing to check — all past days already cached")
         return
@@ -81,6 +91,7 @@ def main():
             cache[day] = {"overall": round(ours_t / truth_t * 100, 1) if truth_t else 0,
                           "contracts": res, "below_threshold": bad,
                           "sampled": len(res), "failed_calls": fails,
+                          "fingerprint": fingerprint(files),
                           "checked_at": datetime.datetime.now().isoformat(timespec="seconds")}
             save_cache(cache)
             print(f"{day}: {cache[day]['overall']:5.1f}%  contracts {len(res)}  below 95%: {len(bad)}")
