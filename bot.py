@@ -65,13 +65,25 @@ def cmd_dash(arg):
 
 def cmd_nodash(arg): return _sh(["pkill", "-f", "dashboard.py"]) or "dashboard stopped"
 def cmd_cap(arg):    return _sh([sys.executable, "capture_check.py"], timeout=900)
+
+def cmd_stream(arg):
+    if subprocess.run(["pgrep", "-f", "stream_test.py"], capture_output=True).returncode == 0:
+        return "stream already running"
+    secs = 23400
+    if arg.strip().isdigit(): secs = min(30000, int(arg.strip()))
+    log = os.path.join(BASE, "logs", f"stream_{time.strftime('%F')}.log")
+    subprocess.Popen([sys.executable, "-u", "stream_test.py", str(secs)], cwd=BASE,
+                     stdout=open(log, "a"), stderr=subprocess.STDOUT)
+    return f"stream test started ({secs//3600}h) — writes only to data/ticks_stream/"
+
+def cmd_nostream(arg): return _sh(["pkill", "-f", "stream_test.py"]) or "stream stopped"
 def cmd_help(arg):
     return ("/start [TICKERS] - begin collecting\n/stop - stop collector\n"
             "/status - is it alive\n/screen TICKER - option screener\n"
-            "/check - toolbelt health\n/snap - daily chain snapshot (all 28)\n/dash - start dashboard\n/nodash - stop dashboard\n/cap - capture check (run next morning)\n/help - this menu")
+            "/check - toolbelt health\n/snap - daily chain snapshot (all 28)\n/dash - start dashboard\n/nodash - stop dashboard\n/cap - capture check (run next morning)\n/stream - start streaming test (6.5h)\n/nostream - stop it\n/help - this menu")
 
 COMMANDS = {"/start": cmd_start, "/stop": cmd_stop, "/status": cmd_status,
-            "/screen": cmd_screen, "/check": cmd_check, "/snap": cmd_snap, "/dash": cmd_dash, "/nodash": cmd_nodash, "/cap": cmd_cap, "/help": cmd_help}
+            "/screen": cmd_screen, "/check": cmd_check, "/snap": cmd_snap, "/dash": cmd_dash, "/nodash": cmd_nodash, "/cap": cmd_cap, "/stream": cmd_stream, "/nostream": cmd_nostream, "/help": cmd_help}
 
 def main():
     offset = None
