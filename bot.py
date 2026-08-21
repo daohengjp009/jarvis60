@@ -101,7 +101,7 @@ def cmd_day(arg):
 def cmd_help(arg):
     return ("/start [TICKERS] - begin collecting\n/stop - stop collector\n"
             "/status - is it alive\n/screen TICKER - option screener\n"
-            "/check - toolbelt health\n/snap - daily chain snapshot (all 28)\n/dash - start dashboard\n/nodash - stop dashboard\n/day [DATE] - session summary (today by default)\n/day [DATE] - session summary (today by default)\n/cap - capture check (run next morning)\n/intra - start intraday chain capture\n/nointra - stop it\n/stream - start streaming test (6.5h)\n/nostream - stop it\n/help - this menu")
+            "/check - toolbelt health\n/snap - daily chain snapshot (all 28)\n/dash - start dashboard\n/nodash - stop dashboard\n/day [DATE] - session summary (today by default)\n/cap - capture check (run next morning)\n/intra - start intraday chain capture\n/nointra - stop it\n/stream - start streaming test (6.5h)\n/nostream - stop it\n/help - this menu")
 
 COMMANDS = {"/start": cmd_start, "/stop": cmd_stop, "/status": cmd_status,
             "/screen": cmd_screen, "/check": cmd_check, "/snap": cmd_snap, "/dash": cmd_dash, "/nodash": cmd_nodash, "/cap": cmd_cap, "/day": cmd_day, "/day": cmd_day, "/intra": cmd_intra, "/nointra": cmd_nointra, "/stream": cmd_stream, "/nostream": cmd_nostream, "/help": cmd_help}
