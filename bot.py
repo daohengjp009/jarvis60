@@ -1,6 +1,6 @@
 """Jarvis_60 Telegram bot — fixed command menu, whitelisted sender, no shell exec.
 Run: nohup python3 bot.py > logs/bot.log 2>&1 &"""
-import os, sys, json, time, subprocess, urllib.request, urllib.parse
+import os, sys, re, json, time, subprocess, urllib.request, urllib.parse
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from dotenv import load_dotenv
 
@@ -77,13 +77,34 @@ def cmd_stream(arg):
     return f"stream test started ({secs//3600}h) — writes only to data/ticks_stream/"
 
 def cmd_nostream(arg): return _sh(["pkill", "-f", "stream_test.py"]) or "stream stopped"
+
+def cmd_intra(arg):
+    if subprocess.run(["pgrep", "-f", "intraday.py"], capture_output=True).returncode == 0:
+        return "intraday capture already running"
+    mins = arg.strip() if arg.strip().isdigit() else "30"
+    log = os.path.join(BASE, "logs", f"intraday_{time.strftime('%F')}.log")
+    subprocess.Popen([sys.executable, "-u", "intraday.py", mins], cwd=BASE,
+                     stdout=open(log, "a"), stderr=subprocess.STDOUT)
+    return f"intraday chain capture started (every {mins} min) - writes to data/intraday/"
+
+def cmd_nointra(arg): return _sh(["pkill", "-f", "intraday.py"]) or "intraday capture stopped"
+
+def cmd_day(arg):
+    a = arg.strip()
+    args = [sys.executable, "daycheck.py"] + ([a] if re.fullmatch(r"\d{4}-\d{2}-\d{2}", a) else [])
+    return _sh(args, timeout=300)
+
+def cmd_day(arg):
+    a = arg.strip()
+    args = [sys.executable, "daycheck.py"] + ([a] if re.fullmatch(r"\d{4}-\d{2}-\d{2}", a) else [])
+    return _sh(args, timeout=300)
 def cmd_help(arg):
     return ("/start [TICKERS] - begin collecting\n/stop - stop collector\n"
             "/status - is it alive\n/screen TICKER - option screener\n"
-            "/check - toolbelt health\n/snap - daily chain snapshot (all 28)\n/dash - start dashboard\n/nodash - stop dashboard\n/cap - capture check (run next morning)\n/stream - start streaming test (6.5h)\n/nostream - stop it\n/help - this menu")
+            "/check - toolbelt health\n/snap - daily chain snapshot (all 28)\n/dash - start dashboard\n/nodash - stop dashboard\n/day [DATE] - session summary (today by default)\n/day [DATE] - session summary (today by default)\n/cap - capture check (run next morning)\n/intra - start intraday chain capture\n/nointra - stop it\n/stream - start streaming test (6.5h)\n/nostream - stop it\n/help - this menu")
 
 COMMANDS = {"/start": cmd_start, "/stop": cmd_stop, "/status": cmd_status,
-            "/screen": cmd_screen, "/check": cmd_check, "/snap": cmd_snap, "/dash": cmd_dash, "/nodash": cmd_nodash, "/cap": cmd_cap, "/stream": cmd_stream, "/nostream": cmd_nostream, "/help": cmd_help}
+            "/screen": cmd_screen, "/check": cmd_check, "/snap": cmd_snap, "/dash": cmd_dash, "/nodash": cmd_nodash, "/cap": cmd_cap, "/day": cmd_day, "/day": cmd_day, "/intra": cmd_intra, "/nointra": cmd_nointra, "/stream": cmd_stream, "/nostream": cmd_nostream, "/help": cmd_help}
 
 def main():
     offset = None
