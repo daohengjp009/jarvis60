@@ -89,6 +89,26 @@ def cmd_intra(arg):
 
 def cmd_nointra(arg): return _sh(["pkill", "-f", "intraday.py"]) or "intraday capture stopped"
 
+def cmd_fill(arg):
+    """Backfill 1-minute underlying bars for any collection day missing them."""
+    import glob
+    ticks = os.path.join(BASE, "data", "ticks")
+    bars = os.path.join(BASE, "data", "underlying_1m")
+    days = sorted({re.search(r"_(\d{4}-\d{2}-\d{2})\.csv$", f).group(1)
+                   for f in glob.glob(os.path.join(ticks, "*.csv"))})
+    out = []
+    for d in days:
+        for t in ("TSLA", "NVDA", "GOOGL"):
+            if os.path.exists(os.path.join(bars, f"US_{t}_{d}.csv")): continue
+            _sh([sys.executable, "backfill_underlying.py", t, d], timeout=180)
+            p = os.path.join(bars, f"US_{t}_{d}.csv")
+            if os.path.exists(p):
+                with open(p) as fh: n = sum(1 for _ in fh) - 1
+                out.append(f"{t} {d}: {n} bars")
+            else:
+                out.append(f"{t} {d}: FAILED")
+    return "\n".join(out) if out else "nothing missing - all days have 1-minute bars"
+
 def cmd_day(arg):
     a = arg.strip()
     args = [sys.executable, "daycheck.py"] + ([a] if re.fullmatch(r"\d{4}-\d{2}-\d{2}", a) else [])
@@ -101,10 +121,10 @@ def cmd_day(arg):
 def cmd_help(arg):
     return ("/start [TICKERS] - begin collecting\n/stop - stop collector\n"
             "/status - is it alive\n/screen TICKER - option screener\n"
-            "/check - toolbelt health\n/snap - daily chain snapshot (all 28)\n/dash - start dashboard\n/nodash - stop dashboard\n/day [DATE] - session summary (today by default)\n/cap - capture check (run next morning)\n/intra - start intraday chain capture\n/nointra - stop it\n/stream - start streaming test (6.5h)\n/nostream - stop it\n/help - this menu")
+            "/check - toolbelt health\n/snap - daily chain snapshot (all 28)\n/dash - start dashboard\n/nodash - stop dashboard\n/day [DATE] - session summary (today by default)\n/cap - capture check (run next morning)\n/fill - backfill missing 1-min underlying bars\n/intra - start intraday chain capture\n/nointra - stop it\n/stream - start streaming test (6.5h)\n/nostream - stop it\n/help - this menu")
 
 COMMANDS = {"/start": cmd_start, "/stop": cmd_stop, "/status": cmd_status,
-            "/screen": cmd_screen, "/check": cmd_check, "/snap": cmd_snap, "/dash": cmd_dash, "/nodash": cmd_nodash, "/cap": cmd_cap, "/day": cmd_day, "/day": cmd_day, "/intra": cmd_intra, "/nointra": cmd_nointra, "/stream": cmd_stream, "/nostream": cmd_nostream, "/help": cmd_help}
+            "/screen": cmd_screen, "/check": cmd_check, "/snap": cmd_snap, "/dash": cmd_dash, "/nodash": cmd_nodash, "/cap": cmd_cap, "/day": cmd_day, "/day": cmd_day, "/fill": cmd_fill, "/intra": cmd_intra, "/nointra": cmd_nointra, "/stream": cmd_stream, "/nostream": cmd_nostream, "/help": cmd_help}
 
 def main():
     offset = None
