@@ -2,7 +2,7 @@
 Deliberately shows NO forward returns.
 Run: ./j dash    then http://192.168.0.208:8060"""
 import os, re, glob, json, subprocess, datetime, urllib.parse
-from http.server import BaseHTTPRequestHandler, HTTPServer
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import pandas as pd
 
 BASE = os.path.dirname(os.path.abspath(__file__))
@@ -290,4 +290,4 @@ class H(BaseHTTPRequestHandler):
 
 if __name__ == "__main__":
     print(f"dashboard: http://192.168.0.208:{PORT}")
-    HTTPServer(("0.0.0.0", PORT), H).serve_forever()
+    ThreadingHTTPServer(("0.0.0.0", PORT), H).serve_forever()
