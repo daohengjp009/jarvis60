@@ -36,6 +36,15 @@ knowable after 16:00 ET on that date and before the next session opens.
 - Missing symbol-day -> row excluded. No forward-fill, no interpolation.
 - Rolling window with fewer than 15 of 20 valid observations -> NaN.
 
+## 5b. Minimum history requirement (added 2026-08-22, before any analysis)
+Discovered at build time: SKHY has 30 days of history and SPCX 48; every other
+symbol has 251. With a 20-day trailing window these symbols yield very few rows,
+each standardised against a barely-established baseline.
+Rule: a symbol-day is excluded from primary analysis unless its symbol has at
+least 60 trading days present in the table. Rows are retained and flagged
+(`symbol_history_days`, `min_history_ok`), not deleted.
+Currently excluded: SKHY (30), SPCX (48).
+
 ## 6. Look-ahead prevention
 - Rolling means/stds use t-1 .. t-20 only (shift(1) then roll).
 - Standardisation uses trailing windows only, never full-sample statistics.
