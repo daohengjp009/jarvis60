@@ -97,6 +97,10 @@ def main():
             print(f"{day}: {cache[day]['overall']:5.1f}%  contracts {len(res)}  below 95%: {len(bad)}")
         r, q = ctx.get_history_kl_quota(get_detail=False)
         if r == 0: print(f"quota remaining after: {q[1]}")
+        r, sub = ctx.query_subscription()
+        if r == 0 and "option_remain_quota" in sub:
+            print(f"OPTION quotas — subs {sub['option_used_quota']}/200 used, "
+                  f"{sub['option_remain_quota']} remain")
     finally:
         ctx.close()
 
