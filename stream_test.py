@@ -66,9 +66,12 @@ def main(seconds=180, per_symbol=40):
             pending = {c: rs for c, rs in rows.items() if rs}
             for c in pending: rows[c] = []
         n = 0
+        session = datetime.date.today()
         for c, rs in pending.items():
             df = pd.DataFrame(rs)
             df["trade_date"] = pd.to_datetime(df["time"], format="mixed").dt.date
+            df = df[df["trade_date"] == session]          # seal: prior sessions ignored
+            if not len(df): continue
             for d, grp in df.groupby("trade_date"):
                 path = os.path.join(OUT, f"{c.replace('.','_')}_{d}.csv")
                 grp.to_csv(path, mode="a", header=not os.path.exists(path), index=False)
