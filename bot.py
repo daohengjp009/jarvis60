@@ -89,6 +89,27 @@ def cmd_intra(arg):
 
 def cmd_nointra(arg): return _sh(["pkill", "-f", "intraday.py"]) or "intraday capture stopped"
 
+def cmd_open(arg):
+    """14:15 - everything the trading day needs."""
+    return ("OPEN\n"
+            f"1. collector: {cmd_start(arg)}\n"
+            f"2. stream:    {cmd_stream('')}\n"
+            f"3. intraday:  {cmd_intra('')}")
+
+def cmd_close(arg):
+    """21:00 - stop collecting, save the chain snapshot."""
+    cmd_nointra("")
+    return ("CLOSE\n"
+            f"1. collector: {cmd_stop('') or 'stopped'}\n"
+            f"2. snapshot:  {cmd_snap('')}\n"
+            "3. intraday:  stopped")
+
+def cmd_morning(arg):
+    """Next morning - verify yesterday."""
+    return (f"CAPTURE CHECK\n{cmd_cap('')}\n\n"
+            f"BACKFILL\n{cmd_fill('')}\n\n"
+            f"{cmd_day(arg)}")
+
 def cmd_fill(arg):
     """Backfill 1-minute underlying bars for any collection day missing them."""
     import glob
@@ -119,12 +140,12 @@ def cmd_day(arg):
     args = [sys.executable, "daycheck.py"] + ([a] if re.fullmatch(r"\d{4}-\d{2}-\d{2}", a) else [])
     return _sh(args, timeout=300)
 def cmd_help(arg):
-    return ("/start [TICKERS] - begin collecting\n/stop - stop collector\n"
+    return ("DAILY (just these three)\n/open - 14:15 start everything\n/close - 21:00 stop + snapshot\n/morning - next day: check + backfill + summary\n\nINDIVIDUAL\n/start [TICKERS] - begin collecting\n/stop - stop collector\n"
             "/status - is it alive\n/screen TICKER - option screener\n"
             "/check - toolbelt health\n/snap - daily chain snapshot (all 28)\n/dash - start dashboard\n/nodash - stop dashboard\n/day [DATE] - session summary (today by default)\n/cap - capture check (run next morning)\n/fill - backfill missing 1-min underlying bars\n/intra - start intraday chain capture\n/nointra - stop it\n/stream - start streaming test (6.5h)\n/nostream - stop it\n/help - this menu")
 
 COMMANDS = {"/start": cmd_start, "/stop": cmd_stop, "/status": cmd_status,
-            "/screen": cmd_screen, "/check": cmd_check, "/snap": cmd_snap, "/dash": cmd_dash, "/nodash": cmd_nodash, "/cap": cmd_cap, "/day": cmd_day, "/day": cmd_day, "/fill": cmd_fill, "/intra": cmd_intra, "/nointra": cmd_nointra, "/stream": cmd_stream, "/nostream": cmd_nostream, "/help": cmd_help}
+            "/screen": cmd_screen, "/check": cmd_check, "/snap": cmd_snap, "/dash": cmd_dash, "/nodash": cmd_nodash, "/cap": cmd_cap, "/day": cmd_day, "/day": cmd_day, "/fill": cmd_fill, "/open": cmd_open, "/close": cmd_close, "/morning": cmd_morning, "/intra": cmd_intra, "/nointra": cmd_nointra, "/stream": cmd_stream, "/nostream": cmd_nostream, "/help": cmd_help}
 
 def main():
     offset = None
