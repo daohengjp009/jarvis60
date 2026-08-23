@@ -102,8 +102,12 @@ def build(d):
     d["price_z20"] = zscore(d["underlying_price"])
 
     # --- persistence ---
-    d["days_iv_z_gt2_last5"] = (d["iv_z20"] > 2).rolling(5, min_periods=1).sum()
-    d["days_vol_z_gt2_last5"] = (d["vol_z20"] > 2).rolling(5, min_periods=1).sum()
+    # NaN must stay NaN: (NaN > 2) is False in pandas, which would silently
+    # report "not extreme" during each symbol's warmup instead of "unknown".
+    d["days_iv_z_gt2_last5"] = (d["iv_z20"] > 2).where(d["iv_z20"].notna()) \
+                                 .rolling(5, min_periods=5).sum()
+    d["days_vol_z_gt2_last5"] = (d["vol_z20"] > 2).where(d["vol_z20"].notna()) \
+                                 .rolling(5, min_periods=5).sum()
     d["oi_change_sum_3d"] = d["oi_change"].rolling(3, min_periods=3).sum()
     d["oi_change_sum_5d"] = d["oi_change"].rolling(5, min_periods=5).sum()
     d["consec_oi_up"] = consec_positive(d["oi_change"])
@@ -155,7 +159,7 @@ def main():
     print(f"\nusable for discovery: {int(df['usable_for_discovery'].sum()):,} rows")
     print("\nmissing rate by feature (%):")
     feats = [c for c in df.columns if c not in
-             ("date", "symbol", "is_etf", "time_split", "symbol_split",
+             ("date", "symbol", "time_split", "symbol_split",
               "usable_for_discovery", "oi_valid")]
     miss = (df[feats].isna().mean() * 100).round(1).sort_values(ascending=False)
     print(miss[miss > 0].to_string() or "  none")
