@@ -8,18 +8,31 @@ One row = one symbol-day (US trading day, post-close state).
 Primary key: `code` + `date`.
 
 ## 2. Universe
-28 symbols: TSLA NVDA AAPL MSFT GOOGL SPY QQQ SPCX INTC MU SKHY COHR BE
-AMZN META AMD NFLX AVGO COIN PLTR MSTR ARM IWM SMCI CRWD ORCL LLY XOM
-ETFs (SPY, QQQ, IWM) retained, flagged `is_etf = 1`.
+AMENDED 2026-08-22, before any outcome was computed or inspected.
+Original: all 28 symbols treated as research subjects, ETFs merely flagged.
+Problem found: SPY/QQQ supply spy_ret_1d and qqq_ret_1d, joined onto every row.
+On a QQQ row qqq_ret_1d is identical to that row's own ret_1d (same for SPY) -
+a degenerate feature. It also made a SPY symbol-holdout meaningless, since
+SPY's returns are embedded in every discovery row.
+Revised: SPY, QQQ, IWM are BENCHMARK/CONTEXT assets only - they supply market
+features and are excluded from the research universe.
+Research universe: 25 symbols -
+TSLA NVDA AAPL MSFT GOOGL SPCX INTC MU SKHY COHR BE AMZN META AMD NFLX
+AVGO COIN PLTR MSTR ARM SMCI CRWD ORCL LLY XOM
+Eligible after the min-history rule (section 5b): 23.
 Date range: 2025-08-22 .. 2026-08-21 (~251 trading days, ~7,028 rows).
 
 ## 3. Splits — FROZEN, never re-drawn
 Time:
   DISCOVERY  date <= 2026-05-21
   HOLDOUT    date >= 2026-05-22
-Symbol (random.Random(20260822).sample(sorted(SYMBOLS), 7)):
-  SYMBOL_HOLDOUT   ARM AVGO MU NVDA SKHY SMCI SPY
-  SYMBOL_DISCOVERY the remaining 21
+Symbol - REDRAWN 2026-08-22 after benchmarks left the research universe.
+Legitimate only because no outcome has been computed or inspected. This draw is
+now FROZEN and must never be re-run.
+  random.Random(20260822).sample(sorted(eligible_research_symbols), 6)
+  SYMBOL_HOLDOUT   ARM AVGO NFLX ORCL PLTR SMCI
+  SYMBOL_DISCOVERY AAPL AMD AMZN BE COHR COIN CRWD GOOGL INTC LLY META
+                   MSFT MSTR MU NVDA TSLA XOM
 Holdout (either kind) must not be used for tuning, threshold search,
 feature selection, or any inspection before the rule is frozen and committed.
 Holdout is tested ONCE.
@@ -62,6 +75,10 @@ Derived (all relative):
   vol_z20, vol_ratio_20, pc_vol_z20, pc_oi_z20,
   oi_change, call_oi_change, put_oi_change, oi_change_pct, oi_change_z20,
   vol_oi_ratio, ret_1d, realized_vol_20, price_z20
+  CORRECTED 2026-08-22: realized_vol_20 is the trailing 20-day standard
+  deviation of DAILY log returns, NOT annualised. The earlier annualised
+  definition, combined with the section 9 outcome formula, would have required
+  a ~270% five-day move to register, making abnormal_move_5d identically zero.
 
 Persistence:
   days_iv_z_gt2_last5, days_vol_z_gt2_last5,
@@ -69,6 +86,15 @@ Persistence:
 
 Cross-sectional / market:
   spy_ret_1d, qqq_ret_1d, iv_z20_xs_rank, vol_z20_xs_rank
+
+## 7b. Known deviation: cross-sectional ranks
+iv_z20_xs_rank and vol_z20_xs_rank rank each row against all research symbols
+present that date, including symbol-holdout members. This shares contemporaneous
+FEATURE values across the symbol split, never outcomes, and matches what would
+be computable live. Retained deliberately and recorded here.
+CORRECTED 2026-08-22: the build originally computed these ranks before dropping
+benchmark rows, so the pool was 28 symbols rather than the 25-symbol research
+universe. Benchmarks are now removed before any cross-sectional statistic.
 
 ## 8. Earnings
 Used for GROUPING ONLY, never as a predictive feature. Rationale: only final

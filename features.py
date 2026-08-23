@@ -12,9 +12,12 @@ OUT = os.path.join(BASE, "data", "features")
 os.makedirs(OUT, exist_ok=True)
 
 SYMBOLS = "TSLA NVDA AAPL MSFT GOOGL SPY QQQ SPCX INTC MU SKHY COHR BE AMZN META AMD NFLX AVGO COIN PLTR MSTR ARM IWM SMCI CRWD ORCL LLY XOM".split()
-ETFS = {"SPY", "QQQ", "IWM"}
+BENCHMARKS = {"SPY", "QQQ", "IWM"}          # context only, not research subjects
+RESEARCH = [s for s in SYMBOLS if s not in BENCHMARKS]
+SHORT_HISTORY = {"SKHY", "SPCX"}            # frozen 2026-08-22 (<60 trading days)
 SEED = 20260822
-SYMBOL_HOLDOUT = set(random.Random(SEED).sample(sorted(SYMBOLS), 7))
+SYMBOL_HOLDOUT = set(random.Random(SEED).sample(
+    sorted(s for s in RESEARCH if s not in SHORT_HISTORY), 6))
 TIME_CUTOFF = "2026-05-21"          # discovery <= this, holdout after
 W, MINP = 20, 15                    # rolling window, minimum valid observations
 
@@ -88,7 +91,7 @@ def build(d):
 
     # --- price (backward-looking only) ---
     d["ret_1d"] = np.log(d["underlying_price"] / d["underlying_price"].shift(1))
-    d["realized_vol_20"] = d["ret_1d"].shift(1).rolling(W, min_periods=MINP).std() * np.sqrt(252)
+    d["realized_vol_20"] = d["ret_1d"].shift(1).rolling(W, min_periods=MINP).std()   # DAILY, not annualised
     d["price_z20"] = zscore(d["underlying_price"])
 
     # --- persistence ---
@@ -113,12 +116,15 @@ def main():
     mkt = mkt.rename(columns={"SPY": "spy_ret_1d", "QQQ": "qqq_ret_1d"}).reset_index()
     df = df.merge(mkt, on="date", how="left")
 
-    # --- cross-sectional ranks within each date ---
+    # --- benchmarks are context only: drop BEFORE any cross-sectional statistic,
+    #     but AFTER the market-context merge which needs their rows ---
+    df = df[~df["symbol"].isin(BENCHMARKS)].copy()
+
+    # --- cross-sectional ranks within each date (research universe only) ---
     df["iv_z20_xs_rank"] = df.groupby("date")["iv_z20"].rank(pct=True)
     df["vol_z20_xs_rank"] = df.groupby("date")["vol_z20"].rank(pct=True)
 
     # --- flags and splits ---
-    df["is_etf"] = df["symbol"].isin(ETFS).astype(int)
     df["time_split"] = np.where(df["date"] <= TIME_CUTOFF, "discovery", "holdout")
     df["symbol_split"] = np.where(df["symbol"].isin(SYMBOL_HOLDOUT), "holdout", "discovery")
     hist = df.groupby("symbol")["date"].transform("count")
