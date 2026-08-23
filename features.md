@@ -5,7 +5,8 @@ searched, no combinations evaluated prior to this commit.
 
 ## 1. Unit of analysis
 One row = one symbol-day (US trading day, post-close state).
-Primary key: `code` + `date`.
+Primary key: `symbol` + `date`. (The vendor `code` column is dropped at build
+time; `symbol` is the identifier throughout.)
 
 ## 2. Universe
 AMENDED 2026-08-22, before any outcome was computed or inspected.
@@ -20,7 +21,10 @@ Research universe: 25 symbols -
 TSLA NVDA AAPL MSFT GOOGL SPCX INTC MU SKHY COHR BE AMZN META AMD NFLX
 AVGO COIN PLTR MSTR ARM SMCI CRWD ORCL LLY XOM
 Eligible after the min-history rule (section 5b): 23.
-Date range: 2025-08-22 .. 2026-08-21 (~251 trading days, ~7,028 rows).
+Date range: 2025-08-22 .. 2026-08-21 (251 trading days).
+Row count: 5,845 (23 symbols x 251, plus SKHY 27 and SPCX 45). The figure of
+~7,028 in the pre-amendment draft was the 28-symbol count, before benchmarks
+left the research universe.
 
 ## 3. Splits — FROZEN, never re-drawn
 Time:
@@ -50,13 +54,14 @@ knowable after 16:00 ET on that date and before the next session opens.
 - Rolling window with fewer than 15 of 20 valid observations -> NaN.
 
 ## 5b. Minimum history requirement (added 2026-08-22, before any analysis)
-Discovered at build time: SKHY has 30 days of history and SPCX 48; every other
-symbol has 251. With a 20-day trailing window these symbols yield very few rows,
+Discovered at build time: SKHY has 27 joined days and SPCX 45; every other
+symbol has 251. (The raw statistic files hold 30 and 48 rows respectively; the
+joined counts are lower because the volatility file is the limiting side.) With a 20-day trailing window these symbols yield very few rows,
 each standardised against a barely-established baseline.
 Rule: a symbol-day is excluded from primary analysis unless its symbol has at
 least 60 trading days present in the table. Rows are retained and flagged
 (`symbol_history_days`, `min_history_ok`), not deleted.
-Currently excluded: SKHY (30), SPCX (48).
+Currently excluded: SKHY (27), SPCX (45).
 
 ## 6. Look-ahead prevention
 - Rolling means/stds use t-1 .. t-20 only (shift(1) then roll).
