@@ -36,7 +36,12 @@ def main():
             d.loc[idx, o] = d.loc[idx, o].to_numpy()[perm]
 
     # --- discovery cell only, exactly as the real analysis would ---
-    disc = d[d["usable_for_discovery"] == 1]
+    disc = d[d["usable_for_discovery"] == 1].copy()
+    # WITHIN-SYMBOL: centre feature and outcome on each symbol's own mean
+    # (features.md section 8b). Pooled levels measure symbol identity, not signal.
+    for c in disc.columns:
+        if c in NON_FEATURES or disc[c].dtype.kind not in "if": continue
+        disc[c] = disc[c] - disc.groupby("symbol")[c].transform("mean")
     feats = sorted(c for c in d.columns
                    if c not in NON_FEATURES and c not in outcomes)
     print(f"scrambled-label control  seed={SEED}")

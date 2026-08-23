@@ -187,6 +187,30 @@ never reported, in discovery or in validation.
 Symbol means are computed on the DISCOVERY period only and applied as fixed
 offsets, so no holdout data enters the centring.
 
+CORRECTED 2026-08-23, still before any real outcome was inspected. Within-symbol
+CENTRING was not sufficient. Sparse features defeat it: days_iv_z_gt2_last5 is 0
+on 75% of discovery rows and abnormal_move_5d on 90%, with 68.8% tied at zero on
+both. Centring turns that tied mass into a per-symbol constant, and those
+constants correlate across symbols (rho 0.48), so one pair produced |rho| ~ 0.22
+on shuffled data in 29 of 30 permutations. A within-symbol shuffle cannot break
+it, because the values are constant within symbol.
+
+FINAL RULE: the test statistic is Spearman rho computed SEPARATELY WITHIN EACH
+SYMBOL (minimum 60 rows), summarised across symbols by the MEDIAN. No row from
+one symbol is ever compared with a row from another, so symbol identity cannot
+enter by any route. Sign agreement across symbols is reported alongside the
+median: an effect present in 15 of 17 symbols means something that an effect
+in 2 does not.
+
+EMPIRICAL DECISION THRESHOLD (100 permutations, null_threshold.py, established
+2026-08-23 before any real result): median per-symbol |rho| must exceed 0.0816
+(95th percentile of the strongest association found under shuffled outcomes;
+median 0.0626, 99th 0.0888, max 0.0898). Under this statistic the winning pair
+is spread across permutations - no pair exceeded 3 of 100 - confirming the null
+behaves. Theoretical p-values are NOT used: features are strongly autocorrelated,
+so nominal degrees of freedom are wrong. The permutation distribution is the
+reference.
+
 RULE: the scrambled-label control is re-run alongside every real scan, on the
 same features, splits and test statistic. A real result is only reportable if
 it clearly exceeds what the same procedure produces on shuffled outcomes.
