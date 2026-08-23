@@ -16,8 +16,20 @@ BENCHMARKS = {"SPY", "QQQ", "IWM"}          # context only, not research subject
 RESEARCH = [s for s in SYMBOLS if s not in BENCHMARKS]
 SHORT_HISTORY = {"SKHY", "SPCX"}            # frozen 2026-08-22 (<60 trading days)
 SEED = 20260822
-SYMBOL_HOLDOUT = set(random.Random(SEED).sample(
-    sorted(s for s in RESEARCH if s not in SHORT_HISTORY), 6))
+# REGISTERED membership - frozen in features.md section 3. Treated as data, not
+# regenerated. The seed is kept only to prove the draw is reproducible; if the
+# universe ever changes, the assertion fails loudly instead of silently
+# reassigning the holdout.
+SYMBOL_HOLDOUT = {"ARM", "AVGO", "NFLX", "ORCL", "PLTR", "SMCI"}
+SYMBOL_DISCOVERY = {"AAPL", "AMD", "AMZN", "BE", "COHR", "COIN", "CRWD", "GOOGL",
+                    "INTC", "LLY", "META", "MSFT", "MSTR", "MU", "NVDA", "TSLA", "XOM"}
+assert SYMBOL_HOLDOUT == set(random.Random(SEED).sample(
+    sorted(s for s in RESEARCH if s not in SHORT_HISTORY), 6)), \
+    "registered symbol holdout no longer reproduces from the frozen seed"
+assert SYMBOL_HOLDOUT | SYMBOL_DISCOVERY | SHORT_HISTORY == set(RESEARCH), \
+    "registered splits do not partition the research universe"
+
+DATE_START, DATE_END = "2025-08-22", "2026-08-21"   # registered sample period
 TIME_CUTOFF = "2026-05-21"          # discovery <= this, holdout after
 W, MINP = 20, 15                    # rolling window, minimum valid observations
 
@@ -33,12 +45,16 @@ def ratio_to_median(s):
     return s / med.replace(0, np.nan)
 
 def consec_positive(s):
-    """Consecutive days with s > 0, reset on <=0 or NaN."""
+    """Consecutive days with s > 0. NaN input -> NaN output: a missing value is
+    'unknown', not 'zero consecutive days'. The run resets after a gap."""
     out, run = [], 0
     for v in s:
-        run = run + 1 if (pd.notna(v) and v > 0) else 0
-        out.append(run)
-    return pd.Series(out, index=s.index)
+        if pd.isna(v):
+            out.append(np.nan); run = 0
+        else:
+            run = run + 1 if v > 0 else 0
+            out.append(run)
+    return pd.Series(out, index=s.index, dtype="float64")
 
 def load(sym):
     fs = os.path.join(SRC, f"US_{sym}_stat.csv")
@@ -47,7 +63,11 @@ def load(sym):
         return None
     st = pd.read_csv(fs)
     vo = pd.read_csv(fv)[["time", "iv", "hv"]]
+    for nm, x in (("stat", st), ("vol", vo)):
+        dup = x["time"].duplicated().sum()
+        assert dup == 0, f"{sym} {nm}: {dup} duplicate dates in source"
     d = st.merge(vo, on="time", how="inner").sort_values("time").reset_index(drop=True)
+    d = d[d["time"].between(DATE_START, DATE_END)].reset_index(drop=True)   # registered period
     d = d.rename(columns={
         "time": "date",
         "option_open_interest": "option_oi",
@@ -62,7 +82,20 @@ def load(sym):
         d[c] = pd.to_numeric(d[c], errors="coerce")     # "N/A" -> NaN
     return d
 
-def build(d):
+def build(d, calendar):
+    """calendar: the full sorted list of trading dates in the table. The symbol's
+    series is reindexed onto the calendar dates within its own first..last range,
+    so .shift(1) / .diff() / rolling windows step by TRADING DAY, not by
+    'previous available row'. Rows with no source data are dropped at the end."""
+    sym = d["symbol"].iloc[0]
+    span = [c for c in calendar if d["date"].min() <= c <= d["date"].max()]
+    d["has_source"] = True
+    d = d.set_index("date").reindex(span).rename_axis("date").reset_index()
+    d["symbol"] = sym
+    d["has_source"] = d["has_source"].fillna(False)
+    return _build_features(d)
+
+def _build_features(d):
     # --- OI is published ONE DAY LATE ---
     # Futu documents call/put_open_interest as T-1 delayed, and the newest row
     # carries 0 / "N/A". So the raw value on row t is day t's OI, which nobody
@@ -97,7 +130,8 @@ def build(d):
     d["vol_oi_ratio"] = d["option_volume"] / d["option_oi"].replace(0, np.nan)
 
     # --- price (backward-looking only) ---
-    d["ret_1d"] = np.log(d["underlying_price"] / d["underlying_price"].shift(1))
+    prev_px = d["underlying_price"].shift(1).replace(0, np.nan)
+    d["ret_1d"] = np.log(d["underlying_price"] / prev_px)
     d["realized_vol_20"] = d["ret_1d"].shift(1).rolling(W, min_periods=MINP).std()   # DAILY, not annualised
     d["price_z20"] = zscore(d["underlying_price"])
 
@@ -114,13 +148,19 @@ def build(d):
     return d
 
 def main():
-    frames = []
+    loaded = {}
     for s in SYMBOLS:
         d = load(s)
-        if d is None:
-            print(f"  {s}: MISSING source files"); continue
-        frames.append(build(d))
-    df = pd.concat(frames, ignore_index=True)
+        if d is not None and len(d):
+            loaded[s] = d
+        else:
+            print(f"  {s}: MISSING source files")
+    required = set(RESEARCH) | {"SPY", "QQQ"}          # QQQ/SPY supply market context
+    missing = required - set(loaded)
+    assert not missing, f"registered symbols absent from build: {sorted(missing)}"
+
+    calendar = sorted({t for d in loaded.values() for t in d["date"]})
+    df = pd.concat([build(d, calendar) for d in loaded.values()], ignore_index=True)
 
     # --- market context ---
     mkt = df[df["symbol"].isin(["SPY", "QQQ"])].pivot(index="date", columns="symbol", values="ret_1d")
@@ -137,7 +177,9 @@ def main():
 
     # --- flags and splits ---
     df["time_split"] = np.where(df["date"] <= TIME_CUTOFF, "discovery", "holdout")
-    df["symbol_split"] = np.where(df["symbol"].isin(SYMBOL_HOLDOUT), "holdout", "discovery")
+    df["symbol_split"] = np.select(
+        [df["symbol"].isin(SYMBOL_HOLDOUT), df["symbol"].isin(SYMBOL_DISCOVERY)],
+        ["holdout", "discovery"], default="excluded")   # SKHY/SPCX: neither, per spec
     hist = df.groupby("symbol")["date"].transform("count")
     df["symbol_history_days"] = hist
     df["min_history_ok"] = (hist >= 60).astype(int)
@@ -145,8 +187,11 @@ def main():
                                   (df["symbol_split"] == "discovery") &
                                   (df["min_history_ok"] == 1)).astype(int)
 
+    df = df[df["has_source"]].drop(columns=["has_source"])      # remove calendar padding
     df = df.drop(columns=[c for c in ("code", "name", "timestamp") if c in df.columns])
     df = df.sort_values(["date", "symbol"]).reset_index(drop=True)
+    assert not df.duplicated(["symbol", "date"]).any(), "symbol+date is not unique"
+    assert df["date"].between(DATE_START, DATE_END).all(), "rows outside the registered period"
     path = os.path.join(OUT, "symbol_days.csv")
     df.to_csv(path, index=False)
 
