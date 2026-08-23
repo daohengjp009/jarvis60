@@ -58,6 +58,11 @@ knowable after 16:00 ET on that date and before the next session opens.
   one-day look-ahead.
 - After the shift, `option_oi == 0` or NaN means NOT YET PUBLISHED, not zero.
   Set `oi_valid = 0`; all OI-derived features become NaN.
+- FIELD TIMING (verified 2026-08-22). On the newest row of every series,
+  option_volume, call_volume, put_volume, iv, hv and underlying_price all carry
+  real values while the OI columns carry 0 / "N/A". Those fields are therefore
+  same-day and need no shift; OI alone is T-1 delayed. This was checked
+  empirically, not documented by the vendor for every field.
 - `"N/A"` strings -> NaN.
 - Zero denominators -> NaN (never 0, never inf).
 - Missing symbol-day -> row excluded. No forward-fill, no interpolation.
