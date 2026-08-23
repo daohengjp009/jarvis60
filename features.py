@@ -155,7 +155,7 @@ def main():
             loaded[s] = d
         else:
             print(f"  {s}: MISSING source files")
-    required = set(RESEARCH) | {"SPY", "QQQ"}          # QQQ/SPY supply market context
+    required = set(RESEARCH) | BENCHMARKS              # benchmarks supply market context
     missing = required - set(loaded)
     assert not missing, f"registered symbols absent from build: {sorted(missing)}"
 
@@ -163,8 +163,9 @@ def main():
     df = pd.concat([build(d, calendar) for d in loaded.values()], ignore_index=True)
 
     # --- market context ---
-    mkt = df[df["symbol"].isin(["SPY", "QQQ"])].pivot(index="date", columns="symbol", values="ret_1d")
-    mkt = mkt.rename(columns={"SPY": "spy_ret_1d", "QQQ": "qqq_ret_1d"}).reset_index()
+    mkt = df[df["symbol"].isin(BENCHMARKS)].pivot(index="date", columns="symbol", values="ret_1d")
+    mkt = mkt.rename(columns={"SPY": "spy_ret_1d", "QQQ": "qqq_ret_1d",
+                              "IWM": "iwm_ret_1d"}).reset_index()
     df = df.merge(mkt, on="date", how="left")
 
     # --- benchmarks are context only: drop BEFORE any cross-sectional statistic,

@@ -37,6 +37,10 @@ now FROZEN and must never be re-run.
   SYMBOL_HOLDOUT   ARM AVGO NFLX ORCL PLTR SMCI
   SYMBOL_DISCOVERY AAPL AMD AMZN BE COHR COIN CRWD GOOGL INTC LLY META
                    MSFT MSTR MU NVDA TSLA XOM
+The stored `symbol_split` column is THREE-valued: "holdout", "discovery", and
+"excluded". SKHY and SPCX are "excluded" - they belong to neither registered
+list (section 5b). Added 2026-08-22: previously they defaulted to "discovery",
+so the stored label contradicted the registered membership.
 Holdout (either kind) must not be used for tuning, threshold search,
 feature selection, or any inspection before the rule is frozen and committed.
 Holdout is tested ONCE.
@@ -65,7 +69,13 @@ knowable after 16:00 ET on that date and before the next session opens.
   empirically, not documented by the vendor for every field.
 - `"N/A"` strings -> NaN.
 - Zero denominators -> NaN (never 0, never inf).
-- Missing symbol-day -> row excluded. No forward-fill, no interpolation.
+- Missing symbol-day -> row excluded from the output. No forward-fill, no
+  interpolation. MECHANISM (added 2026-08-22): each symbol's series is first
+  reindexed onto the pooled trading-day calendar over its own first..last date
+  range, so shift(1), diff() and rolling windows step by TRADING DAY rather
+  than by "previous available row". A data gap therefore becomes a real NaN
+  step instead of being invisible. The padded rows carry no values and are
+  dropped before output; nothing is filled or interpolated.
 - Rolling window with fewer than 15 of 20 valid observations -> NaN.
 
 ## 5b. Minimum history requirement (added 2026-08-22, before any analysis)
@@ -77,6 +87,24 @@ Rule: a symbol-day is excluded from primary analysis unless its symbol has at
 least 60 trading days present in the table. Rows are retained and flagged
 (`symbol_history_days`, `min_history_ok`), not deleted.
 Currently excluded: SKHY (27), SPCX (45).
+
+## 5c. Build-time guards (added 2026-08-22)
+The build asserts rather than assumes:
+- the registered symbol holdout still reproduces from seed 20260822;
+- holdout + discovery + short-history partition the research universe;
+- no duplicate dates in either source file per symbol;
+- every registered research symbol and every benchmark is present;
+- `symbol` + `date` is unique in the output;
+- no output row falls outside 2025-08-22 .. 2026-08-21.
+A violation fails the build loudly instead of silently producing a table over a
+different universe or period.
+
+## 5d. Output columns beyond section 7
+`oi_valid`, `symbol_history_days`, `min_history_ok`, `time_split`,
+`symbol_split`, and `usable_for_discovery` are bookkeeping columns, not
+features. `usable_for_discovery` = time_split discovery AND symbol_split
+discovery AND min_history_ok. Primary analysis filters on this compound flag,
+never on `symbol_split` alone.
 
 ## 6. Look-ahead prevention
 - Rolling means/stds use t-1 .. t-20 only (shift(1) then roll).
@@ -103,9 +131,18 @@ Derived (all relative):
 Persistence:
   days_iv_z_gt2_last5, days_vol_z_gt2_last5,
   oi_change_sum_3d, oi_change_sum_5d, consec_oi_up
+  NaN SEMANTICS (added 2026-08-22). These use their own 3- and 5-day windows,
+  not the W=20/MINP=15 rule above. A window containing any NaN yields NaN, and
+  consec_oi_up returns NaN for a missing input rather than 0. Previously
+  (NaN > 2) evaluated False and a missing value silently read as "not extreme"
+  or "zero consecutive days" - an unknown presenting as a confident number.
 
 Cross-sectional / market:
-  spy_ret_1d, qqq_ret_1d, iv_z20_xs_rank, vol_z20_xs_rank
+  spy_ret_1d, qqq_ret_1d, iwm_ret_1d, iv_z20_xs_rank, vol_z20_xs_rank
+  ADDED 2026-08-22: iwm_ret_1d. IWM was declared a benchmark and loaded but
+  contributed no feature column, so its exclusion from the research universe
+  bought nothing. It now supplies small-cap market context alongside SPY and
+  QQQ. Feature count 38 -> 39.
 
 ## 7b. Known deviation: cross-sectional ranks
 iv_z20_xs_rank and vol_z20_xs_rank rank each row against all research symbols
