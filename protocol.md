@@ -42,6 +42,10 @@ ranked, signed, or inspected. No holdout cell has been opened.
   recomputed on the final table; the earlier 0.166 figure is superseded.
   Exposed: feature marginals and feature-feature correlations only. NO genuine
   feature-outcome pairing inspected. No holdout opened.
+2026-08-23e Descriptive profiling of MU and SKHY (features only, no outcomes)
+  showed big and small capital flow moving together, not diverging. Checked
+  across all 23 eligible symbols: rho positive in 23 of 23, median +0.439.
+  flow_big_minus_small_z20 REMOVED as redundant. Family 50/300 -> 49/294.
 
 ## 2. Discovery procedure - FROZEN
 Cell: usable_for_discovery == 1, minus the last 5 dates (embargo: their
@@ -49,7 +53,7 @@ outcomes resolve inside the temporal holdout).
 Statistic: Spearman rho within each symbol (>= 60 paired rows, feature >= 3
 distinct values, outcome >= 2), aggregated as |median across symbols|.
 Directional: opposite-signed symbols cancel, they do not reinforce.
-Family: 50 features x 6 outcomes = 300 tests (was 39/234 before the capital
+Family: 49 features x 6 outcomes = 294 tests (was 39/234 before the capital
 flow family was added on 2026-08-23, pre-pairing).
 Null: block permutation of dates, block = 5 (= max outcome horizon), ONE date
 mapping applied identically to every symbol and every outcome, preserving

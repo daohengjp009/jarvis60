@@ -162,7 +162,6 @@ def _build_features(d):
     d["flow_net_z20"]   = zscore(d["in_flow"])
     d["flow_big_z20"]   = zscore(big)
     d["flow_small_z20"] = zscore(small)
-    d["flow_big_minus_small_z20"] = zscore(big - small)   # smart-vs-dumb divergence
     d["flow_big_sum_5d"] = big.rolling(5, min_periods=5).sum()
     d["consec_flow_big_up"] = consec_positive(big)
 

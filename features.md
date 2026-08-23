@@ -142,8 +142,15 @@ Cross-sectional / market:
 
 Capital flow (stock side, by trade size) - ADDED 2026-08-23, before any genuine
 feature-outcome pairing was inspected:
-  flow_net_z20, flow_big_z20, flow_small_z20, flow_big_minus_small_z20,
-  flow_big_sum_5d, consec_flow_big_up
+  flow_net_z20, flow_big_z20, flow_small_z20, flow_big_sum_5d,
+  consec_flow_big_up
+  REMOVED 2026-08-23, same day, pre-pairing: flow_big_minus_small_z20. It was
+  built on the assumption that institutional and retail flow diverge. Measured
+  across all 23 eligible symbols, the two move TOGETHER - Spearman rho positive
+  in 23 of 23, median +0.439, range +0.28 (GOOGL) to +0.78 (TSLA), none
+  negative. The difference is therefore a residual around a common factor, not
+  a smart-vs-dumb signal, and a redundant test costs power in a frozen family.
+  The two components are retained separately.
 Source: get_capital_flow(period_type="DAY"), ~250 trading days per symbol, no
 quota cost, rolling window (must be re-pulled or the tail is lost).
 big = super_in_flow + big_in_flow; small = mid_in_flow + sml_in_flow.
@@ -158,7 +165,7 @@ Direct flow columns retained and declared as features (consistent with the
 option-side raw levels in this section): in_flow, super_in_flow, big_in_flow,
 mid_in_flow, sml_in_flow. They are safe under the per-symbol statistic (section
 8b), which never compares rows across symbols.
-Feature count 39 -> 50 (5 direct + 6 derived); test family 234 -> 300.
+Feature count 39 -> 49 (5 direct + 5 derived); test family 234 -> 294.
   ADDED 2026-08-22: iwm_ret_1d. IWM was declared a benchmark and loaded but
   contributed no feature column, so its exclusion from the research universe
   bought nothing. It now supplies small-cap market context alongside SPY and
