@@ -8,6 +8,7 @@ import pandas as pd
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.join(BASE, "data", "symbol_history", "frozen")
+FLOW = os.path.join(BASE, "data", "capital_flow")
 OUT = os.path.join(BASE, "data", "features")
 os.makedirs(OUT, exist_ok=True)
 
@@ -76,6 +77,26 @@ def load(sym):
         "put_call_volume_ratio": "pc_volume_ratio",
         "put_call_open_interest_ratio": "pc_oi_ratio"})
     d["symbol"] = sym
+
+    # --- stock-side capital flow by trade size (added 2026-08-23) ---
+    fp = os.path.join(FLOW, f"US_{sym}_flow.csv")
+    if os.path.exists(fp):
+        fl = pd.read_csv(fp).rename(columns={"time": "date"})
+        keep = ["date","in_flow","super_in_flow","big_in_flow","mid_in_flow","sml_in_flow"]
+        fl = fl[[c for c in keep if c in fl.columns]]
+        for c in fl.columns:
+            if c != "date": fl[c] = pd.to_numeric(fl[c], errors="coerce")
+        # CONSERVATIVE ONE-DAY SHIFT. Publication timing is UNVERIFIED: unlike OI,
+        # the newest row carries real values, which suggests same-day availability -
+        # but that was checked on a non-trading day and could not be distinguished
+        # from overnight publication. Shifted until a live-session test settles it.
+        # If same-day is confirmed, removing the shift is a pre-pairing amendment.
+        fl[[c for c in fl.columns if c != "date"]] = \
+            fl[[c for c in fl.columns if c != "date"]].shift(1)
+        d = d.merge(fl, on="date", how="left")
+    else:
+        for c in ("in_flow","super_in_flow","big_in_flow","mid_in_flow","sml_in_flow"):
+            d[c] = np.nan
     for c in ("pc_volume_ratio", "pc_oi_ratio", "iv", "hv", "underlying_price",
               "option_volume", "call_volume", "put_volume",
               "option_oi", "call_oi", "put_oi"):
@@ -134,6 +155,16 @@ def _build_features(d):
     d["ret_1d"] = np.log(d["underlying_price"] / prev_px)
     d["realized_vol_20"] = d["ret_1d"].shift(1).rolling(W, min_periods=MINP).std()   # DAILY, not annualised
     d["price_z20"] = zscore(d["underlying_price"])
+
+    # --- capital flow (stock side, by trade size) ---
+    big   = d["super_in_flow"] + d["big_in_flow"]      # institutional-size prints
+    small = d["mid_in_flow"] + d["sml_in_flow"]        # retail-size prints
+    d["flow_net_z20"]   = zscore(d["in_flow"])
+    d["flow_big_z20"]   = zscore(big)
+    d["flow_small_z20"] = zscore(small)
+    d["flow_big_minus_small_z20"] = zscore(big - small)   # smart-vs-dumb divergence
+    d["flow_big_sum_5d"] = big.rolling(5, min_periods=5).sum()
+    d["consec_flow_big_up"] = consec_positive(big)
 
     # --- persistence ---
     # NaN must stay NaN: (NaN > 2) is False in pandas, which would silently

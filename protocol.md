@@ -29,13 +29,28 @@ by a frozen confirmatory procedure. Section 1 records exactly what was exposed.
 AT NO POINT was a genuine (unshuffled) feature-outcome association computed,
 ranked, signed, or inspected. No holdout cell has been opened.
 
+2026-08-23d Probed all unused Futu 10.10 methods (read-only, no pairing seen).
+  Found get_capital_flow(period_type="DAY") returns ~250 trading days of
+  stock-side flow split by trade size, for all 28 symbols, at zero quota cost.
+  An earlier note had called underlying trade-level flow perishable and
+  uncollected; that was wrong. Added 11 features (5 direct + 6 derived).
+  Verified orthogonal to existing option features (|rho| < 0.03 against
+  vol_z20, oi_change_z20, pc_vol_z20), so these are new information rather
+  than restatements. Publication timing UNVERIFIED - a conservative one-day
+  shift is applied pending a live-session test.
+  Family grows 39 features / 234 tests -> 50 / 300. The null threshold must be
+  recomputed on the final table; the earlier 0.166 figure is superseded.
+  Exposed: feature marginals and feature-feature correlations only. NO genuine
+  feature-outcome pairing inspected. No holdout opened.
+
 ## 2. Discovery procedure - FROZEN
 Cell: usable_for_discovery == 1, minus the last 5 dates (embargo: their
 outcomes resolve inside the temporal holdout).
 Statistic: Spearman rho within each symbol (>= 60 paired rows, feature >= 3
 distinct values, outcome >= 2), aggregated as |median across symbols|.
 Directional: opposite-signed symbols cancel, they do not reinforce.
-Family: 39 features x 6 outcomes = 234 tests.
+Family: 50 features x 6 outcomes = 300 tests (was 39/234 before the capital
+flow family was added on 2026-08-23, pre-pairing).
 Null: block permutation of dates, block = 5 (= max outcome horizon), ONE date
 mapping applied identically to every symbol and every outcome, preserving
 cross-symbol and cross-outcome dependence. B = 1000.

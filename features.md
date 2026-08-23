@@ -139,6 +139,26 @@ Persistence:
 
 Cross-sectional / market:
   spy_ret_1d, qqq_ret_1d, iwm_ret_1d, iv_z20_xs_rank, vol_z20_xs_rank
+
+Capital flow (stock side, by trade size) - ADDED 2026-08-23, before any genuine
+feature-outcome pairing was inspected:
+  flow_net_z20, flow_big_z20, flow_small_z20, flow_big_minus_small_z20,
+  flow_big_sum_5d, consec_flow_big_up
+Source: get_capital_flow(period_type="DAY"), ~250 trading days per symbol, no
+quota cost, rolling window (must be re-pulled or the tail is lost).
+big = super_in_flow + big_in_flow; small = mid_in_flow + sml_in_flow.
+Rationale: HYP-002 asks whether large money accumulates before a move. Until now
+only OPTION flow was visible; this adds the equity side, split by trade size.
+An earlier note called underlying trade-level flow perishable and uncollected -
+that was wrong; it is backfillable.
+TIMING UNVERIFIED: the newest row carries real values (unlike OI, which shows 0),
+suggesting same-day availability, but this was checked on a non-trading day. A
+conservative one-day shift is applied until a live-session test settles it.
+Direct flow columns retained and declared as features (consistent with the
+option-side raw levels in this section): in_flow, super_in_flow, big_in_flow,
+mid_in_flow, sml_in_flow. They are safe under the per-symbol statistic (section
+8b), which never compares rows across symbols.
+Feature count 39 -> 50 (5 direct + 6 derived); test family 234 -> 300.
   ADDED 2026-08-22: iwm_ret_1d. IWM was declared a benchmark and loaded but
   contributed no feature column, so its exclusion from the research universe
   bought nothing. It now supplies small-cap market context alongside SPY and
