@@ -63,6 +63,13 @@ def load(sym):
     return d
 
 def build(d):
+    # --- OI is published ONE DAY LATE ---
+    # Futu documents call/put_open_interest as T-1 delayed, and the newest row
+    # carries 0 / "N/A". So the raw value on row t is day t's OI, which nobody
+    # could see until t+1. Shift by one so row t holds the OI KNOWN at t's close.
+    for _c in ("option_oi", "call_oi", "put_oi", "pc_oi_ratio"):
+        d[_c] = d[_c].shift(1)
+
     # --- OI validity: 0 means "not yet published", not zero ---
     d["oi_valid"] = (d["option_oi"] > 0).astype(int)
     for c in ("option_oi", "call_oi", "put_oi", "pc_oi_ratio"):
@@ -87,7 +94,7 @@ def build(d):
     d["put_oi_change"] = d["put_oi"].diff()
     d["oi_change_pct"] = d["oi_change"] / d["option_oi"].shift(1).replace(0, np.nan)
     d["oi_change_z20"] = zscore(d["oi_change"])
-    d["vol_oi_ratio"] = d["option_volume"] / d["option_oi"].shift(1).replace(0, np.nan)
+    d["vol_oi_ratio"] = d["option_volume"] / d["option_oi"].replace(0, np.nan)
 
     # --- price (backward-looking only) ---
     d["ret_1d"] = np.log(d["underlying_price"] / d["underlying_price"].shift(1))

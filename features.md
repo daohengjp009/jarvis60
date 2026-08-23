@@ -46,7 +46,17 @@ Holdout is tested ONCE.
 knowable after 16:00 ET on that date and before the next session opens.
 
 ## 5. Missing / zero / N/A
-- `option_open_interest == 0` means NOT YET PUBLISHED, not zero.
+- OPEN INTEREST IS PUBLISHED ONE DAY LATE (added 2026-08-22, before any
+  analysis). Futu documents call_open_interest and put_open_interest as T-1
+  delayed, and the newest row of every series carries 0 / "N/A" - confirmed on
+  TSLA. The raw value on row t is therefore day t's OI, which is not knowable
+  until t+1. All OI columns (option_oi, call_oi, put_oi, pc_oi_ratio) are
+  SHIFTED BY ONE DAY at build time, so row t holds the OI known at t's close.
+  Every OI-derived feature inherits this shift. Without it, nine features
+  (oi_change, oi_change_pct, oi_change_z20, pc_oi_ratio, pc_oi_z20,
+  vol_oi_ratio, oi_change_sum_3d, oi_change_sum_5d, consec_oi_up) would carry a
+  one-day look-ahead.
+- After the shift, `option_oi == 0` or NaN means NOT YET PUBLISHED, not zero.
   Set `oi_valid = 0`; all OI-derived features become NaN.
 - `"N/A"` strings -> NaN.
 - Zero denominators -> NaN (never 0, never inf).
