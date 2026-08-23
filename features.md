@@ -160,6 +160,37 @@ carry mild look-ahead. Primary analysis runs on the unscheduled subset.
 STATUS: not yet implemented; get_earnings_calendar historical coverage is
 unverified (docs indicate a 7-day span limit per call).
 
+## 8b. Analysis method — WITHIN-SYMBOL ONLY (added 2026-08-23, before any
+##      real outcome was computed or inspected)
+
+Established by the scrambled-label control (null_demo.py), run before any real
+analysis. With outcomes permuted within each symbol - so no true association can
+exist - a pooled Spearman scan returned 18-22% of tests significant at p<0.05
+against an expected 5%, and 3-9 associations survived Bonferroni correction.
+The winners were overwhelmingly RAW LEVEL features (underlying_price,
+option_volume, call_oi, option_oi, pc_oi_ratio, vol_oi_ratio).
+
+Cause: a within-symbol permutation destroys the day-to-day pairing but leaves
+every BETWEEN-symbol difference intact. Symbols differ enormously in price
+level and option volume, and also differ in mean forward return over the
+sample. A pooled correlation therefore measures symbol identity, not signal.
+This is the same confound that invalidated the HYP-001 pilot.
+
+Confirmed directly: on identical shuffled data, pooled levels gave 18
+significant results; subtracting each symbol's own mean from both feature and
+outcome gave 3, against an expected 2.
+
+RULE: every association in HYP-002 is estimated WITHIN SYMBOL. Feature and
+outcome are both centred on the symbol's own mean before testing, or the test
+is run on a per-date cross-sectional rank. Pooled raw-level correlations are
+never reported, in discovery or in validation.
+Symbol means are computed on the DISCOVERY period only and applied as fixed
+offsets, so no holdout data enters the centring.
+
+RULE: the scrambled-label control is re-run alongside every real scan, on the
+same features, splits and test statistic. A real result is only reportable if
+it clearly exceeds what the same procedure produces on shuffled outcomes.
+
 ## 9. Outcomes — DEFINED HERE, NOT COMPUTED IN THIS TABLE
   ret_fwd_1d, ret_fwd_3d, ret_fwd_5d
   abnormal_move_5d = 1 if |ret_fwd_5d| >= 2 * realized_vol_20 * sqrt(5)

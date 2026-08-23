@@ -31,6 +31,10 @@ case "$1" in
   check)  python3 core/recheck.py ;;
   snap)   python3 snapshot.py ;;
   day)    python3 daycheck.py "$2" ;;
+  gist)   command -v gh >/dev/null || { echo "gh not installed: brew install gh"; exit 1; }
+          gh gist edit 55d0ce57a59fca26c8541cdf7b1732a6 -f features.md  < features.md &&
+          gh gist edit 55d0ce57a59fca26c8541cdf7b1732a6 -f features.py  < features.py &&
+          echo "gist updated" ;;
   fill)   for d in $(ls data/ticks/*.csv 2>/dev/null | sed -E 's/.*_([0-9]{4}-[0-9]{2}-[0-9]{2})\.csv/\1/' | sort -u); do
             for t in TSLA NVDA GOOGL; do
               [ -f "data/underlying_1m/US_${t}_${d}.csv" ] || python3 backfill_underlying.py $t $d 2>/dev/null | grep -E "saved|FAILED"
