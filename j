@@ -53,7 +53,9 @@ case "$1" in
   cap)    "$PY" capture_check.py ;;
   dash)   nohup "$PY" dashboard.py > logs/dashboard.log 2>&1 & sleep 2; echo "dashboard: http://192.168.0.208:8060" ;;
   nodash) pkill -f dashboard.py && echo "dashboard stopped" || echo "was not running" ;;
+  bot)    pgrep -f "$(pwd)/bot.py" >/dev/null && echo "bot already running" || { nohup "$PY" "$(pwd)/bot.py" > logs/bot.log 2>&1 & sleep 2; echo "bot started"; } ;;
+  nobot)  pkill -f "$(pwd)/bot.py" && echo "bot stopped" || echo "was not running" ;;
   *)
-    echo "Usage: ./j start [TICKERS] | stop | status | log | screen TICKER | check | snap | cap | dash | nodash"
+    echo "Usage: ./j start [TICKERS] | stop | status | log | screen TICKER | check | snap | cap | dash | nodash | bot | nobot"
     ;;
 esac

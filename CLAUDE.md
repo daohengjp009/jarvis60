@@ -48,10 +48,14 @@ anything that touches `futu`; the RSA key path is hardcoded as
 ./j close               # 21:00 routine: stop + nointra + snap
 ./j morning [DATE]      # next-day routine: cap + fill + day summary
 ./j dash / nodash        # dashboard.py on http://192.168.0.208:8060
+./j bot / nobot          # Telegram front-end (bot.py) on the pinned interpreter
 ```
 `bot.py` is a Telegram front-end exposing the same command set (fixed menu,
 whitelisted `TELEGRAM_CHAT_ID`, no shell strings — always `subprocess` with an
-argument list). Run with `nohup python3 bot.py > logs/bot.log 2>&1 &`.
+argument list). Start it with `./j bot`, not bare `python3 bot.py` — a bare
+`python3` can resolve to an interpreter without `pandas` depending on shell
+config (this bit `intraday.py` under launchd once already), whereas `./j bot`
+launches it on `$PY`, the interpreter pinned at the top of `./j`.
 
 ### The agent (`core/`)
 ```
