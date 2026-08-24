@@ -46,7 +46,9 @@ case "$1" in
   stream) pgrep -f stream_test.py >/dev/null && echo "stream already running" || { nohup "$PY" -u stream_test.py "${2:-23400}" > logs/stream_$(date +%F).log 2>&1 & sleep 2; echo "stream started"; } ;;
   nostream) pkill -f stream_test.py && echo "stream stopped" || echo "was not running" ;;
   open)   echo "=== OPEN ==="; "$0" start ${@:2}; "$0" intra ;;   # stream dropped: option sub quota is 200
-  close)  echo "=== CLOSE ==="; "$0" stop; "$0" nointra; "$0" snap ;;
+  close)  echo "=== CLOSE ==="; "$0" stop; "$0" nointra; pkill -f alert.py 2>/dev/null
+          "$0" snap
+          "$PY" close_report.py ;;
   morning) echo "=== CAPTURE ==="; "$0" cap; echo; echo "=== BACKFILL ==="; "$0" fill; echo; echo "=== SUMMARY ==="; "$0" day "$2" ;;
   cap)    "$PY" capture_check.py ;;
   dash)   nohup "$PY" dashboard.py > logs/dashboard.log 2>&1 & sleep 2; echo "dashboard: http://192.168.0.208:8060" ;;
