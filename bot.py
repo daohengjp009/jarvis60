@@ -89,6 +89,17 @@ def cmd_intra(arg):
 
 def cmd_nointra(arg): return _sh(["pkill", "-f", "intraday.py"]) or "intraday capture stopped"
 
+def cmd_alert(arg):
+    if subprocess.run(["pgrep", "-f", "alert.py"], capture_output=True).returncode == 0:
+        return "alerts already running"
+    secs = arg.strip() if arg.strip().isdigit() else "120"
+    log = os.path.join(BASE, "logs", f"alert_{time.strftime('%F')}.log")
+    subprocess.Popen([sys.executable, "-u", "alert.py", secs], cwd=BASE,
+                     stdout=open(log, "a"), stderr=subprocess.STDOUT)
+    return f"live alerts started (checking every {secs}s) - clusters, spreads, Futu events"
+
+def cmd_noalert(arg): return _sh(["pkill", "-f", "alert.py"]) or "alerts stopped"
+
 def cmd_open(arg):
     """14:15 - everything the trading day needs."""
     return ("OPEN\n"
@@ -142,10 +153,10 @@ def cmd_day(arg):
 def cmd_help(arg):
     return ("DAILY (just these three)\n/open - 14:15 start everything\n/close - 21:00 stop + snapshot\n/morning - next day: check + backfill + summary\n\nINDIVIDUAL\n/start [TICKERS] - begin collecting\n/stop - stop collector\n"
             "/status - is it alive\n/screen TICKER - option screener\n"
-            "/check - toolbelt health\n/snap - daily chain snapshot (all 28)\n/dash - start dashboard\n/nodash - stop dashboard\n/day [DATE] - session summary (today by default)\n/cap - capture check (run next morning)\n/fill - backfill missing 1-min underlying bars\n/intra - start intraday chain capture\n/nointra - stop it\n/stream - start streaming test (6.5h)\n/nostream - stop it\n/help - this menu")
+            "/check - toolbelt health\n/snap - daily chain snapshot (all 28)\n/dash - start dashboard\n/nodash - stop dashboard\n/day [DATE] - session summary (today by default)\n/cap - capture check (run next morning)\n/fill - backfill missing 1-min underlying bars\n/alert - live unusual-activity alerts\n/noalert - stop them\n/intra - start intraday chain capture\n/nointra - stop it\n/stream - start streaming test (6.5h)\n/nostream - stop it\n/help - this menu")
 
 COMMANDS = {"/start": cmd_start, "/stop": cmd_stop, "/status": cmd_status,
-            "/screen": cmd_screen, "/check": cmd_check, "/snap": cmd_snap, "/dash": cmd_dash, "/nodash": cmd_nodash, "/cap": cmd_cap, "/day": cmd_day, "/day": cmd_day, "/fill": cmd_fill, "/open": cmd_open, "/close": cmd_close, "/morning": cmd_morning, "/intra": cmd_intra, "/nointra": cmd_nointra, "/stream": cmd_stream, "/nostream": cmd_nostream, "/help": cmd_help}
+            "/screen": cmd_screen, "/check": cmd_check, "/snap": cmd_snap, "/dash": cmd_dash, "/nodash": cmd_nodash, "/cap": cmd_cap, "/day": cmd_day, "/day": cmd_day, "/fill": cmd_fill, "/open": cmd_open, "/close": cmd_close, "/morning": cmd_morning, "/alert": cmd_alert, "/noalert": cmd_noalert, "/intra": cmd_intra, "/nointra": cmd_nointra, "/stream": cmd_stream, "/nostream": cmd_nostream, "/help": cmd_help}
 
 def main():
     offset = None
