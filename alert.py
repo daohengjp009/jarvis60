@@ -24,6 +24,8 @@ SYMS = ("TSLA", "NVDA", "GOOGL")
 ABS_FLOOR = 250_000        # absolute minimum notional, as in HYP-001
 REL_MULT = 10              # ... AND at least 10x this contract's own median cluster
 MIN_HIST = 30              # clusters needed before a relative baseline is trusted
+SPREAD_MIN_NOTIONAL = 100_000   # a real combo order, not two retail lots colliding
+SPREAD_MIN_LOTS = 50            # 1-lot coincidences at the open are not footprints
 
 TOKEN = os.environ.get("TELEGRAM_TOKEN")
 CHAT = os.environ.get("TELEGRAM_CHAT_ID")
@@ -47,6 +49,19 @@ load_env()
 TOKEN = os.environ.get("TELEGRAM_TOKEN"); CHAT = os.environ.get("TELEGRAM_CHAT_ID")
 
 seen = set()
+_offset = {}          # path -> lines already parsed, so each poll reads only new rows
+
+def _read_new(path, cols):
+    """Read only rows appended since the last poll. Re-reading every tick file
+    each cycle does not scale once files reach tens of thousands of rows."""
+    try:
+        start = _offset.get(path, 0)
+        d = pd.read_csv(path, usecols=cols, skiprows=range(1, start + 1)) if start \
+            else pd.read_csv(path, usecols=cols)
+        _offset[path] = start + len(d)
+        return d
+    except Exception:
+        return None
 def log(rec):
     day = str(datetime.date.today())
     with open(os.path.join(OUT, f"alerts_{day}.jsonl"), "a") as f:
@@ -61,10 +76,8 @@ def own_clusters(day):
         base = os.path.basename(f)[:-15]
         m = re.match(r"US_([A-Z]+)", base)
         if not m or m.group(1) not in SYMS: continue
-        try:
-            d = pd.read_csv(f, usecols=["time","volume","turnover","ticker_direction"])
-        except Exception:
-            continue
+        d = _read_new(f, ["time","volume","turnover","ticker_direction"])
+        if d is None or len(d) < 2: continue
         d = d[d["ticker_direction"].isin(["BUY","SELL"])]
         if len(d) < 2: continue
         g = d.groupby(["time","ticker_direction"]).agg(
@@ -122,10 +135,9 @@ def spreads(day):
         base = os.path.basename(f)[:-15]
         m = re.match(r"US_([A-Z]+)(\d{6})([CP])(\d+)", base)
         if not m or m.group(1) not in SYMS: continue
-        try:
-            d = pd.read_csv(f, usecols=["time","volume","turnover","ticker_direction"])
-        except Exception:
-            continue
+        d = _read_new(f + "|spread", ["time","volume","turnover","ticker_direction"]) \
+            if False else _read_new(f, ["time","volume","turnover","ticker_direction"])
+        if d is None or not len(d): continue
         d = d[d["ticker_direction"].isin(["BUY","SELL"])]
         if not len(d): continue
         g = d.groupby(["time","ticker_direction"]).agg(
@@ -140,6 +152,8 @@ def spreads(day):
         if len(grp) < 2: continue
         if grp["ticker_direction"].nunique() < 2: continue     # need both sides
         if grp["contract"].nunique() < 2: continue             # need two legs
+        if lots < SPREAD_MIN_LOTS: continue
+        if grp["n"].sum() < SPREAD_MIN_NOTIONAL: continue
         key = f"spread|{sym}|{t}|{lots}"
         if key in seen: continue
         seen.add(key)
@@ -158,7 +172,12 @@ def main():
     try:
         while True:
             day = str(datetime.date.today())
-            hits = own_clusters(day) + spreads(day) + futu_events(ctx)
+            try:
+                hits = own_clusters(day) + spreads(day) + futu_events(ctx)
+            except Exception as e:
+                print(f"  [{datetime.datetime.now():%H:%M:%S}] poll error: "
+                      f"{type(e).__name__}: {e}", flush=True)
+                hits = []
             for h in hits:
                 log(h)
                 if h["kind"] == "spread":
@@ -173,7 +192,7 @@ def main():
                     msg = f"FUTU EVENT  {h['contract']}\n{extra}"
                 print("\n" + msg, flush=True)
                 notify(msg)
-            if hits: print(f"  [{datetime.datetime.now():%H:%M:%S}] {len(hits)} new", flush=True)
+            print(f"  [{datetime.datetime.now():%H:%M:%S}] poll done, {len(hits)} new", flush=True)
             time.sleep(POLL)
     except KeyboardInterrupt:
         print("\nstopped", flush=True)
