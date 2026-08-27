@@ -81,7 +81,7 @@ from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 from zoneinfo import ZoneInfo
 
 NY = ZoneInfo("America/New_York")
-WHALE_SCHEMA_VERSION = 4
+WHALE_SCHEMA_VERSION = 5
 ENGINE_VERSION = "0.3.3"
 
 # v0.3.3's execution clustering policy.  These values are part of the output
@@ -91,6 +91,10 @@ CLUSTER_MAX_ADJACENT_GAP_SECONDS = 300.0
 CLUSTER_MAX_TOTAL_SPAN_SECONDS = 900.0
 CLUSTER_MAX_ROLLING_MEDIAN_PREMIUM_DIFF = 0.05
 CLUSTER_MAX_PREMIUM_RANGE = 0.10
+
+# Moneyness is descriptive only.  ATM uses a small, explicit tolerance because
+# exact equality between an equity price and strike is not observable reliably.
+ATM_MONEYNESS_TOLERANCE_PCT = 0.005
 
 # Known transition tape: it mixes legacy schema and prior-session vendor data.
 # It remains readable/auditable, but can never provide lifecycle history.
@@ -132,6 +136,12 @@ INVERSE_STRUCTURE = {
     "long_strangle": "short_strangle",
     "short_strangle": "long_strangle",
 }
+
+MONITORABLE_DIRECTIONAL_STRUCTURES = {
+    "bull_call_spread", "bear_call_spread", "bull_put_spread", "bear_put_spread",
+    "synthetic_long", "synthetic_short", "bullish_risk_reversal", "bearish_risk_reversal",
+}
+MONITORABLE_ORIENTATION_BANDS = {"MODERATE", "WEAK_TO_MODERATE"}
 
 
 @dataclass(frozen=True)
@@ -223,6 +233,75 @@ def median(values: Sequence[float]) -> float:
     n = len(ordered)
     middle = n // 2
     return ordered[middle] if n % 2 else (ordered[middle - 1] + ordered[middle]) / 2.0
+
+
+def event_underlying_price(source: Dict[str, Any]) -> Tuple[Optional[float], Optional[str]]:
+    """Return only a price carried by the source event; never query live data."""
+    for key in ("underlying_price", "underlying_price_at_event"):
+        value = finite_float(source.get(key))
+        if value is not None and value > 0:
+            return value, (safe_text(source.get("underlying_price_source")) or key)
+    return None, None
+
+
+def event_underlying_metadata(source: Dict[str, Any]) -> Dict[str, Any]:
+    """Return event-time provenance carried by alert.py, without replay lookup."""
+    price, source_key = event_underlying_price(source)
+    return {
+        "underlying_price_at_event": price,
+        "underlying_price_source": source_key or "UNKNOWN",
+        "underlying_price_observed_at": (source.get("underlying_price_observed_at")
+                                           if price is not None else None),
+        "underlying_price_age_seconds": (finite_float(source.get("underlying_price_age_seconds"))
+                                         if price is not None else None),
+    }
+
+
+def leg_price_metrics(legs: Sequence[Leg], underlying_price: Optional[float]) -> List[Dict[str, Any]]:
+    metrics: List[Dict[str, Any]] = []
+    for leg in legs:
+        distance = (underlying_price - leg.strike) if underlying_price is not None else None
+        distance_pct = (distance / leg.strike) if distance is not None and leg.strike else None
+        moneyness = "UNKNOWN"
+        if distance_pct is not None:
+            if abs(distance_pct) <= ATM_MONEYNESS_TOLERANCE_PCT:
+                moneyness = "ATM"
+            elif (leg.right == "C" and distance > 0) or (leg.right == "P" and distance < 0):
+                moneyness = "ITM"
+            else:
+                moneyness = "OTM"
+        metrics.append({
+            "expiry": leg.expiry, "right": leg.right, "strike": leg.strike, "side": leg.side,
+            "strike_distance_dollars": distance,
+            "strike_distance_percent": distance_pct,
+            "moneyness": moneyness,
+        })
+    return metrics
+
+
+def aggregate_event_price(records: Sequence[Dict[str, Any]]) -> Dict[str, Any]:
+    values = [float(r["underlying_price_at_event"]) for r in records
+              if finite_float(r.get("underlying_price_at_event")) is not None]
+    sources = sorted({str(r.get("underlying_price_source")) for r in records
+                      if r.get("underlying_price_source")})
+    if not values:
+        return {"underlying_price_at_event": None, "underlying_price_source": "UNKNOWN",
+                "underlying_price_observed_at": None, "underlying_price_age_seconds": None,
+                "underlying_price_observation_count": 0}
+    representatives = [r for r in records if finite_float(r.get("underlying_price_at_event")) is not None]
+    observed_at = [safe_text(r.get("underlying_price_observed_at")) for r in representatives]
+    ages = [finite_float(r.get("underlying_price_age_seconds")) for r in representatives]
+    observed_at_value = observed_at[0] if len(set(observed_at)) == 1 else None
+    age_value = ages[0] if len(set(ages)) == 1 else None
+    return {
+        "underlying_price_at_event": values[0] if len(set(values)) == 1 else median(values),
+        "underlying_price_source": sources[0] if len(sources) == 1 else "MULTIPLE_EVENT_SOURCES",
+        "underlying_price_observed_at": observed_at_value,
+        "underlying_price_age_seconds": age_value,
+        "underlying_price_observation_count": len(values),
+        "underlying_price_at_event_min": min(values),
+        "underlying_price_at_event_max": max(values),
+    }
 
 
 def safe_text(value: Any) -> Optional[str]:
@@ -567,6 +646,8 @@ def normalize_inferred_spread(day: str, rec: Dict[str, Any]) -> Dict[str, Any]:
         "synthetic_long", "synthetic_short"}
 
     lots = finite_float(rec.get("lots"))
+    underlying = event_underlying_metadata(rec)
+    underlying_price = underlying["underlying_price_at_event"]
     premium_per_spread = (
         net_premium / (lots * 100.0)
         if net_premium is not None and lots is not None and lots > 0 else None)
@@ -580,6 +661,12 @@ def normalize_inferred_spread(day: str, rec: Dict[str, Any]) -> Dict[str, Any]:
         "orientation_thesis_id": None,
         "contract_set_activity_id": None,
         "independence_claim": "NONE",
+        **underlying,
+        "underlying_price_raw_source_value": rec.get("underlying_price_source"),
+        "strike_distance": leg_price_metrics(legs, underlying_price),
+        "moneyness": [x["moneyness"] for x in leg_price_metrics(legs, underlying_price)],
+        "monitoring_state": "NOT_APPLICABLE",
+        "high_frequency_monitoring_active": False,
         "structure": structure,
         "canonical_signature": canonical_signature(legs) if legs else None,
         "position_key": position_key(symbol or "?", legs) if legs else None,
@@ -636,6 +723,7 @@ def normalize_own(day: str, rec: Dict[str, Any]) -> Dict[str, Any]:
     po = parse_option_fields(rec)
     symbol = po.symbol if po else parse_symbol_from_record(rec)
     side = safe_text(rec.get("dir"))
+    underlying_price, underlying_price_source = event_underlying_price(rec)
     out = base_envelope(day, rec, "flow_evidence", symbol)
     out.update({
         "evidence_type": "relative_cluster",
@@ -647,6 +735,14 @@ def normalize_own(day: str, rec: Dict[str, Any]) -> Dict[str, Any]:
         "lots": finite_float(rec.get("lots")),
         "notional": finite_float(rec.get("notional")),
         "x_typical": finite_float(rec.get("x_typical")),
+        "underlying_price_at_event": underlying_price,
+        "underlying_price_source": underlying_price_source or "UNKNOWN",
+        "underlying_price_raw_source_value": rec.get(underlying_price_source) if underlying_price_source else None,
+        "strike_distance": leg_price_metrics([Leg(side=side or "UNKNOWN", right=po.right, strike=po.strike, expiry=po.expiry)] if po else [], underlying_price),
+        "moneyness": (leg_price_metrics([Leg(side=side, right=po.right, strike=po.strike, expiry=po.expiry)], underlying_price)[0]["moneyness"]
+                      if po and side else "UNKNOWN"),
+        "monitoring_state": "NOT_APPLICABLE",
+        "high_frequency_monitoring_active": False,
         "exposure_hint": single_leg_exposure(po, side) if po else {"direction": "UNKNOWN", "volatility": "UNKNOWN", "theta": "UNKNOWN"},
         "intent": "UNKNOWN",
         "opening_closing": "UNKNOWN_T0",
@@ -705,6 +801,7 @@ def normalize_futu(day: str, rec: Dict[str, Any]) -> Dict[str, Any]:
     volume = finite_float(rec.get("volume"))
     prior_oi = finite_float(rec.get("total_open_interest"))
     floor = t0_opening_floor(volume, prior_oi)
+    underlying_price, underlying_price_source = event_underlying_price(rec)
     out.update({
         "evidence_type": "futu_option_event",
         "contract": rec.get("option_code"),
@@ -719,6 +816,14 @@ def normalize_futu(day: str, rec: Dict[str, Any]) -> Dict[str, Any]:
         "iv": finite_float(rec.get("iv")),
         "dte": finite_float(rec.get("dte")),
         "underlying_price": finite_float(rec.get("underlying_price")),
+        "underlying_price_at_event": underlying_price,
+        "underlying_price_source": underlying_price_source or "UNKNOWN",
+        "underlying_price_raw_source_value": rec.get(underlying_price_source) if underlying_price_source else None,
+        "strike_distance": leg_price_metrics([Leg(side=side or "UNKNOWN", right=po.right, strike=po.strike, expiry=po.expiry)] if po and side else [], underlying_price),
+        "moneyness": ([leg_price_metrics([Leg(side=side, right=po.right, strike=po.strike, expiry=po.expiry)], underlying_price)[0]["moneyness"]]
+                      if po and side else ["UNKNOWN"]),
+        "monitoring_state": "NOT_APPLICABLE",
+        "high_frequency_monitoring_active": False,
         "bid_at_event": finite_float(rec.get("bid_price")),
         "ask_at_event": finite_float(rec.get("ask_price")),
         "vendor_labels": {
@@ -803,6 +908,9 @@ def _cluster_record(day: str, group: Sequence[Dict[str, Any]], split_before: Opt
     signed = sum(float(r["net_premium"]) for r in ordered)
     turnover = sum(abs(float(r["net_premium"])) for r in ordered)
     gross = sum(float(r.get("gross_notional") or 0.0) for r in ordered)
+    price_fields = aggregate_event_price(ordered)
+    legs = ordered[0].get("legs") or []
+    cluster_price = price_fields.get("underlying_price_at_event")
     for rec in ordered:
         rec["execution_cluster_id"] = cluster_id
         rec["cluster_eligibility"] = {"eligible": True, "reasons": []}
@@ -819,6 +927,10 @@ def _cluster_record(day: str, group: Sequence[Dict[str, Any]], split_before: Opt
         "duration_seconds": round((times[-1] - times[0]).total_seconds(), 6),
         "premium_per_spread_min": min(premiums), "premium_per_spread_median": median(premiums),
         "premium_per_spread_max": max(premiums),
+        "legs": legs,
+        **price_fields,
+        "strike_distance": leg_price_metrics([Leg(**x) for x in legs], cluster_price) if legs else [],
+        "moneyness": [x["moneyness"] for x in leg_price_metrics([Leg(**x) for x in legs], cluster_price)] if legs else [],
         "signed_net_premium_sum": signed, "premium_turnover_sum": turnover,
         "gross_leg_turnover_sum": gross,
         "activity_description": "MODELED_NET_DEBIT_ACTIVITY" if signed > 0 else "MODELED_NET_CREDIT_ACTIVITY" if signed < 0 else "MODELED_NET_FLAT_ACTIVITY",
@@ -833,6 +945,8 @@ def _cluster_record(day: str, group: Sequence[Dict[str, Any]], split_before: Opt
         "split_before": split_before, "independence_claim": "NONE",
         "participant_identity": "UNKNOWN", "parent_order": "UNKNOWN", "opening_closing": "UNKNOWN_T0",
         "paper_only": True,
+        "monitoring_state": "NOT_APPLICABLE",
+        "high_frequency_monitoring_active": False,
     }
 
 
@@ -893,12 +1007,22 @@ def build_orientation_theses(day: str, clusters: Sequence[Dict[str, Any]],
         print_ids = [pid for x in items for pid in x["print_ids"]]
         oid = deterministic_id("orientation", day, pk, signature, cluster_ids)
         signed = sum(float(x["signed_net_premium_sum"]) for x in items)
+        price_fields = aggregate_event_price(items)
+        legs = items[0].get("legs") or []
+        orientation_price = price_fields.get("underlying_price_at_event")
+        orientation_monitorable = (items[0].get("structure") in MONITORABLE_DIRECTIONAL_STRUCTURES
+                                   and any(x.get("link_confidence_band") in MONITORABLE_ORIENTATION_BANDS
+                                           for x in items))
         rec = {
             "whale_schema_version": WHALE_SCHEMA_VERSION, "kind": "orientation_thesis",
             "observation_level": "ORIENTATION_THESIS", "analysis_date": day,
             "analysis_created_at": now_ny_iso(), "symbol": items[0].get("symbol"),
             "orientation_thesis_id": oid, "position_key": pk, "canonical_signature": signature,
             "structure": items[0]["structure"], "premium_form": items[0]["premium_form"],
+            "directional_monitoring_eligible": orientation_monitorable,
+            "legs": legs, **price_fields,
+            "strike_distance": leg_price_metrics([Leg(**x) for x in legs], orientation_price) if legs else [],
+            "moneyness": [x["moneyness"] for x in leg_price_metrics([Leg(**x) for x in legs], orientation_price)] if legs else [],
             "execution_cluster_ids": cluster_ids, "print_ids": print_ids,
             "execution_cluster_count": len(items), "raw_print_count": len(print_ids),
             "lots_sum": sum(float(x["lots_sum"]) for x in items),
@@ -906,11 +1030,92 @@ def build_orientation_theses(day: str, clusters: Sequence[Dict[str, Any]],
             "premium_turnover_sum": sum(float(x["premium_turnover_sum"]) for x in items),
             "gross_leg_turnover_sum": sum(float(x["gross_leg_turnover_sum"]) for x in items),
             "independence_claim": "NONE", "participant_identity": "UNKNOWN", "paper_only": True,
+            "monitoring_state": "NOT_APPLICABLE", "high_frequency_monitoring_active": False,
         }
         output.append(rec)
         for pid in print_ids:
             print_index[pid]["orientation_thesis_id"] = oid
     return output
+
+
+def _monitoring_seed(activity: Dict[str, Any], day: str, eligible: bool) -> Dict[str, Any]:
+    """Seed the separate abnormal-structure monitoring lifecycle."""
+    abnormal = activity.get("direction_status") == "DIRECTION_CONFLICT"
+    if not abnormal and not eligible:
+        return {
+            "monitoring_state": "NOT_APPLICABLE", "monitoring_started_at": None,
+            "outcome_label": None, "outcome_captured_at": None,
+            "monitoring_reason": None, "monitoring_history": [],
+            "high_frequency_monitoring_active": False,
+            "low_frequency_lifecycle_active": False,
+            "low_frequency_monitoring_scope": [],
+        }
+    started = activity.get("analysis_created_at") or now_ny_iso()
+    reason = "DIRECTION_CONFLICT" if abnormal else "eligible consistent directional structure"
+    history = [
+        {"state": "DETECTED", "at": started, "reason": reason},
+        {"state": "ACTIVE_MONITOR", "at": started, "reason": "begin high-frequency monitoring"},
+    ]
+    return {
+        "monitoring_state": "ACTIVE_MONITOR", "monitoring_started_at": started,
+        "outcome_label": None, "outcome_captured_at": None,
+        "monitoring_reason": reason, "monitoring_history": history,
+        "high_frequency_monitoring_active": True,
+        "low_frequency_lifecycle_active": False,
+        "low_frequency_monitoring_scope": ["repeated_flow", "opposite_flow", "t_plus_1_open_interest", "expiry"],
+    }
+
+
+def advance_monitoring_state(activity: Dict[str, Any], event: str,
+                             outcome_label: Optional[str] = None,
+                             at: Optional[str] = None) -> Dict[str, Any]:
+    """Deterministic state machine; outcome thresholds are intentionally absent."""
+    current = str(activity.get("monitoring_state") or "NOT_APPLICABLE")
+    stamp = at or activity.get("analysis_created_at") or now_ny_iso()
+    allowed = {
+        "start": {"DETECTED": "ACTIVE_MONITOR"},
+        "outcome_captured": {"ACTIVE_MONITOR": "OUTCOME_CAPTURED"},
+        "low_frequency": {"OUTCOME_CAPTURED": "LOW_FREQUENCY_LIFECYCLE"},
+        "expiry": {"DETECTED": "CLOSED_OR_EXPIRED", "ACTIVE_MONITOR": "CLOSED_OR_EXPIRED",
+                   "OUTCOME_CAPTURED": "CLOSED_OR_EXPIRED", "LOW_FREQUENCY_LIFECYCLE": "CLOSED_OR_EXPIRED"},
+    }
+    target = allowed.get(event, {}).get(current)
+    if target is None:
+        return activity
+    history = list(activity.get("monitoring_history") or [])
+    history.append({"state": target, "at": stamp, "event": event})
+    activity["monitoring_state"] = target
+    activity["monitoring_history"] = history
+    activity["high_frequency_monitoring_active"] = target in {"DETECTED", "ACTIVE_MONITOR"}
+    activity["low_frequency_lifecycle_active"] = target in {"OUTCOME_CAPTURED", "LOW_FREQUENCY_LIFECYCLE"}
+    if target == "OUTCOME_CAPTURED":
+        directional_labels = {"BULLISH_FOLLOW_THROUGH", "BEARISH_FOLLOW_THROUGH",
+                              "BULLISH_SUCCESS", "BEARISH_SUCCESS"}
+        if (activity.get("direction_status") == "DIRECTION_CONFLICT" and
+                outcome_label in directional_labels):
+            activity["outcome_label"] = "NO_DIRECTIONAL_FOLLOW_THROUGH_LABEL"
+        else:
+            activity["outcome_label"] = outcome_label or "UNLABELED_OUTCOME_CAPTURED"
+        activity["outcome_captured_at"] = stamp
+        activity["monitoring_reason"] = "explicit outcome captured; no success threshold inferred"
+    elif target == "LOW_FREQUENCY_LIFECYCLE":
+        activity["monitoring_reason"] = "outcome captured; continue low-frequency checks"
+    elif target == "CLOSED_OR_EXPIRED":
+        activity["high_frequency_monitoring_active"] = False
+        activity["monitoring_reason"] = "contract set expired or monitoring closed"
+    return activity
+
+
+def monitoring_expired(activity: Dict[str, Any], day: str) -> bool:
+    for leg in activity.get("legs") or []:
+        expiry = safe_text(leg.get("expiry"))
+        if expiry:
+            try:
+                expiry_day = dt.datetime.strptime(expiry, "%y%m%d").date()
+                return dt.date.fromisoformat(day) >= expiry_day
+            except ValueError:
+                continue
+    return False
 
 
 def build_contract_set_activities(day: str, orientations: Sequence[Dict[str, Any]],
@@ -926,6 +1131,9 @@ def build_contract_set_activities(day: str, orientations: Sequence[Dict[str, Any
         signatures = [x["canonical_signature"] for x in items]
         conflict = len(set(signatures)) > 1
         print_ids = [pid for x in items for pid in x["print_ids"]]
+        price_fields = aggregate_event_price(items)
+        legs = items[0].get("legs") or []
+        activity_price = price_fields.get("underlying_price_at_event")
         activity = {
             "whale_schema_version": WHALE_SCHEMA_VERSION, "kind": "contract_set_activity",
             "observation_level": "CONTRACT_SET_ACTIVITY", "analysis_date": day,
@@ -934,6 +1142,9 @@ def build_contract_set_activities(day: str, orientations: Sequence[Dict[str, Any
             "orientation_thesis_ids": orientation_ids, "canonical_signatures": signatures,
             "structures": dict(Counter(str(x["structure"]) for x in items)),
             "print_ids": print_ids,
+            "legs": legs, **price_fields,
+            "strike_distance": leg_price_metrics([Leg(**x) for x in legs], activity_price) if legs else [],
+            "moneyness": [x["moneyness"] for x in leg_price_metrics([Leg(**x) for x in legs], activity_price)] if legs else [],
             "execution_cluster_count": sum(int(x["execution_cluster_count"]) for x in items),
             "orientation_thesis_count": len(items), "raw_print_count": len(print_ids),
             "lots_sum": sum(float(x["lots_sum"]) for x in items),
@@ -946,6 +1157,17 @@ def build_contract_set_activities(day: str, orientations: Sequence[Dict[str, Any
             "parent_execution_programme": "UNKNOWN", "opening_closing": "UNKNOWN_T0",
             "paper_only": True,
         }
+        monitorable_orientations = [x for x in items if x.get("directional_monitoring_eligible")]
+        monitoring_eligible = bool(monitorable_orientations)
+        activity["monitoring_eligibility"] = {
+            "eligible": (conflict or (not conflict and monitoring_eligible)),
+            "reasons": (["DIRECTION_CONFLICT_ACTIVITY_ONLY"] if conflict else
+                        (["CONSISTENT_DIRECTIONAL_STRUCTURE"] if monitoring_eligible else
+                         ["NO_ELIGIBLE_DIRECTIONAL_ORIENTATION"]))
+        }
+        activity.update(_monitoring_seed(activity, day, conflict or monitoring_eligible))
+        if monitoring_expired(activity, day):
+            advance_monitoring_state(activity, "expiry")
         output.append(activity)
         for pid in print_ids:
             print_index[pid]["contract_set_activity_id"] = cid
