@@ -80,6 +80,7 @@ except ImportError:
 BASE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(BASE, "data", "alerts")
 TICKS = os.path.join(BASE, "data", "ticks")
+UNDER = os.path.join(BASE, "data", "underlying")
 KEY = "/Users/leolo/.openclaw/futu/conn_key_1024.pem"
 SCHEMA_STATE_PATH = os.path.join(OUT, ".futu_columns.json")
 os.makedirs(OUT, exist_ok=True)
@@ -104,6 +105,8 @@ COLLECTOR_WRITE_LATENCY_MARGIN = 3 * COLLECTOR_POLL_SECONDS
 SCHEMA_VERSION = 2
 NY = ZoneInfo("America/New_York")
 SPREAD_RE = re.compile(r"US_([A-Z]+)(\d{6})([CP])(\d+)")
+UNDERLYING_MAX_AGE_SECONDS = 300
+_UNDERLYING_CACHE = {}
 
 TOKEN = os.environ.get("TELEGRAM_TOKEN")
 CHAT = os.environ.get("TELEGRAM_CHAT_ID")
@@ -404,6 +407,53 @@ def aggregate_leg_candidates(base, m, settled):
     return g
 
 
+def _underlying_rows(sym, day):
+    """Load one session's historical underlying tape, never a live quote."""
+    path = os.path.join(UNDER, f"US_{sym}_{day}.csv")
+    if path in _UNDERLYING_CACHE:
+        return _UNDERLYING_CACHE[path]
+    try:
+        d = pd.read_csv(path, usecols=["update_time", "last_price"])
+        d["_observed"] = pd.to_datetime(d["update_time"], format="mixed", errors="coerce")
+        d["_price"] = pd.to_numeric(d["last_price"], errors="coerce")
+        d = d[d["_observed"].notna() & d["_price"].notna() &
+              np.isfinite(d["_price"]) & (d["_price"] > 0)].copy()
+        _UNDERLYING_CACHE[path] = d
+        return d
+    except Exception:
+        _UNDERLYING_CACHE[path] = None
+        return None
+
+
+def event_underlying_price(sym, mkt_time):
+    """Return the latest valid historical price at or before an event time."""
+    empty = {"underlying_price": None, "underlying_price_source": None,
+             "underlying_price_observed_at": None, "underlying_price_age_seconds": None}
+    try:
+        event_time = pd.Timestamp(mkt_time)
+        if event_time.tzinfo is not None:
+            event_time = event_time.tz_localize(None)
+        day = event_time.strftime("%Y-%m-%d")
+    except Exception:
+        return empty
+    d = _underlying_rows(str(sym).upper(), day)
+    if d is None or not len(d):
+        return empty
+    eligible = d[d["_observed"] <= event_time]
+    if not len(eligible):
+        return empty
+    row = eligible.iloc[-1] if eligible["_observed"].is_monotonic_increasing else \
+        eligible.loc[eligible["_observed"].idxmax()]
+    age = (event_time - row["_observed"]).total_seconds()
+    if age < 0 or age > UNDERLYING_MAX_AGE_SECONDS:
+        return empty
+    observed_at = pd.Timestamp(row["_observed"]).isoformat(timespec="milliseconds")
+    return {"underlying_price": float(row["_price"]),
+            "underlying_price_source": f"US_{str(sym).upper()}_{day}.csv:update_time/last_price",
+            "underlying_price_observed_at": observed_at,
+            "underlying_price_age_seconds": float(age)}
+
+
 def decide_spreads(state, sym, candidates):
     """Pure: evaluate a symbol's DECIDABLE leg-candidate rows (every relevant
     file's watermark has already passed their timestamp) for spread
@@ -427,6 +477,7 @@ def decide_spreads(state, sym, candidates):
         net = float(grp.loc[grp["ticker_direction"] == "BUY", "n"].sum()
                      - grp.loc[grp["ticker_direction"] == "SELL", "n"].sum())
         mkt_time = grp["time"].iloc[0]
+        underlying = event_underlying_price(sym, mkt_time)
         dedup_key = f"inferred_spread|{sym}|{expiry}|{mkt_time}|{lots}"
         if dedup_key in state.seen:
             continue
@@ -435,7 +486,7 @@ def decide_spreads(state, sym, candidates):
         hits.append(make_record("inferred_spread", dedup_key, mkt_time, {
             "symbol": sym, "expiry": expiry, "legs": " / ".join(legs),
             "lots": float(lots), "gross_notional": gross, "net_premium": net,
-            "n_legs": len(grp)}))
+            "n_legs": len(grp), **underlying}))
     return hits
 
 
