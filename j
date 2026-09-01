@@ -45,8 +45,20 @@ case "$1" in
   nointra) pkill -f intraday.py && echo "intraday stopped" || echo "was not running" ;;
   stream) pgrep -f stream_test.py >/dev/null && echo "stream already running" || { nohup "$PY" -u stream_test.py "${2:-23400}" > logs/stream_$(date +%F).log 2>&1 & sleep 2; echo "stream started"; } ;;
   nostream) pkill -f stream_test.py && echo "stream stopped" || echo "was not running" ;;
-  open)   echo "=== OPEN ==="; "$0" start ${@:2}; "$0" intra ;;   # stream dropped: option sub quota is 200
-  close)  echo "=== CLOSE ==="; "$0" stop; "$0" nointra; pkill -f alert.py 2>/dev/null
+  open)   echo "=== OPEN ==="; "$0" start ${@:2}; "$0" intra
+          if pgrep -f " alert\.py" > /dev/null; then
+            echo "alerts already running"
+          else
+            nohup "$PY" -u alert.py 120 >> "logs/alert_$(date +%F).log" 2>&1 &
+            sleep 3
+            if pgrep -f " alert\.py" > /dev/null; then
+              echo "alerts started"
+            else
+              echo "ALERTS FAILED TO START - see logs/alert_$(date +%F).log"
+              tail -5 "logs/alert_$(date +%F).log"
+            fi
+          fi ;;   # stream dropped: option sub quota is 200
+  close)  echo "=== CLOSE ==="; "$0" stop; "$0" nointra; pkill -f " alert\.py" 2>/dev/null
           "$0" snap
           "$PY" close_report.py ;;
   morning) echo "=== CAPTURE ==="; "$0" cap; echo; echo "=== BACKFILL ==="; "$0" fill; echo; echo "=== SUMMARY ==="; "$0" day "$2" ;;
