@@ -1,6 +1,6 @@
 """End-of-session summary to Telegram, so the daily run reports itself.
 Run automatically by ./j close. Read-only."""
-import os, glob, datetime, urllib.request, urllib.parse
+import os, glob, datetime, json, urllib.request, urllib.parse
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 p = os.path.join(BASE, ".env")
@@ -15,7 +15,17 @@ ticks = glob.glob(os.path.join(BASE, "data", "ticks", f"*_{d}.csv"))
 snaps = glob.glob(os.path.join(BASE, "data", "snapshots", f"US_*_{d}.csv"))
 intra = glob.glob(os.path.join(BASE, "data", "intraday", f"US_*_{d}.csv"))
 alerts = os.path.join(BASE, "data", "alerts", f"alerts_{d}.jsonl")
-n_alerts = sum(1 for _ in open(alerts)) if os.path.exists(alerts) else 0
+def count_alerts(path):
+    if not os.path.exists(path): return 0
+    n = 0
+    with open(path) as f:
+        for line in f:
+            try:
+                if json.loads(line).get("kind") != "_meta": n += 1
+            except Exception:
+                continue
+    return n
+n_alerts = count_alerts(alerts)
 
 prints = 0
 for f in ticks:

@@ -64,7 +64,7 @@ KNOWN, DOCUMENTED LIMITATIONS (not silently papered over)
     BEST-EFFORT assumption about collect.py's own ~30s write cadence, not a
     guaranteed bound — collect.py could in principle lag further.
 """
-import os, sys, time, datetime, json, glob, re, math
+import os, sys, time, datetime, json, glob, re, math, hashlib, signal, subprocess
 from collections import deque
 from zoneinfo import ZoneInfo
 import pandas as pd, numpy as np
@@ -148,6 +148,7 @@ class AlertState:
         self.spread_buffer = {}   # symbol -> DataFrame of settled, not-yet-decided leg candidates
         self.seen = set()         # dedup_key set
         self.futu_schema = {}     # column -> {"dtype":..., "types":[...]}
+        self.last_api_ok = None
 
 
 # ---------------------------------------------------------------------------
@@ -256,9 +257,88 @@ def make_record(kind, dedup_key, mkt_time, payload):
 
 
 def log(rec):
+    global _alerts_today_count
     day = str(datetime.date.today())
     with open(os.path.join(OUT, f"alerts_{day}.jsonl"), "a") as f:
         f.write(json.dumps(rec) + "\n")
+    if rec.get("kind") != "_meta":
+        _alerts_today_count += 1
+
+
+HEARTBEAT_INTERVAL = 300
+
+def heartbeat_due(now_monotonic, next_heartbeat):
+    return now_monotonic >= next_heartbeat
+
+def _git_sha():
+    try:
+        sha = subprocess.check_output(["git", "rev-parse", "--short", "HEAD"],
+                                      cwd=BASE, text=True, stderr=subprocess.DEVNULL).strip()
+        dirty = subprocess.run(["git", "diff", "--quiet", "HEAD", "--", "alert.py"],
+                               cwd=BASE, stdout=subprocess.DEVNULL,
+                               stderr=subprocess.DEVNULL).returncode != 0
+        return f"{sha}-dirty" if dirty else sha
+    except Exception:
+        return None
+
+def _source_sha256():
+    try:
+        with open(os.path.join(BASE, "alert.py"), "rb") as f:
+            return hashlib.sha256(f.read()).hexdigest()
+    except Exception:
+        return None
+
+def _alerts_today(day):
+    path = os.path.join(OUT, f"alerts_{day}.jsonl")
+    if not os.path.exists(path):
+        return 0
+    n = 0
+    try:
+        with open(path) as f:
+            for line in f:
+                try:
+                    if json.loads(line).get("kind") != "_meta":
+                        n += 1
+                except Exception:
+                    continue
+    except Exception:
+        return n
+    return n
+
+_alerts_today_count = 0
+
+def reset_alerts_today(day):
+    global _alerts_today_count
+    _alerts_today_count = _alerts_today(day)
+
+def alerts_today_count():
+    return _alerts_today_count
+
+def collector_started(started_at, pid, symbols):
+    return {"schema_version": SCHEMA_VERSION, "kind": "_meta", "event": "collector_started",
+            "observed_at": started_at, "pid": pid, "git_sha": _git_sha(),
+            "source_sha256": _source_sha256(), "symbols": symbols}
+
+def heartbeat_record(started_monotonic, loops, alerts_today, last_api_ok,
+                     now_monotonic=None, observed_at=None, pid=None):
+    now = time.monotonic() if now_monotonic is None else now_monotonic
+    return {"schema_version": SCHEMA_VERSION, "kind": "_meta", "event": "heartbeat",
+            "observed_at": observed_at or now_ny().isoformat(timespec="seconds"),
+            "pid": os.getpid() if pid is None else pid,
+            "uptime_s": int(now - started_monotonic), "alerts_today": alerts_today,
+            "loops": loops, "last_api_ok": last_api_ok}
+
+def collector_stopped(started_monotonic, loops, alerts_today, reason,
+                      now_monotonic=None, observed_at=None, pid=None):
+    now = time.monotonic() if now_monotonic is None else now_monotonic
+    return {"schema_version": SCHEMA_VERSION, "kind": "_meta", "event": "collector_stopped",
+            "observed_at": observed_at or now_ny().isoformat(timespec="seconds"),
+            "pid": os.getpid() if pid is None else pid,
+            "uptime_s": int(now - started_monotonic), "alerts_today": alerts_today,
+            "reason": reason}
+
+class CollectorStop(Exception):
+    def __init__(self, reason): self.reason = reason
 
 
 # ---------------------------------------------------------------------------
@@ -665,6 +745,7 @@ def futu_events(state, ctx):
         print(f"  option_event error: {e}", flush=True); return []
     if r != 0:
         return []
+    state.last_api_ok = now_ny().isoformat(timespec="seconds")
 
     df = d.get("event_list") if isinstance(d, dict) else d
     all_count = d.get("all_count") if isinstance(d, dict) else None
@@ -708,6 +789,16 @@ def main():
     ctx = OpenQuoteContext(host="127.0.0.1", port=11112)
     state = AlertState()
     day = str(datetime.date.today())
+    started_monotonic = time.monotonic()
+    started_at = now_ny().isoformat(timespec="seconds")
+    loops = 0
+    reset_alerts_today(day)
+    stop_reason = None
+    def request_stop(signum, _frame):
+        raise CollectorStop("SIGTERM" if signum == signal.SIGTERM else "SIGINT")
+    signal.signal(signal.SIGTERM, request_stop)
+    signal.signal(signal.SIGINT, request_stop)
+    log(collector_started(started_at, os.getpid(), len(SYMS)))
     seed_seen_from_today(state, day)
     state.futu_schema = load_schema_state()
     print(f"alerts running: own clusters >= ${ABS_FLOOR:,} AND >= {REL_MULT}x that "
@@ -716,8 +807,10 @@ def main():
           f"poll {POLL}s. worst-case idle-flush latency ~{worst_case_flush_latency_seconds()}s",
           flush=True)
     notify(f"Jarvis alerts started ({datetime.datetime.now():%H:%M})")
+    next_heartbeat = started_monotonic + HEARTBEAT_INTERVAL
     try:
         while True:
+            loops += 1
             day = str(datetime.date.today())
             try:
                 hits = own_clusters(state, day) + spreads(state, day) + futu_events(state, ctx)
@@ -746,12 +839,21 @@ def main():
                 notify(msg)
             save_schema_state(state.futu_schema)
             print(f"  [{datetime.datetime.now():%H:%M:%S}] poll done, {len(hits)} new", flush=True)
+            now_monotonic = time.monotonic()
+            if heartbeat_due(now_monotonic, next_heartbeat):
+                while next_heartbeat <= now_monotonic:
+                    next_heartbeat += HEARTBEAT_INTERVAL
+                log(heartbeat_record(started_monotonic, loops, alerts_today_count(),
+                                     state.last_api_ok, now_monotonic=now_monotonic))
             time.sleep(POLL)
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, CollectorStop) as e:
+        stop_reason = e.reason if isinstance(e, CollectorStop) else "SIGINT"
         print("\nstopped", flush=True)
     finally:
         for h in flush_all(state, day):
             log(h)
+        if stop_reason is not None:
+            log(collector_stopped(started_monotonic, loops, alerts_today_count(), stop_reason))
         ctx.close()
 
 
