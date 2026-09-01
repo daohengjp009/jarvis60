@@ -260,3 +260,9 @@ Live-capture only, NOT in this table:
 ## 11. Relationship to HYP-001
 HYP-001 remains sealed. No forward returns for TSLA/NVDA/GOOGL tick data are
 examined until its own stopping rule is met.
+
+## Amendments
+
+2026-09-01: snapshot.py daily chain expiry window extended 28d -> 365d.
+Rationale: 28d covered 37% of observed option notional; 365d covers 96%.
+Logged before any outcome using post-2026-09-01 snapshots was inspected.
