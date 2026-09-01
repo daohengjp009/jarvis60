@@ -1,0 +1,35 @@
+{
+  "library_version": "pattern_library_v1",
+  "patterns": [
+    {
+      "pattern_id": "CALL_VERTICAL",
+      "pattern_version": "1",
+      "required_leg_count": 2,
+      "expiry_relationship": "SAME_EXPIRY",
+      "option_type_relationship": "BOTH_CALL",
+      "strike_ordering": "DISTINCT",
+      "side_quantity_relationship": "OPPOSITE_SIDES_EQUAL_QUANTITY",
+      "allowed_leg_permutations": true,
+      "required_evidence": ["two legs", "expiry", "strike", "side", "quantity"],
+      "disqualifying_conditions": ["different expiry", "missing side", "unequal quantity"],
+      "structural_classification": "CALL_VERTICAL",
+      "conditional_directional_interpretation": "BUY_LOWER_SELL_HIGHER=BULLISH; BUY_HIGHER_SELL_LOWER=BEARISH",
+      "ambiguity_notes": "Observed leg relationship only; not a confirmed package order."
+    },
+    {
+      "pattern_id": "PUT_VERTICAL",
+      "pattern_version": "1",
+      "required_leg_count": 2,
+      "expiry_relationship": "SAME_EXPIRY",
+      "option_type_relationship": "BOTH_PUT",
+      "strike_ordering": "DISTINCT",
+      "side_quantity_relationship": "OPPOSITE_SIDES_EQUAL_QUANTITY",
+      "allowed_leg_permutations": true,
+      "required_evidence": ["two legs", "expiry", "strike", "side", "quantity"],
+      "disqualifying_conditions": ["different expiry", "missing side", "unequal quantity"],
+      "structural_classification": "PUT_VERTICAL",
+      "conditional_directional_interpretation": "SELL_HIGHER_BUY_LOWER=BULLISH; BUY_HIGHER_SELL_LOWER=BEARISH",
+      "ambiguity_notes": "Observed leg relationship only; not a confirmed package order."
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "schema_version": "pattern_library_v1",
+  "fact_fields": ["source_file", "trading_date", "source_line", "raw_row_id", "sequence_id", "symbol", "event_time", "event_time_precision", "option_code", "option_type", "expiry", "strike", "observed_side", "raw_quantity", "price", "turnover", "net_premium", "bid_price", "ask_price", "quote_context", "trade_conditions", "underlying_price", "underlying_price_source", "moneyness", "vendor_strategy_evidence", "source_schema_version", "source_kind", "raw_payload"],
+  "derived_fields": ["candidate_id", "leg_count", "expiry_relationship", "strike_relationship", "quantity_relationship", "structural_fingerprint", "match_evidence", "contradictions"],
+  "hypothesis_fields": ["match_status", "same_execution_hypothesis", "execution_family_hypothesis", "family_evidence"],
+  "review_fields": ["review_status", "review_reasons", "human_label"],
+  "status_values": ["KNOWN_PATTERN", "AMBIGUOUS", "UNKNOWN"]
+}

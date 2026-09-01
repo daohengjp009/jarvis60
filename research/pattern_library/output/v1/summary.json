@@ -1,0 +1,48 @@
+{
+  "ambiguous_count": 0,
+  "candidate_count": 736,
+  "eligible_candidate_count": 630,
+  "event_rows": 736,
+  "execution_family_hypothesis_count": 1277,
+  "holdout_validation": "NOT_PERFORMED \u2014 insufficient dates and no repeated holdout inspection",
+  "human_review_strata_counts": {
+    "COMMON_SEQUENCE_OR_TIMESTAMP_CANDIDATE": 182,
+    "DENSE_NVDA_ACTIVITY": 423,
+    "DIFFERENT_EXPIRY_COMBINATION": 0,
+    "LOWER_DENSITY_GOOGL_ACTIVITY": 36,
+    "POSSIBLE_REVERSAL_OR_UNWIND": 514,
+    "RECURRING_UNKNOWN": 35,
+    "REPEATED_98_99_LOT_STRUCTURE": 25,
+    "VENDOR_VS_STRUCTURAL_DISAGREEMENT": 426
+  },
+  "inputs": [
+    "/Users/leolo/jarvis60/data/alerts/alerts_2026-08-24.jsonl",
+    "/Users/leolo/jarvis60/data/alerts/alerts_2026-08-25.jsonl",
+    "/Users/leolo/jarvis60/data/alerts/alerts_2026-08-26.jsonl",
+    "/Users/leolo/jarvis60/data/alerts/alerts_2026-08-27.jsonl",
+    "/Users/leolo/jarvis60/data/alerts/alerts_2026-08-28.jsonl",
+    "/Users/leolo/jarvis60/data/alerts/alerts_2026-08-31.jsonl"
+  ],
+  "known_pattern_count": 58,
+  "library_version": "pattern_library_v1",
+  "no_raw_rows_dropped": true,
+  "paper_only": true,
+  "prospective_count": 0,
+  "quarantine_excluded_from_recurrence": true,
+  "quarantined_candidate_count": 106,
+  "raw_rows": 762,
+  "same_execution_hypothesis_count": 136,
+  "source_counts": {
+    "_meta": 26,
+    "futu": 492,
+    "inferred_spread": 80,
+    "own": 133,
+    "spread": 31
+  },
+  "unknown_count": 572,
+  "vendor_vs_structural": {
+    "STRUCTURAL_ONLY_CLASSIFICATION": 58,
+    "UNRESOLVED_UNKNOWN_OR_AMBIGUOUS": 678,
+    "VENDOR_ONLY_CLASSIFICATION": 492
+  }
+}

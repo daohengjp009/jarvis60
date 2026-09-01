@@ -1,0 +1,57 @@
+{
+  "ambiguous_count": 0,
+  "builder": "pattern_library.py",
+  "candidate_count": 736,
+  "eligible_candidate_count": 630,
+  "event_rows": 736,
+  "execution_family_hypothesis_count": 1277,
+  "holdout_validation": "NOT_PERFORMED \u2014 insufficient dates and no repeated holdout inspection",
+  "human_review_strata_counts": {
+    "COMMON_SEQUENCE_OR_TIMESTAMP_CANDIDATE": 182,
+    "DENSE_NVDA_ACTIVITY": 423,
+    "DIFFERENT_EXPIRY_COMBINATION": 0,
+    "LOWER_DENSITY_GOOGL_ACTIVITY": 36,
+    "POSSIBLE_REVERSAL_OR_UNWIND": 514,
+    "RECURRING_UNKNOWN": 35,
+    "REPEATED_98_99_LOT_STRUCTURE": 25,
+    "VENDOR_VS_STRUCTURAL_DISAGREEMENT": 426
+  },
+  "input_sha256": {
+    "/Users/leolo/jarvis60/data/alerts/alerts_2026-08-24.jsonl": "6fb28ec34f942170f8429a91366133f91397b46f7871f8c7cbe9375c402c8cc0",
+    "/Users/leolo/jarvis60/data/alerts/alerts_2026-08-25.jsonl": "9467edfc521c998395eb9cd9e8d635e7692a39a52f82028c7ea0158d987f94d5",
+    "/Users/leolo/jarvis60/data/alerts/alerts_2026-08-26.jsonl": "2d6fadd377859b20c2947d92b3872077c1774624687ac9dfb8315046c86f3053",
+    "/Users/leolo/jarvis60/data/alerts/alerts_2026-08-27.jsonl": "9896d4603478cca08941d2d11c15168cd4c24e86409d11bb3a060f3561b440d2",
+    "/Users/leolo/jarvis60/data/alerts/alerts_2026-08-28.jsonl": "7f2afabadec61656a2a7258b35784386dd3afe0851f218318f59c9d024f94763",
+    "/Users/leolo/jarvis60/data/alerts/alerts_2026-08-31.jsonl": "56fedb9250fa13e1733bef7707589b6443caf0197815593a8e005c3e9e91f5e7"
+  },
+  "inputs": [
+    "/Users/leolo/jarvis60/data/alerts/alerts_2026-08-24.jsonl",
+    "/Users/leolo/jarvis60/data/alerts/alerts_2026-08-25.jsonl",
+    "/Users/leolo/jarvis60/data/alerts/alerts_2026-08-26.jsonl",
+    "/Users/leolo/jarvis60/data/alerts/alerts_2026-08-27.jsonl",
+    "/Users/leolo/jarvis60/data/alerts/alerts_2026-08-28.jsonl",
+    "/Users/leolo/jarvis60/data/alerts/alerts_2026-08-31.jsonl"
+  ],
+  "known_pattern_count": 58,
+  "library_version": "pattern_library_v1",
+  "no_raw_rows_dropped": true,
+  "paper_only": true,
+  "prospective_count": 0,
+  "quarantine_excluded_from_recurrence": true,
+  "quarantined_candidate_count": 106,
+  "raw_rows": 762,
+  "same_execution_hypothesis_count": 136,
+  "source_counts": {
+    "_meta": 26,
+    "futu": 492,
+    "inferred_spread": 80,
+    "own": 133,
+    "spread": 31
+  },
+  "unknown_count": 572,
+  "vendor_vs_structural": {
+    "STRUCTURAL_ONLY_CLASSIFICATION": 58,
+    "UNRESOLVED_UNKNOWN_OR_AMBIGUOUS": 678,
+    "VENDOR_ONLY_CLASSIFICATION": 492
+  }
+}

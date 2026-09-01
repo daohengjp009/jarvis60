@@ -1,0 +1,85 @@
+{
+  "assertions": [
+    {
+      "check": "baseline_raw_rows",
+      "detail": "independent=762 frozen=762",
+      "pass": true
+    },
+    {
+      "check": "baseline_event_rows",
+      "detail": "independent=736 frozen=736",
+      "pass": true
+    },
+    {
+      "check": "baseline_candidate_count",
+      "detail": "independent=736 frozen=736",
+      "pass": true
+    },
+    {
+      "check": "baseline_eligible_candidate_count",
+      "detail": "independent=630 frozen=630",
+      "pass": true
+    },
+    {
+      "check": "baseline_quarantined_candidate_count",
+      "detail": "independent=106 frozen=106",
+      "pass": true
+    },
+    {
+      "check": "baseline_known_pattern_count",
+      "detail": "independent=58 frozen=58",
+      "pass": true
+    },
+    {
+      "check": "baseline_ambiguous_count",
+      "detail": "independent=0 frozen=0",
+      "pass": true
+    },
+    {
+      "check": "baseline_unknown_count",
+      "detail": "independent=572 frozen=572",
+      "pass": true
+    },
+    {
+      "check": "baseline_same_execution_hypothesis_count",
+      "detail": "independent=136 frozen=136",
+      "pass": true
+    },
+    {
+      "check": "baseline_execution_family_hypothesis_count",
+      "detail": "independent=1277 frozen=1277",
+      "pass": true
+    },
+    {
+      "check": "baseline_source_counts",
+      "detail": "independent={'futu': 492, 'spread': 31, 'own': 133, 'inferred_spread': 80, '_meta': 26} frozen={'_meta': 26, 'futu': 492, 'inferred_spread': 80, 'own': 133, 'spread': 31}",
+      "pass": true
+    }
+  ],
+  "frozen_summary_counts": {
+    "ambiguous_count": 0,
+    "candidate_count": 736,
+    "eligible_candidate_count": 630,
+    "event_rows": 736,
+    "execution_family_hypothesis_count": 1277,
+    "known_pattern_count": 58,
+    "quarantined_candidate_count": 106,
+    "raw_rows": 762,
+    "same_execution_hypothesis_count": 136,
+    "unknown_count": 572
+  },
+  "independent_counts": {
+    "ambiguous_count": 0,
+    "candidate_count": 736,
+    "eligible_candidate_count": 630,
+    "event_rows": 736,
+    "execution_family_hypothesis_count": 1277,
+    "known_pattern_count": 58,
+    "quarantined_candidate_count": 106,
+    "raw_rows": 762,
+    "recurring_unknown_fingerprint_rows": 553,
+    "review_queue_rows": 1111,
+    "same_execution_hypothesis_count": 136,
+    "unknown_count": 572
+  }
+}

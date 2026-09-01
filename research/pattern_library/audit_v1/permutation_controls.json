@@ -1,0 +1,62 @@
+[
+  {
+    "control": "sequence",
+    "effect_size_z": null,
+    "empirical_p_value": 1.0,
+    "fdr_bh_q_value": 1.0,
+    "null_mean": 0.0,
+    "null_median": 0.0,
+    "null_p05": 0.0,
+    "null_p95": 0.0,
+    "null_permutations": 250,
+    "null_sd": 0.0,
+    "observed": 0.0,
+    "observed_to_null_ratio": null,
+    "seed": 20260901
+  },
+  {
+    "control": "timestamp",
+    "effect_size_z": 45.59091486935354,
+    "empirical_p_value": 0.00398406374501992,
+    "fdr_bh_q_value": 0.005312084993359893,
+    "null_mean": 0.010898796886058033,
+    "null_median": 0.010615711252653927,
+    "null_p05": 0.006369426751592357,
+    "null_p95": 0.01556970983722576,
+    "null_permutations": 250,
+    "null_sd": 0.0028966176344880925,
+    "observed": 0.14295824486907288,
+    "observed_to_null_ratio": 13.116883116883114,
+    "seed": 20260901
+  },
+  {
+    "control": "quantity",
+    "effect_size_z": 37.03566240078142,
+    "empirical_p_value": 0.00398406374501992,
+    "fdr_bh_q_value": 0.005312084993359893,
+    "null_mean": 0.020416135881104035,
+    "null_median": 0.020523708421797595,
+    "null_p05": 0.014154281670205236,
+    "null_p95": 0.026185421089879687,
+    "null_permutations": 250,
+    "null_sd": 0.003538067621745232,
+    "observed": 0.15145081387119605,
+    "observed_to_null_ratio": 7.4181919023849145,
+    "seed": 20260901
+  },
+  {
+    "control": "contract",
+    "effect_size_z": 55.70137231559009,
+    "empirical_p_value": 0.00398406374501992,
+    "fdr_bh_q_value": 0.005312084993359893,
+    "null_mean": 0.38327813163481955,
+    "null_median": 0.38358103326256193,
+    "null_p05": 0.36691436659589527,
+    "null_p95": 0.3996107572540693,
+    "null_permutations": 250,
+    "null_sd": 0.010182547735196737,
+    "observed": 0.9504600141542817,
+    "observed_to_null_ratio": 2.479818011270893,
+    "seed": 20260901
+  }
+]

@@ -1,0 +1,14 @@
+{
+  "audit_version": "pattern_library_audit_v1",
+  "frozen_files": {
+    "candidates.jsonl": "c28d36f1b3db6d3098d6658278da45d3265b640878578cd104ff4a7bd004c198",
+    "human_review_queue.jsonl": "b265ddd5a43b42d7348715342774ac636eaf863dd50f91a399294248d7b9ad4a",
+    "manifest.json": "94985f19a11fd485f14ecbe3b1c52cd0ac7d5a4ef940dda3423989954999cffc",
+    "raw_rows.jsonl": "8a25090fe566bf3ddab06a0d7721463b945dd466ee7521b61db7c0ce94d61212",
+    "summary.json": "3c5ee93598cf6b1cc0fa52091eada673f693c4c2b300ee0bb8c2413afb642d58",
+    "unknown_recurrence.jsonl": "c51688cb7da2787b035123b60fa7e66108e21ba623a8955c22a171050626055b"
+  },
+  "permutations": 1000,
+  "plan_sha256": "37aa9f247fc0bc88e0f47e66bc807e57bf6dfc59e9c4551b2fc6a66dc7d9b5a8",
+  "seed": 20260901
+}

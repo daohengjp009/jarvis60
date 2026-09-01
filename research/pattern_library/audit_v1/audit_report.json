@@ -1,0 +1,7901 @@
+{
+  "ambiguous_reachability": {
+    "eligible": {
+      "KNOWN_PATTERN": 58,
+      "UNKNOWN": 572
+    },
+    "quarantined": {
+      "AMBIGUOUS": 29,
+      "UNKNOWN": 77
+    }
+  },
+  "assertions": [
+    {
+      "check": "baseline_raw_rows",
+      "detail": "independent=762 frozen=762",
+      "pass": true
+    },
+    {
+      "check": "baseline_event_rows",
+      "detail": "independent=736 frozen=736",
+      "pass": true
+    },
+    {
+      "check": "baseline_candidate_count",
+      "detail": "independent=736 frozen=736",
+      "pass": true
+    },
+    {
+      "check": "baseline_eligible_candidate_count",
+      "detail": "independent=630 frozen=630",
+      "pass": true
+    },
+    {
+      "check": "baseline_quarantined_candidate_count",
+      "detail": "independent=106 frozen=106",
+      "pass": true
+    },
+    {
+      "check": "baseline_known_pattern_count",
+      "detail": "independent=58 frozen=58",
+      "pass": true
+    },
+    {
+      "check": "baseline_ambiguous_count",
+      "detail": "independent=0 frozen=0",
+      "pass": true
+    },
+    {
+      "check": "baseline_unknown_count",
+      "detail": "independent=572 frozen=572",
+      "pass": true
+    },
+    {
+      "check": "baseline_same_execution_hypothesis_count",
+      "detail": "independent=136 frozen=136",
+      "pass": true
+    },
+    {
+      "check": "baseline_execution_family_hypothesis_count",
+      "detail": "independent=1277 frozen=1277",
+      "pass": true
+    },
+    {
+      "check": "baseline_source_counts",
+      "detail": "independent={'futu': 492, 'spread': 31, 'own': 133, 'inferred_spread': 80, '_meta': 26} frozen={'_meta': 26, 'futu': 492, 'inferred_spread': 80, 'own': 133, 'spread': 31}",
+      "pass": true
+    },
+    {
+      "check": "plan_hash_present",
+      "detail": "37aa9f247fc0bc88e0f47e66bc807e57bf6dfc59e9c4551b2fc6a66dc7d9b5a8",
+      "pass": true
+    },
+    {
+      "check": "raw_to_candidate_mapping",
+      "detail": "one source-row edge per candidate",
+      "pass": true
+    },
+    {
+      "check": "raw_ids_unique",
+      "detail": "762 rows",
+      "pass": true
+    },
+    {
+      "check": "candidate_ids_unique",
+      "detail": "736 candidates",
+      "pass": true
+    },
+    {
+      "check": "candidate_semantics_one_row_one_candidate",
+      "detail": "{1: 736}",
+      "pass": true
+    },
+    {
+      "check": "all_58_known_audited",
+      "detail": "audited=58 failures=0",
+      "pass": true
+    },
+    {
+      "check": "eligible_ambiguous_zero",
+      "detail": "Counter({'UNKNOWN': 572, 'KNOWN_PATTERN': 58})",
+      "pass": true
+    },
+    {
+      "check": "quarantined_ambiguous_explained",
+      "detail": "Counter({'UNKNOWN': 77, 'AMBIGUOUS': 29})",
+      "pass": true
+    },
+    {
+      "check": "all_514_reversals_audited",
+      "detail": "rows=514 unique_links=514",
+      "pass": true
+    },
+    {
+      "check": "vendor_review_coverage",
+      "detail": "queue=426 vendor_without_structural=492",
+      "pass": true
+    },
+    {
+      "check": "source_line_overlap_absent",
+      "detail": "1",
+      "pass": true
+    },
+    {
+      "check": "minimum_1000_permutations",
+      "detail": "1000",
+      "pass": true
+    },
+    {
+      "check": "all_35_recurring_unknown_reviews_audited",
+      "detail": "review_rows=35",
+      "pass": true
+    },
+    {
+      "check": "exact_pattern_library_tests",
+      "detail": "test_pattern_library.py: PASS (7 tests)",
+      "pass": true
+    }
+  ],
+  "counts": {
+    "ambiguous_count": 0,
+    "candidate_count": 736,
+    "eligible_candidate_count": 630,
+    "event_rows": 736,
+    "execution_family_hypothesis_count": 1277,
+    "known_pattern_count": 58,
+    "quarantined_candidate_count": 106,
+    "raw_rows": 762,
+    "recurring_unknown_fingerprint_rows": 553,
+    "review_queue_rows": 1111,
+    "same_execution_hypothesis_count": 136,
+    "unknown_count": 572
+  },
+  "date_shift_exploratory": {
+    "method": "shift every event timestamp by exactly one calendar day within symbol; exploratory only",
+    "observed_pairs": 1413,
+    "observed_same_day_pair_rate": 1.0,
+    "one_day_shifted_same_day_pair_rate": 0.0,
+    "shifted_pairs": 0
+  },
+  "density_normalized": {
+    "GOOGL": {
+      "dates": 5,
+      "eligible_candidates": 36,
+      "family_links": 6,
+      "links_per_candidate": 0.16666666666666666,
+      "links_per_date": 1.2
+    },
+    "NVDA": {
+      "dates": 5,
+      "eligible_candidates": 423,
+      "family_links": 1146,
+      "links_per_candidate": 2.7092198581560285,
+      "links_per_date": 229.2
+    }
+  },
+  "duplicates": {
+    "duplicate_payload_groups": 1,
+    "raw_source_line_max_multiplicity": 1
+  },
+  "exact_tests": "test_pattern_library.py: PASS (7 tests)",
+  "frozen_manifest_sha256": "94985f19a11fd485f14ecbe3b1c52cd0ac7d5a4ef940dda3423989954999cffc",
+  "known_pattern_audit": [
+    {
+      "candidate_id": "0ee4e0e76870828f7f84c898",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "f87fca66a7096cda71807f77",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "808547d467a2aeac38fd0bbd",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "5a3407543c38682818196613",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "21e748c037c24c33a265fe2e",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "613a9722b637439a58f1e63b",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "a9e17d1d9f65c97eab3a5112",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "ffb587a0e85f6f1ca8adbbbc",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "7d97e4d15a6133f1d1b6d1dd",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "7ced0f2c776a1ee2416649dc",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "801eee62091a533f521fd046",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "88716880c545add84dffd1c4",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "caf91db5995e3195145e0c70",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "034eb701430931b95305e9af",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "137346e4f4d61283761e21a9",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "544bcc9c75c9119999bb9d8f",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "34d1c20c6d0c1baab05312bc",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "805c6e8d4c0b7ae728bb9b30",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "0d87a458465dd683fba2350b",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "14a77e71187b8db8920c51f6",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "a6ad408a170a386762eda2ff",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "89f28d9c46e158b776d64c7c",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "6fcb849504ff52c9786a8d12",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "6da9e621d303ab6f50151420",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "87b1d20f4f333cceeedb21c1",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "c75b1cfa26e50be8d9c1a4fe",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "6550323fc7e41d282d219ff8",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "951c4e2ae881e2ad94a568cc",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "PUT_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "60722ae4c2e00e9c61ea8917",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "0c80c761f8f07a7f0b42a098",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "3255e0876ff13c61e175275b",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "a88c68dc8f39194f71b37401",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "67a9fbf1fea4e105f7725a64",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "d1c1b6d480e837105349460c",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "PUT_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "3ec5f2e5de8d3c753ae8e2a0",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "1e72b64aca30acdcc1df04dc",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "a44bd7fa94459644198e09da",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "3bcd167a09f986d6d06f3a9c",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "ea0dae8f84963ad7fbc6ba88",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "d666ea2820c4be806f2aac3a",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "d85cc7ca576c3b9697408458",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "18eb333f0da31808759ab3eb",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "0fc1bcc0971be6c53afb42eb",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "7f8bef2a49e07fc6c946bdc8",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "9a93d41fc4ed36369111653d",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "32b3a5d77cd5651251aa8cfd",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "ebfe4e6f69aedef090d12ff6",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "74fb89ecc4455b2769d41787",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "b4b6cbf6dd4f0521988918ef",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "2c02cdf5bcffd07d245b91e0",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "b7fe0952f06e92e600eabeac",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "e3aafcf9217fb6ce83d5eed2",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "PUT_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "b13edd53b5166ca22f14aff4",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "PUT_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "b563cc6a1ef91f7cc826d46b",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "PUT_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "31e8a460ea4f85291cde03aa",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "bc458ce0bfffca7e714fcc26",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "8b73ebaf262f14b9a3344e70",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    },
+    {
+      "candidate_id": "3e038b171c80fa7b14690660",
+      "independent": "KNOWN_PATTERN",
+      "ok": true,
+      "pattern": "CALL_VERTICAL",
+      "stored": "KNOWN_PATTERN"
+    }
+  ],
+  "permutation_controls": [
+    {
+      "control": "sequence",
+      "effect_size_z": null,
+      "empirical_p_value": 1.0,
+      "fdr_bh_q_value": 1.0,
+      "null_mean": 0.0,
+      "null_median": 0.0,
+      "null_p05": 0.0,
+      "null_p95": 0.0,
+      "null_permutations": 250,
+      "null_sd": 0.0,
+      "observed": 0.0,
+      "observed_to_null_ratio": null,
+      "seed": 20260901
+    },
+    {
+      "control": "timestamp",
+      "effect_size_z": 45.59091486935354,
+      "empirical_p_value": 0.00398406374501992,
+      "fdr_bh_q_value": 0.005312084993359893,
+      "null_mean": 0.010898796886058033,
+      "null_median": 0.010615711252653927,
+      "null_p05": 0.006369426751592357,
+      "null_p95": 0.01556970983722576,
+      "null_permutations": 250,
+      "null_sd": 0.0028966176344880925,
+      "observed": 0.14295824486907288,
+      "observed_to_null_ratio": 13.116883116883114,
+      "seed": 20260901
+    },
+    {
+      "control": "quantity",
+      "effect_size_z": 37.03566240078142,
+      "empirical_p_value": 0.00398406374501992,
+      "fdr_bh_q_value": 0.005312084993359893,
+      "null_mean": 0.020416135881104035,
+      "null_median": 0.020523708421797595,
+      "null_p05": 0.014154281670205236,
+      "null_p95": 0.026185421089879687,
+      "null_permutations": 250,
+      "null_sd": 0.003538067621745232,
+      "observed": 0.15145081387119605,
+      "observed_to_null_ratio": 7.4181919023849145,
+      "seed": 20260901
+    },
+    {
+      "control": "contract",
+      "effect_size_z": 55.70137231559009,
+      "empirical_p_value": 0.00398406374501992,
+      "fdr_bh_q_value": 0.005312084993359893,
+      "null_mean": 0.38327813163481955,
+      "null_median": 0.38358103326256193,
+      "null_p05": 0.36691436659589527,
+      "null_p95": 0.3996107572540693,
+      "null_permutations": 250,
+      "null_sd": 0.010182547735196737,
+      "observed": 0.9504600141542817,
+      "observed_to_null_ratio": 2.479818011270893,
+      "seed": 20260901
+    }
+  ],
+  "plan_sha256": "37aa9f247fc0bc88e0f47e66bc807e57bf6dfc59e9c4551b2fc6a66dc7d9b5a8",
+  "recurring_unknown_audit": [
+    {
+      "count": 4,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "c05f9ff33b541b541476041a",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 4
+      }
+    },
+    {
+      "count": 3,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "cb8b80e23944fabb7ef93a69",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 3
+      }
+    },
+    {
+      "count": 2,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "138cdd62905144dee17d2360",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 2
+      }
+    },
+    {
+      "count": 2,
+      "dates": [
+        "2026-08-25",
+        "2026-08-28"
+      ],
+      "fingerprint": "2bcddf156cb646acb48b97db",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 2
+      }
+    },
+    {
+      "count": 2,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "3d5688312ce133924b34ef88",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 2
+      }
+    },
+    {
+      "count": 2,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "5dd5e389672e69de9a0dbc95",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 2
+      }
+    },
+    {
+      "count": 2,
+      "dates": [
+        "2026-08-27",
+        "2026-08-28"
+      ],
+      "fingerprint": "68fcd7be4f26515e3f3abdee",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 2
+      }
+    },
+    {
+      "count": 2,
+      "dates": [
+        "2026-08-25",
+        "2026-08-27"
+      ],
+      "fingerprint": "6f3f8a9f1387065b33aa5fe6",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 2
+      }
+    },
+    {
+      "count": 2,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "72cfd5a0c8f68a3f4aaa5c5a",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 2
+      }
+    },
+    {
+      "count": 2,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "8eab0b0293b3a1d2e4c9358c",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 2
+      }
+    },
+    {
+      "count": 2,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "900f4261df787d1c8f96d994",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1,
+        "NONE": 1
+      }
+    },
+    {
+      "count": 2,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "9e3998e206575ed49a39521d",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 2
+      }
+    },
+    {
+      "count": 2,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "bc336f86568f0d4bcac6572d",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 2
+      }
+    },
+    {
+      "count": 2,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "c4381a968f1b92e40712ebf3",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 2
+      }
+    },
+    {
+      "count": 2,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "d192b05b95fe2313db859572",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 2
+      }
+    },
+    {
+      "count": 2,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "ffc5b6894e51005bcd7da328",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 2
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "0083022b8e8d7b078cea84ad",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "00bef16bcbafa2a88faa8b74",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "00c19896c9bea080beb66a13",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "0170e3aa6722af291804a126",
+      "symbols": [
+        "GOOGL"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "02363d51aeacc58814bbd6df",
+      "symbols": [
+        "GOOGL"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "03548310c3304ef69d346b82",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "03c5e060d922c695fcc0fd2d",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "04bde37bb2015c2bd241e822",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "05039dbff7720cda8edc399f",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "0592e6e5fa5e56a815e5a374",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "05a6e7aed41794a27467823b",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "06028d90d9dc438e0fc310d0",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "06ed8255a659664510784429",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "076ca88f8f00738ddebbb0b6",
+      "symbols": [
+        "GOOGL"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "08088766e0a59bf4167bc7f7",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "08388f36462b17974c4e8d76",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "087308532bd452ae7104760a",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "08ac8cbce3819cfdf691c1d8",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "09edeb06859be95c5812271c",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "0a70ffcea83511c825578c46",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "0b0047957139ae1704cd33d1",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "0b23ef4febc9b4c78459963c",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "0b4375d4b8e26d3c35fe5953",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "0b618520783838e53fc56531",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "0bab49c94dfd84fe8acc690f",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "0bcd87d35d5b4e4bfa8b1505",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "0c3eddeb524b844b788028f7",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "0cd2f61423068de92f1a31bc",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "0e9a23ee27cad625f2c909c2",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "10b64eb9bcffced968bc5cd9",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "118563da99255133e1e96fe1",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "11f67012737b60650acf7657",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "12a9078cc932188224de5c1b",
+      "symbols": [
+        "GOOGL"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "12c288522b80a8ca9cf7daf6",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "12f2e47bebaf9123d00fbec7",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "13600d5449b860d610adc015",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "140da2aad852adccc810f82c",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "1535492dd6e887adcd093201",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "1581f72e954cbd617d5d80f2",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "1583273f8ca863645a77f133",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "15e96723f158ff8b3fcffc64",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "16588b127fe336d35830b7de",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "16605d17169c7e62621e692d",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "17e211f8611cc80ea767e527",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "19c1126a5f8addc3374753cc",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "1a18814faa01761053ebb47b",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "1a79bc3516399662bfd9b4d1",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "1abeac1a80e54ec0fc8feb9f",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "1af172259e67e37696b89cf1",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "1b966326e7a144d757fe89ef",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "1bf0d3321bfffd2d87fe871b",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "1c2adb06f41a7c791fc3093e",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "1c3b7c083d36dc7290d3884c",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "1c44270b0c34111b6e360b9b",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "1c8e3666a8579d64fb8afd88",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "1c9d009cb2b4ef6440c5396e",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "1d0378c5bb63c2366d6e29d0",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "1f9a9649d92c0f25778c02cb",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "1fca4da4a5093a3bfa3afc24",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "2020ce24b18fbaf62839b672",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "20322375395fb87e5e97275e",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "20ed903d4ddc22b94603761b",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "21bbc0e3a13f7827c04060ec",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "21e0cb9f34e514ce0d340c1c",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "226913a36fb7c68617d9e082",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "2382c8e39e6765720f7a5c6e",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "23e91bf1e7cad26261f2425e",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "24155215b4b8d4f3bf1475d3",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "2419154c6d32d30303be73b4",
+      "symbols": [
+        "GOOGL"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "2461d7531e54e9f9408911aa",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "24b6b0b6e2ee79c6d7b80792",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "24e76005fbf04b73795098b0",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "2526be3354d5f46752ae7583",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "257a4ec5157283a24312dc69",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "25e3f8953cba9348fd5de43e",
+      "symbols": [
+        "GOOGL"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "26b496f346c57c4dafa6f0ba",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "26e377282ab74cb5e0c00e32",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "276041f81c0562ef2bc178eb",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "27e18d5e821d3203ef26d102",
+      "symbols": [
+        "GOOGL"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "283896c86811e91bf5bda0e4",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "29343f4ca97f16d82cb49de2",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "295d55e07d5f613f8f7e4e18",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "295f165003ae10e56fb9b85b",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "29ad8b547154e28cafcccdfc",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "2a0060ade9f724e526fbaa7c",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "2ad29f12b858f1893d1db7f3",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "2b57afefdbe7821c9eeacc7b",
+      "symbols": [
+        "GOOGL"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "2c2aa19609e9eb532a17c3d7",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "2c85dc649c223fcf67b6cbcc",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "2cfd17ea20f99856625079f5",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "2d11f821aa4ecb47be111fc0",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "2d3d30563a5dd67be779d2cc",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "2de07cfc8c2e00f7ec0b6100",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "2e5291535e05af69ea826d7b",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "2efab2de2ca9fb6209a23610",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "2f1720c88235c55c4a5d1cdb",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "2f47df49e0039efe3407a4a7",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "2fc2fe7d472b076fb2383234",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "30a62ac765eb3bab4a3940ca",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "30b817ac7e0ce2dc8ecda46d",
+      "symbols": [
+        "GOOGL"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "3216262dabc8d80259fe5d15",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "324f070f10ed21a8d44f1f9a",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "3298545db526d9e61eea61f9",
+      "symbols": [
+        "GOOGL"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "33c37af95f581ff0958a2acb",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "34256784f7cddbbbf80ee6bc",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "34b0c25f1fa2e2355032ad78",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "357d0304ac45a3f797daaed1",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "35bb44a6eb793920f9f3a1af",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "35e85f23c4b4a1613ae25702",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "35f5b4fb0bad59c4ff0b7cde",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "366409d9686585a4607d3761",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "3724b53bff0fe444efba2d37",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "380208f7a3984165f2b9ac69",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "381a54ecd2a8d74a2b2dec9f",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "38255299a80214aa2dbd3106",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "385bed0891df03e2dfdb61a1",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "387ac8dcce2fd089b331a669",
+      "symbols": [
+        "GOOGL"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "38a70d8079d1712349e17e71",
+      "symbols": [
+        "GOOGL"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "38c24dec1e80349eaa7836d4",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "3921a7896a22af81e8847298",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "3a2f67d8cd7a7dce78ee3922",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "3a8ff18cef8e8854612aa90e",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "3aba060bbac0a40794f7e29b",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "3ac5dff748e5bc42b37b5b72",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "3bae7742daa605cca66a09e8",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "3c244020428df0232972b9e1",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "3c4a820298d13ea9c608f2cc",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "3ce471569bbfc3fab3c969d7",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "3e4bf853ac1841d611d9256c",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "3e63bea4284fa81515816d3c",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "3ec3e463f267a2ac07a2bf2c",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "4149c45c49e2e3c769bef5db",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "420529f554c1797fa9435b1c",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "424ea7f93f263569c00e7c7f",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "428a63e469e6de3295ad3532",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "42f4f02197bbc7e9ee0bbfdd",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "43a20585a2291ebf2e7596ab",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "440ee068dc89a8ed5064cb0e",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "44207f752967e476f5b6fb41",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "442e248fd8f0d535bda15a73",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "447bd8fbad3788a5ce86ae53",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "449f38a6c673a58f4c554600",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "44a2c9a9f1d36f4263b67931",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "44c02ed2efb48886e29031fa",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "457aa8528a963dcbf413317b",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "45d6d7c50ab06994af54f965",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "464db4dc2a7db985f58d472f",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "46571a81481379134ea0bc82",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "46d7d0b86d388a5e487636c2",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "471ac42e8c83bba71cdd0163",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "47782acac02608b41e5c0988",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "47c395b2750045bddcae7ac0",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "48695fa1b95f06c3b23b1d6c",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "48a36f7e09550ef32b2a8219",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "48c1cc947224cea3205a1eb4",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "48dd6886f30b33c5b63e19fd",
+      "symbols": [
+        "GOOGL"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "49010bce020bd5bb12c99592",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "49a48a6e53ec754d95f6c521",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "4b1ae36633790263603d6e03",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "4b2b2cd681d4d3f447af423a",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "4b91051a33f9279035a64606",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "4bfcb36412a456a7752ea508",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "4c14b77db1860ed3d0c4b0d7",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "4c4939eececc2d7740f8c685",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "4d13f8ce58788fd13cecef9c",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "4d7c7bbe9a475ca1383233ee",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "4e0f65f32d0413930bf5e90e",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "4e98cc11cc319942dd06f2e6",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "4ec27f219ef31cc72f49bb0c",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "4f9b67c9e1fdfdf36ad77454",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "4f9f0840604fc3fd849be7d5",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "50716a2c8b37b485df5c0b1f",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "50caee29150c5c8b7315ceae",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "50d877b61f31005c229e9113",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "524e904fd5054d95facc05ab",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "5333f4917ca40037bd814ad8",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "54a441dd80deb692b94ffc19",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "54ae30582c97f98cdad213dc",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "551ec4184755899b9cce21c5",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "568aad1f5f6cdf2ffdf8ab25",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "5696208597fca9b08b9815ab",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "56e833b63755fe0239eb1086",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "573178d92611555945c3046b",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "57463d0a68b84022a769d5ec",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "5761a41cf396b6e74d7b9e20",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "57c8b6f2c6584ee685239044",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "5907fbd9889653e5668929c4",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "5993757f12401c036011a9d0",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "5a012ebee4d42b197fbfdc9c",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "5a0f5bfe16ca9d1975980a60",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "5a51739487519b09ae0f4169",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "5aecf46310a9f0a3ff629f4a",
+      "symbols": [
+        "GOOGL"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "5b347c65e50945bab05337d4",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "5b3d3bbd74e7cda5b8f4c212",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "5b7c4efd536953d01109f556",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "5c181130471a487ec1a084c2",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "5c28c3be8423f3314a95c5e2",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "5c47fe145c52783e16e69777",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "5c748f005445436e86987a7d",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "5d906d88f5b1c897e5717703",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "5e229e8904f47b9222b74dd6",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "5e84298fbcdbaee7afe3a257",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "5f3fdfc2816a24b470c4e7ef",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "5f5142f3885f34d6179f4780",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "5f7d0f54cb79435680a6a972",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "5ff4331fe2ab9dcc6b9a04a7",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "60ab7e30d1b7eb4c66da4cdb",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "60b09caa3827cc1f43cc9af2",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "60b9863468cdd4ce2af7f2ff",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "611036ea106431ada54722a0",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "62219b47d3c3fc03b717cb5d",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "62aca9c3451466487a646801",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "634d9a65ee0f036b6fd907eb",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "643fc524adcd22bfcb440d71",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "650e98a23aebfca10cf49d07",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "6577510763a807c5c458ec07",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "65b28e31c511748ba84d620e",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "65b99972ce6c6fd1cd8a2ea4",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "666ba94a785e4898a3799075",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "6830c9ed8fba4339c60dd974",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "689ef584153ff3482d74bdd4",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "6970c30cfea6d14678ec7514",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "69f51ee83a97e299e5724473",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "6a8984514d7daf39631cd4f9",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "6abf96de2c2c58da43c0c5ed",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "6b191292d1e562c302d9b297",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "6b38d4626cc286c61cd1d8ef",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "6b985a628bfb19dfb895b7dc",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "6c279d1cc6bd49b63fbc3439",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "6c714693bdce7e440d4e6f8a",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "6cb74550e8c3d0b8b2105c42",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "6d25b317bbdb8a5917531d09",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "6d7418cb173d9a26022b53cb",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "6d8874b3b9259775e10630f4",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "6d9dbab878634e5e144682d0",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "6f0e75007071ea8d624321cb",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "6f5289cf10aa6c06f5a290fb",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "710ca2dd65f6465745ef0c9e",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "71fe1709340bb98381651220",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "72aae3eb13c19a071ea632d3",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "7377d05f1a5036b290a3415e",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "73c8a8c58b881f906edaab95",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "744e282e917df1d0415a0956",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "75113cc73b73da6146cadd1a",
+      "symbols": [
+        "GOOGL"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "752c015e21301dc6bdc31634",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "7607d1bfcdb23ab63570a3c3",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "761850cf51a1429f72b06033",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "765348e89653ec1501a3505a",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "766b62b00385701dbdad468c",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "769232d5be5bc5a759298063",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "7699496465c3c1cd167a0874",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "76e7f1f945eec125ce0031d3",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "775e8dd33c7f3ad491947622",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "7778d7e10c616e971297b90d",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "77b3e1abd18db292162b2ede",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "77c602558865dcf1e66db8dd",
+      "symbols": [
+        "GOOGL"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "77d151a9810283f1ce095331",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "7806f83ae2f979ed24e91f51",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "789780dcb52677778e648f16",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "79d17fc0d2e405651051cf1e",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "7a2d8c13063298ed79e0f739",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "7a4f55ffa096b4f9769e13cf",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "7abc9d847970e00dac5035b5",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "7c25c492cbc24bfc17fdac8d",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "7c5ab0a1d36b458fd8d83de0",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "7c68c6b97d25c8e627ab7f47",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "7dd73a3f4983b61ff55af3a6",
+      "symbols": [
+        "GOOGL"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "7e70e5a8b6d7998e04a8a6a1",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "7f6b68f83adbc0310cf62442",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "7ff0bb5cb99bf018b01d018b",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "80028de5f0258a2e77e91656",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "80a8110134340925c6379d4a",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "80adbe663e90b1a9379d951c",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "80f6dd0e6b3090e89cd05bd3",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "81d1ee5182e0350760f3dba9",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "8231e3162a669921efae8639",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "826a3641327d6a8ab36fa773",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "826bcc21f077a5f68ae5dca6",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "8272b35d61b6cf4e3ddeed70",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "8277a16d717132d4ff0c011d",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "8299c95deb879f8ea4bbad7f",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "8394b394f6528f65e644409a",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "84b9d489f6cf2d231ba06c8c",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "850bd23166150507850d0b2c",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "8578578e975403c45decee17",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "85866cbb2a90b66aa2394384",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "86e3bc1775e5c958ee2fff2b",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "8712e4db8ad1254c0ff595b3",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "885fe334b694d3568918e096",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "888e12ee1c6b2b90aedab8c1",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "88bf834f919c29d30fe0f039",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "893a2a329f2a8d96ee141295",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "8953f6dd677db819217858c9",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "89e26ad84c1775de113f516a",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "89f36e6dc85fcb530e3f1c28",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "8a4398cb68bb6a3d5a7a13d1",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "8b6d7160a64762c26e3d1e4b",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "8b8f793ee1ba624e58417a2c",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "8b8ff34d20add085416c20cf",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "8bbe6543cf9658323b51973e",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "8bfc597ededa3b7730d0c335",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "8c65968b37662931a1e225b3",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "8c7f70ea7e5778afe9a0299f",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "8e11ce66f81717ec9609f274",
+      "symbols": [
+        "GOOGL"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "8e3225ea8c142a7cf9c9e626",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "8e8fe16f74fd8b638f718502",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "8fb5de48974d44c23bb058b5",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "903ab5a6b1449a6deac1e0c7",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "90e8654f37555df35938423f",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "919099ef627b43c5f050db58",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "9256cfb984e7a3cf5199d514",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "92862247a5fcee8a2b067080",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "931c2fccd934777c4b68c42e",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "9349f03e98f0aac57a541736",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "935debd00e5ccf5a0c14919d",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "94575b3ecd52a1cb7c453496",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "9485db942243a3766c10ca45",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "94bb61c70ff05ac7f2e256fc",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "94edbafea613bb4ab1e1e0a5",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "959083458455504dde4b7ebc",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "95a9306b696cbe04586c6484",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "95ef5a0d7f7de023c69b2515",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "96bef23030088998695df9fe",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "97b286090e9d789996528eb5",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "97cb2f16353974a34e10108b",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "97d0d9b70ab3ac833cb69b89",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "98148b97e6427e4121c79d80",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "9820e1d993ce7d35f9f5f0f4",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "98bb9603ce5671fb61e099dc",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "98e712372189686f790b3733",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "9963f1145ad1ce44a3f5cfea",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "9a8e27a546e2f2c6e618b030",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "9b01629e2e9bd3dadbb09f70",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "9b2ce4b832a597ee9c04eff7",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "9b7a36d2d08ede06c20debd4",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "9b7e1154a1a1823b861dee00",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "9b858ce7e232863ab05ac973",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "9c1fae8d351cd51927b53597",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "9c705f13e1aa00ef41ffdd54",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "9ca29cae5a3f93215c5c6980",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "9cc73cd5db23bb3d0284c2f6",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "9e5cb066ba27323a2a6f1963",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "9e737c9d28ba83180a0309f2",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "9ef041dc2bf496b8d03e8912",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "9ef9a951ef28e88dc0d4ad8f",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "9f5860671f471373f7946c43",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "9f706d03e335c356edd976dc",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "a03784efcb1d95a3d47360b0",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "a0ad468607b500ef3d2c3730",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "a0bad9c78cbc3e9d91372ab2",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "a0d98aee8a8388316e2637a0",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "a130d5df6f169fa552c6e01a",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "a1eb6afc7e606052de2bfc4e",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "a2068d664d0fbf4355ef1b99",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "a250c9338ca11911b5bf8ec3",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "a25105bf5862a0cd188d39db",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "a2e52d001e8a9d01bc082823",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "a30f4af4a405881b9714cb79",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "a32d3b1486745992245c5371",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "a37ce7997d8aafd139a85850",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "a3d920e1cc738514d8f8c68c",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "a41d7ff53614cf887eb6cdcd",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "a491c2a375d7fa846907efa4",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "a4bb16801863bbb18a30d739",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "a5727f632cad15217753872d",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "a65640101580d80f854632e6",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "a674d4e4194b499cd50b455b",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "a6ed4b9ec133d59c3b563427",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "a7ea872e5437774c3e5ae42e",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "a8a3a760deb0c14086fe60d6",
+      "symbols": [
+        "GOOGL"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "a911e1fca583b970d2f8e791",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "a9aa89b50a4884d6157da4f1",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "a9bf8c076871e48ed82c9300",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "aa8628eb3d53549780d27dcb",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "aba9c90ea04bb34a6f08373c",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "ac938c62c03bbcdc58f2cdf3",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "acbb9d167e597bd4a30ececb",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "ad12c38a7b4c1ab533dd29bd",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "ad4d5354f4a7831d71c5656a",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "ada3641a5925fc7349490ed7",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "ade59dc1b67131855a371f8f",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "af236b6f86dac1425930934a",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "b148b8c0332f43a3327cd519",
+      "symbols": [
+        "GOOGL"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "b1c251d1b662f964ac66dcc9",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "b3fb528d17bfc4dec5234a4f",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "b45715041a3e019ed3106f3d",
+      "symbols": [
+        "GOOGL"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "b4ae0eec94bb9b3569888529",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "b53ba6c3ef0ad51d4ea23a71",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "b5de6a40735c73186915a656",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "b5f83d0ad3021826848b5984",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "b61500db34a957e01f172f60",
+      "symbols": [
+        "GOOGL"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "b6be84a4b758a45ea78268a9",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "b7a925c55d2fa7aea2629471",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "b92596a49f54f1a79eba2cd1",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "b938ab395995a5fb5ddfd0f7",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "ba53ecbe616a253410a4f19a",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "babaa3b1f120aefb2541a338",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "bac4736b30c84d09f40bdbbb",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "bb0ae7c2d465a265e71670c1",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "bd9284abfec6ca4eb736c76e",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "beba0177fe38fc0f74d69ea4",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "bedc6d695a103a8cd38f31e5",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "bee3c06dbed26c3943d59413",
+      "symbols": [
+        "GOOGL"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "bf5d034a8eb629a1539f9078",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "c0297e4383fa9c0c6ec1aaa8",
+      "symbols": [
+        "GOOGL"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "c0b784307c4d1952d77b0818",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "c1428d0e41bbc065fd943122",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "c1d13d5c123eaa5960e5b040",
+      "symbols": [
+        "GOOGL"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "c1e0428f068e0275dd618bed",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "c201d5223ee6dd26fea27abf",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "c216354979c47f1cecd80c2c",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "c22f2f85affe6ccd56b34b06",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "c2495dcf7aa9f03f5080fafa",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "c2739f0851dd255c3ab443ff",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "c280b4ec6e26fde6211fceca",
+      "symbols": [
+        "GOOGL"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "c2f262c37020c409716cbf33",
+      "symbols": [
+        "GOOGL"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "c3f157ae32bb18e5c85247dc",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "c3f23e19370ccbf261638a59",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "c42cfe58fe0e280a234775b8",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "c4c96df826f7f938bfde0b44",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "c4ec5e23ad64fc01ed936213",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "c541af5d034c438e8353d501",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "c58bcd581fd8fc5a94b88dfa",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "c5a04611e25e49a37f4a5b4f",
+      "symbols": [
+        "GOOGL"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "c5ed1ab9084ee9ea8bcb3e1f",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "c69943be19550a745c298d5d",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "c7168d497835d37b14f4ba7c",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "c73c35f50144f4fb16809366",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "c7bbdedbe41ed47a7974f597",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "c7d3d842e3298a2216ef3c74",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "c87ac756ee4511207fccb100",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "c89a030c7edddc846c812fdb",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "c97b05cda171f8f79f3c02b5",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "ca2d8bee462aa394f5b512ac",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "ca4d2c7ca1ba0d2cec284e6a",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "ca90234fe01e0d42bc975cf9",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "cac951f80341b1f0851ff4e0",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "cbff00411828b9ff8e8948c4",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "cc414d830ad5aaf422f416b8",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "cca5adefe65178ed5283254f",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "ccb6590be38fb37e5a0bddd3",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "cd847df7c9cc63ee0477b566",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "ce21aab6e4fa1ced4ef77d29",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "cf914cbaeaff9463d1ccc7fe",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "cfc482a86e9c7d44b873f4d2",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "d076ba3f7a773bfd4dff4c48",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "d09cdacbeb06620b376e3981",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "d0b0e36b00dad9f6012a1d77",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "d2a86bc3f2b5da171d4f35c8",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "d3137a7b6b337c0947b39a18",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "d31e683d6f97b1cb93b688eb",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "d32ef841168cbd2d62607226",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "d3729858f84b51463f780417",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "d453d533a9213ac420996ec5",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "d4de4492ee47f436621ddb06",
+      "symbols": [
+        "GOOGL"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "d51b4efcafeaea6742141fe5",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "d5b5d8a1a5b820cc8df30586",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "d6176ef4fc4878791a161f5c",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "d66382e912e69a9663ef9da4",
+      "symbols": [
+        "GOOGL"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "d7ad34cf5c68be9c8d1476a9",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "d8251e775619fd367625364a",
+      "symbols": [
+        "GOOGL"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "d85decb8dc50f92568f2d3c1",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "da2515efa1fce0443900fb9a",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "dabad2ca2ff8733e0563d73a",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "dadde87495bf0c72ff5bf401",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "db251719c9825845f5df2910",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "db8ae3230b9f9130d2d3627e",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "dc38cf973a4e6abdfd67973c",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "dd1c501143ff6f5fc5fcb14f",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "dd88d1398b7a92803d84a79f",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "de9596b0bd1ba0d35c72bf63",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "dfa1c991f63de0e62c120e1d",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "dfe2f5658a9b69915a5a4eaa",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "e0a19822773624223637e43d",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "e0b6ea05d98336ecd1a8143b",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "e12591e34c0fa9ba42f05c11",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "e19107e781c107eb3359b6a0",
+      "symbols": [
+        "GOOGL"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "e1cfbc457eef6d07a46374ea",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "e20acb12222ade4cc2cfaf17",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "e27640339175a5434c94057b",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "e281199d5ba650ef4653cd47",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "e2b4426330054679b3ae5c0d",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "e2c3641582b1bb798c210d49",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "e2d114942ec5a40f734614bd",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "e2d17afe17d97b0b79c10804",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "e3936ceabe68492019d825cf",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "e47bdbbc5aa0e6674530ad3f",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "e4b0d4255b072fd07f862a96",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "e5a66be7f80a6e58d9db4a2c",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "e74939d80b0071e30ec0fea1",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "e7688307c5aba70d66e6745d",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "e7fcd69468ce6e6769f8560b",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "e84bed3002a10021ab8e47f8",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "e92fbea4b434d1401ba2c4ce",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "e96745d1255c4cdb33f8bf19",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "e9a91d52ce75cbd50a9272fb",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "e9af06f19f85fa102080520a",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "e9b05cefd0d93f9ec135a7bf",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "e9dcbd0335882950f6236a47",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "ea0754aaff34cec6598ad202",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "ea09a8056da06ec23bf3f3f1",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "ecaf052ecc5756de611bd1a1",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "ed5d79a13943e1118b00b3db",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "ed7fc70ac18c9e0beeaf41a6",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "edbd73501a52900db8113983",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "edced17971b142808b7c6fbc",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "efac6d3feb6cdfb535127031",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "f1e5b6c4fc28d9aec56d1ccf",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "f1fb423b7dc76be9fa72c818",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "f2e78ceb03bda57556313b0b",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "f3270d3c39c0a3096675771f",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "f389d5cb177c0d4383bda85c",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "f3f9eadb8fe556b2d306e089",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "f41dd309859fb2ee358709fd",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-25"
+      ],
+      "fingerprint": "f41f9b83c7d6c142931c70b6",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "f4b0c79e9cf96cfba96f54c7",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "f4b4b46d4af645271256aca0",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "f4cd56bf95756313300ea6fb",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "f4f45bfe761e4548c54be470",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "f618e02d85b172ea1b3fd055",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "f6970cadc0f318a80ed7e862",
+      "symbols": [
+        "GOOGL"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "f70a7648b154ac0836d52493",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "f79e5c018121b1f86b632a40",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "f7e468a877423d7f7925ac43",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "f84e71b799f732bcf5c4d6ce",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "f8f315fb99303d0d6c648804",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "fa9f23bdb49806d90f73df27",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-31"
+      ],
+      "fingerprint": "fadc3d1c8ea001145127933c",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "NONE": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-26"
+      ],
+      "fingerprint": "fb44e9a322ac817fe4923a75",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "fc51cc79b87149f07045ae4c",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "fe2a67354b759823a7821fc8",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "fe520994255fd833432f54af",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "fe5d51141db5887f53fb27a1",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "ff8e84accf9264edd2e0b53e",
+      "symbols": [
+        "TSLA"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "fingerprint": "ff99dd63459b28527171ba0b",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "ffbc0c4009b43e10c1e2ca80",
+      "symbols": [
+        "GOOGL"
+      ],
+      "vendor_labels": {
+        "SINGLE_LEG": 1
+      }
+    },
+    {
+      "count": 1,
+      "dates": [
+        "2026-08-27"
+      ],
+      "fingerprint": "ffca116c29ac55ba83fe93a1",
+      "symbols": [
+        "NVDA"
+      ],
+      "vendor_labels": {
+        "MULTI_LEG": 1
+      }
+    }
+  ],
+  "reversal_audit": {
+    "all_mechanical_checks_pass": true,
+    "review_rows": 514,
+    "unique_links": 514
+  },
+  "semantics": {
+    "candidate_source_kind": {
+      "futu": 492,
+      "inferred_spread": 80,
+      "own": 133,
+      "spread": 31
+    },
+    "event_time_precision": {
+      "MILLISECOND_OR_FINER": 243,
+      "SECOND": 493
+    },
+    "mapping_cardinality": {
+      "1": 736
+    },
+    "parsed_leg_count": {
+      "1": 625,
+      "2": 99,
+      "3": 11,
+      "4": 1
+    },
+    "quarantine_reasons": {
+      "EXPLICITLY_QUARANTINED_TRANSITION_TAPE": 106
+    },
+    "source_kind": {
+      "_meta": 26,
+      "futu": 492,
+      "inferred_spread": 80,
+      "own": 133,
+      "spread": 31
+    }
+  },
+  "stale_report_detected": true,
+  "strata_counts": {
+    "COMMON_SEQUENCE_OR_TIMESTAMP_CANDIDATE": 182,
+    "DENSE_NVDA_ACTIVITY": 423,
+    "LOWER_DENSITY_GOOGL_ACTIVITY": 36,
+    "POSSIBLE_REVERSAL_OR_UNWIND": 514,
+    "RECURRING_UNKNOWN": 35,
+    "REPEATED_98_99_LOT_STRUCTURE": 25,
+    "VENDOR_VS_STRUCTURAL_DISAGREEMENT": 426
+  },
+  "vendor_structural": {
+    "review_rows": 426,
+    "structural_known_with_vendor": 0,
+    "vendor_labelled_candidates": 492,
+    "vendor_only_or_unresolved": 492
+  },
+  "verdict": "PASS_WITH_LIMITATIONS"
+}
